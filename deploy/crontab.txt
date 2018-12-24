@@ -1,6 +1,6 @@
 0-59/5  * * * * /home/windmobile/winds-mobi-providers/deploy/provider.sh jdc
 0-59/5  * * * * sleep 30;/home/windmobile/winds-mobi-providers/deploy/provider.sh windline
-#1-59/5  * * * * /home/windmobile/winds-mobi-providers/deploy/provider.sh meteoswiss_web
+1-59/5  * * * * /home/windmobile/winds-mobi-providers/deploy/provider.sh meteoswiss_opendata
 1-59/5  * * * * sleep 30;/home/windmobile/winds-mobi-providers/deploy/provider.sh slf
 2-59/5  * * * * /home/windmobile/winds-mobi-providers/deploy/provider.sh pioupiou
 2-59/5  * * * * sleep 30;/home/windmobile/winds-mobi-providers/deploy/provider.sh ffvl
