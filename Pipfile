@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 arrow = "==0.12.1"
 cachetools = "==1.1.3"
-lxml = "==4.0.0"
+lxml = "==4.2.5"
 metar = "==1.6.0"
 mysqlclient = "==1.3.6"
 numpy = "==1.12.1"

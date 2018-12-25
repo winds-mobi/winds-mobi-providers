@@ -7,7 +7,7 @@ from cachetools import hashkey, cached
 
 from commons import wgs84
 from commons.provider import Provider, ProviderException, Status, ureg, Q_
-from settings import WINDLINE_URL
+from settings import WINDLINE_SQL_URL
 
 
 class NoMeasure(Exception):
@@ -36,7 +36,7 @@ class Windline(Provider):
 
     def __init__(self):
         super().__init__()
-        self.windline_url = WINDLINE_URL
+        self.windline_sql_url = WINDLINE_SQL_URL
 
     # Windline status: offline, maintenance, demo or online
     def get_status(self, status):
@@ -116,7 +116,7 @@ class Windline(Provider):
         try:
             self.log.info('Processing WINDLINE data...')
 
-            connection_info = urlparse(self.windline_url)
+            connection_info = urlparse(self.windline_sql_url)
             mysql_connection = MySQLdb.connect(connection_info.hostname, connection_info.username,
                                                connection_info.password, connection_info.path[1:], charset='utf8')
 

@@ -5,6 +5,7 @@ from os import path
 import requests
 from lxml import etree
 
+from commons import user_agents
 from commons.provider import Provider, ProviderException, Status
 
 
@@ -65,16 +66,19 @@ class Slf(Provider):
             self.add_metadata_from_kml('slf/IMIS_SNOW_EN.kml', slf_metadata)
             self.add_metadata_from_kml('slf/IMIS_SPECIAL_EN.kml', slf_metadata)
 
-            result = requests.get('http://odb.slf.ch/odb/api/v1/stations',
-                                  timeout=(self.connect_timeout, self.read_timeout))
+            session = requests.Session()
+            session.headers.update(user_agents.chrome)
+
+            result = session.get('http://odb.slf.ch/odb/api/v1/stations',
+                                 timeout=(self.connect_timeout, self.read_timeout))
             slf_stations = result.json()
 
             for slf_station in slf_stations:
                 station_id = None
                 try:
                     slf_id = slf_station['id']
-                    result = requests.get(f'http://odb.slf.ch/odb/api/v1/measurement?id={slf_id}',
-                                          timeout=(self.connect_timeout, self.read_timeout))
+                    result = session.get(f'http://odb.slf.ch/odb/api/v1/measurement?id={slf_id}',
+                                         timeout=(self.connect_timeout, self.read_timeout))
                     data = result.json()
                     if not self.has_wind_data(data):
                         continue

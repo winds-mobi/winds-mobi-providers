@@ -5,7 +5,8 @@
 2-59/5  * * * * /home/windmobile/winds-mobi-providers/deploy/provider.sh pioupiou
 2-59/5  * * * * sleep 30;/home/windmobile/winds-mobi-providers/deploy/provider.sh ffvl
 3-59/5  * * * * /home/windmobile/winds-mobi-providers/deploy/provider.sh holfuy
-3-59/5  * * * * sleep 30;/home/windmobile/winds-mobi-providers/deploy/provider.sh windspots
+3-59/5  * * * * sleep 20;/home/windmobile/winds-mobi-providers/deploy/provider.sh windspots
+3-59/5  * * * * sleep 40;/home/windmobile/winds-mobi-providers/deploy/provider.sh romma
 4-59/5  * * * * /home/windmobile/winds-mobi-providers/deploy/provider.sh iweathar
 4-59/5  * * * * sleep 20;/home/windmobile/winds-mobi-providers/deploy/provider.sh yvbeach
 4-59/5  * * * * sleep 40;/home/windmobile/winds-mobi-providers/deploy/provider.sh thunerwetter

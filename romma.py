@@ -1,0 +1,114 @@
+import urllib.parse
+
+import arrow
+import requests
+from dateutil import tz
+from lxml import etree
+
+from commons.provider import Provider, Status, Pressure, ProviderException
+from settings import ROMMA_KEY
+
+
+class Romma(Provider):
+    provider_code = 'romma'
+    provider_name = 'romma.fr'
+    provider_url = 'http://romma.fr'
+
+    wind_directions = {
+        'N': 0,
+        'NNE': 1 * (360 / 16),
+        'NE': 2 * (360 / 16),
+        'ENE': 3 * (360 / 16),
+        'E': 4 * (360 / 16),
+        'ESE': 5 * (360 / 16),
+        'SE': 6 * (360 / 16),
+        'SSE': 7 * (360 / 16),
+        'S': 8 * (360 / 16),
+        'SSO': 9 * (360 / 16),
+        'SO': 10 * (360 / 16),
+        'OSO': 11 * (360 / 16),
+        'O': 12 * (360 / 16),
+        'ONO': 13 * (360 / 16),
+        'NO': 14 * (360 / 16),
+        'NNO': 15 * (360 / 16),
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.romma_key = ROMMA_KEY
+
+    def get_value(self, value):
+        if value == '--' or value == '---':
+            return None
+        return value
+
+    def process_data(self):
+        try:
+            self.log.info('Processing Romma data...')
+
+            romma_tz = tz.gettz('Europe/Paris')
+
+            result_tree = etree.fromstring(requests.get(f'http://romma.fr/releves_romma_xml.php?id={self.romma_key}',
+                                                        timeout=(self.connect_timeout, self.read_timeout)).text)
+
+            for report in result_tree.xpath('//releves/releve'):
+                station_id = None
+                try:
+                    romma_id = report.xpath('id')[0].text
+                    name = report.xpath('station')[0].text
+                    status = Status.GREEN if report.xpath('valide')[0].text == '1' else Status.RED
+
+                    station = self.save_station(
+                        romma_id,
+                        name,
+                        name,
+                        report.xpath('latitude')[0].text,
+                        report.xpath('longitude')[0].text,
+                        status,
+                        altitude=report.xpath('altitude')[0].text,
+                        url=urllib.parse.urljoin(self.provider_url, f'/station_24.php?id={romma_id}'))
+                    station_id = station['_id']
+
+                    wind_dir = self.get_value(report.xpath('direction')[0].text)
+                    if not wind_dir:
+                        self.log.warning(f"Station '{station_id}' has no wind direction value")
+                        continue
+
+                    measures_collection = self.measures_collection(station_id)
+                    key = arrow.get(report.xpath('date')[0].text, 'D.MM.YYYY HH[:]mm').replace(
+                        tzinfo=romma_tz).timestamp
+
+                    if not self.has_measure(measures_collection, key):
+                        try:
+                            measure = self.create_measure(
+                                station,
+                                key,
+                                self.wind_directions[wind_dir],
+                                self.get_value(report.xpath('vent_moyen_10')[0].text),
+                                self.get_value(report.xpath('rafale_maxi')[0].text),
+                                temperature=self.get_value(report.xpath('temperature')[0].text),
+                                humidity=self.get_value(report.xpath('humidite')[0].text),
+                                pressure=Pressure(
+                                    qfe=self.get_value(report.xpath('pression')[0].text),
+                                    qnh=None,
+                                    qff=None)
+                            )
+                            self.insert_new_measures(measures_collection, station, [measure])
+                        except ProviderException as e:
+                            self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                        except Exception as e:
+                            self.log.exception(
+                                f"Error while processing measure '{key}' for station '{station_id}': {e}")
+
+                except ProviderException as e:
+                    self.log.warning(f"Error while processing station '{station_id}': {e}")
+                except Exception as e:
+                    self.log.exception(f"Error while processing station '{station_id}': {e}")
+
+        except Exception as e:
+            self.log.exception(f'Error while processing Romma: {e}')
+
+        self.log.info('...Done!')
+
+
+Romma().process_data()
