@@ -10,13 +10,27 @@ Follow this project on:
 winds-mobi-providers
 --------------------
 
-Python 3.6 cronjobs that get the weather data from different providers and save it into mongodb. This project use
-Google Cloud APIs to compute any missing station details (altitude, name, timezone, ...). Google Cloud API results are
-cached with redis.   
+Python 3.6 cronjobs that get the weather data from different providers and save it in a common format into mongodb. 
+This project use Google Cloud APIs to compute any missing station details (altitude, name, timezone, ...).
+Google Cloud API results are cached with redis.
+
+### Requirements
+
+Mandatory requirements:
+- python >= 3.6 
+- mongodb >= 3.0
+- redis
+- Google Cloud API key
+
+See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master/settings.py)
 
 ### How to build
 
-- pipenv install
+- `pipenv install`
+
+### Run a provider
+
+- `python jdc.py`
 
 Licensing
 ---------
