@@ -18,10 +18,10 @@ class Pioupiou(Provider):
                 if (arrow.utcnow().timestamp - location_date.timestamp) < 3600 * 24 * 15:
                     up_to_date = True
                 else:
-                    self.log.warn(f"'{station_id}': last known location date is {location_date.humanize()}")
+                    self.log.warning(f"'{station_id}': last known location date is {location_date.humanize()}")
                     up_to_date = False
             else:
-                self.log.warn(f"'{station_id}': no last known location")
+                self.log.warning(f"'{station_id}': no last known location")
                 return Status.RED
 
             if location_status and up_to_date:
@@ -85,7 +85,7 @@ class Pioupiou(Provider):
                     self.insert_new_measures(measures_collection, station, new_measures)
 
                 except ProviderException as e:
-                    self.log.warn(f"Error while processing station '{station_id}': {e}")
+                    self.log.warning(f"Error while processing station '{station_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing station '{station_id}': {e}")
 

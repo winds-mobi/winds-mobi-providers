@@ -83,7 +83,7 @@ class Jdc(Provider):
                                         )
                                         new_measures.append(measure)
                                     except ProviderException as e:
-                                        self.log.warn(
+                                        self.log.warning(
                                             f"Error while processing measure '{key}' for station '{station_id}': {e}")
                                     except Exception as e:
                                         self.log.exception(
@@ -94,12 +94,12 @@ class Jdc(Provider):
                             raise ProviderException(f"Action=Data returns an error: '{json['ERROR']}'")
 
                     except ProviderException as e:
-                        self.log.warn(f"Error while processing measures for station '{station_id}': {e}")
+                        self.log.warning(f"Error while processing measures for station '{station_id}': {e}")
                     except Exception as e:
                         self.log.exception(f"Error while processing measures for station '{station_id}': {e}")
 
                 except ProviderException as e:
-                    self.log.warn(f"Error while processing station '{station_id}': {e}")
+                    self.log.warning(f"Error while processing station '{station_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing station '{station_id}': {e}")
 

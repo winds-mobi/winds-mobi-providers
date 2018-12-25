@@ -43,29 +43,36 @@ class MeteoSwiss(Provider):
             url_pattern = 'https://data.geo.admin.ch/ch.meteoschweiz.messwerte-{parameter}/' \
                           'ch.meteoschweiz.messwerte-{parameter}_en.json'
 
-            main_wind_data = requests.get(url_pattern.format(parameter='windgeschwindigkeit-kmh-10min'),
-                                          timeout=(self.connect_timeout, self.read_timeout)).json()['features']
-            wind_gust_data = self.to_dict(
-                requests.get(url_pattern.format(parameter='wind-boeenspitze-kmh-10min'),
-                             timeout=(self.connect_timeout, self.read_timeout)).json()['features'])
-            temperature_data = self.to_dict(
-                requests.get(url_pattern.format(parameter='lufttemperatur-10min'),
-                             timeout=(self.connect_timeout, self.read_timeout)).json()['features'])
-            humidity_data = self.to_dict(
-                requests.get(url_pattern.format(parameter='luftfeuchtigkeit-10min'),
-                             timeout=(self.connect_timeout, self.read_timeout)).json()['features'])
-            pressure_data_qfe = self.to_dict(
-                requests.get(url_pattern.format(parameter='luftdruck-qfe-10min'),
-                             timeout=(self.connect_timeout, self.read_timeout)).json()['features'])
-            pressure_data_qnh = self.to_dict(
-                requests.get(url_pattern.format(parameter='luftdruck-qnh-10min'),
-                             timeout=(self.connect_timeout, self.read_timeout)).json()['features'])
-            pressure_data_qff = self.to_dict(
-                requests.get(url_pattern.format(parameter='luftdruck-qnh-10min'),
-                             timeout=(self.connect_timeout, self.read_timeout)).json()['features'])
-            rain_data = self.to_dict(
-                requests.get(url_pattern.format(parameter='niederschlag-10min'),
-                             timeout=(self.connect_timeout, self.read_timeout)).json()['features'])
+            main_wind = requests.get(url_pattern.format(parameter='windgeschwindigkeit-kmh-10min'), timeout=(
+                self.connect_timeout, self.read_timeout)).json()
+            wind_gust = requests.get(url_pattern.format(parameter='wind-boeenspitze-kmh-10min'), timeout=(
+                self.connect_timeout, self.read_timeout)).json()
+            temperature = requests.get(url_pattern.format(parameter='lufttemperatur-10min'), timeout=(
+                self.connect_timeout, self.read_timeout)).json()
+            humidity = requests.get(url_pattern.format(parameter='luftfeuchtigkeit-10min'), timeout=(
+                self.connect_timeout, self.read_timeout)).json()
+            pressure_qfe = requests.get(url_pattern.format(parameter='luftdruck-qfe-10min'), timeout=(
+                self.connect_timeout, self.read_timeout)).json()
+            pressure_qnh = requests.get(url_pattern.format(parameter='luftdruck-qnh-10min'), timeout=(
+                self.connect_timeout, self.read_timeout)).json()
+            pressure_qff = requests.get(url_pattern.format(parameter='luftdruck-qnh-10min'), timeout=(
+                self.connect_timeout, self.read_timeout)).json()
+            rain = requests.get(url_pattern.format(parameter='niederschlag-10min'), timeout=(
+                self.connect_timeout, self.read_timeout)).json()
+
+            if main_wind['creation_time'] != wind_gust['creation_time'] != temperature['creation_time'] != \
+                    humidity['creation_time'] != pressure_qfe['creation_time'] != pressure_qnh['creation_time'] != \
+                    pressure_qff['creation_time'] != rain['creation_time']:
+                self.log.error('Creation time of parameters files are not the same')
+
+            main_wind_data = main_wind['features']
+            wind_gust_data = self.to_dict(wind_gust['features'])
+            temperature_data = self.to_dict(temperature['features'])
+            humidity_data = self.to_dict(humidity['features'])
+            pressure_qfe_data = self.to_dict(pressure_qfe['features'])
+            pressure_qnh_data = self.to_dict(pressure_qnh['features'])
+            pressure_qff_data = self.to_dict(pressure_qff['features'])
+            rain_data = self.to_dict(rain['features'])
 
             station_id = None
             for meteoswiss_station in main_wind_data:
@@ -87,6 +94,10 @@ class MeteoSwiss(Provider):
                         url=urls)
                     station_id = station['_id']
 
+                    timestamp = meteoswiss_station['properties'].get('reference_ts', None)
+                    if not timestamp:
+                        self.log.warning(f"'{station_id}' has no timestamp field")
+                        continue
                     key = arrow.get(meteoswiss_station['properties']['reference_ts'], 'YY-MM-DDTHH:mm:ZZ').timestamp
 
                     measures_collection = self.measures_collection(station_id)
@@ -102,11 +113,11 @@ class MeteoSwiss(Provider):
                     else:
                         humidity = None
 
-                    if meteoswiss_id in pressure_data_qfe:
+                    if meteoswiss_id in pressure_qfe_data:
                         pressure = Pressure(
-                            qfe=self.get_value(pressure_data_qfe[meteoswiss_id]['properties']),
-                            qnh=self.get_value(pressure_data_qnh[meteoswiss_id]['properties']),
-                            qff=self.get_value(pressure_data_qff[meteoswiss_id]['properties']))
+                            qfe=self.get_value(pressure_qfe_data[meteoswiss_id]['properties']),
+                            qnh=self.get_value(pressure_qnh_data[meteoswiss_id]['properties']),
+                            qff=self.get_value(pressure_qff_data[meteoswiss_id]['properties']))
                     else:
                         pressure = None
 
@@ -134,7 +145,7 @@ class MeteoSwiss(Provider):
                     self.insert_new_measures(measures_collection, station, new_measures)
 
                 except ProviderException as e:
-                    self.log.warn(f"Error while processing station '{station_id}': {e}")
+                    self.log.warning(f"Error while processing station '{station_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing station '{station_id}': {e}")
 

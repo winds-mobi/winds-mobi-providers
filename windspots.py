@@ -57,7 +57,7 @@ class Windspots(Provider):
                         wind_direction_last = windspots_measure['windDirectionChart']['serie']['points'][0]
                         wind_direction_key = int(wind_direction_last['date']) // 1000
                         if arrow.get(key).minute != arrow.get(wind_direction_key).minute:
-                            self.log.warn(
+                            self.log.warning(
                                 "{name} ({id}): wind direction time '{direction}' is inconsistent with measure "
                                 "time '{key}'"
                                 .format(
@@ -79,7 +79,8 @@ class Windspots(Provider):
                                 )
                                 new_measures.append(measure)
                             except ProviderException as e:
-                                self.log.warn(f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                                self.log.warning(
+                                    f"Error while processing measure '{key}' for station '{station_id}': {e}")
                             except Exception as e:
                                 self.log.exception(
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}")
@@ -87,17 +88,17 @@ class Windspots(Provider):
                         self.insert_new_measures(measures_collection, station, new_measures)
 
                     except ProviderException as e:
-                        self.log.warn(f"Error while processing measure for station '{station_id}': {e}")
+                        self.log.warning(f"Error while processing measure for station '{station_id}': {e}")
                     except Exception as e:
                         self.log.exception(f"Error while processing measure for station '{station_id}': {e}")
 
                 except ProviderException as e:
-                    self.log.warn(f"Error while processing station '{station_id}': {e}")
+                    self.log.warning(f"Error while processing station '{station_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing station '{station_id}': {e}")
 
         except ProviderException as e:
-            self.log.warn(f'Error while processing Windspots: {e}')
+            self.log.warning(f'Error while processing Windspots: {e}')
         except Exception as e:
             self.log.exception(f'Error while processing Windspots: {e}')
 

@@ -87,7 +87,7 @@ class Slf(Provider):
                         lon = slf_metadata[slf_id]['lon']
                         status = Status.GREEN
                     else:
-                        self.log.warn(f'No metadata found for station {slf_id}/{name}')
+                        self.log.warning(f'No metadata found for station {slf_id}/{name}')
                         status = Status.ORANGE
 
                     station = self.save_station(
@@ -119,7 +119,8 @@ class Slf(Provider):
                                 )
                                 new_measures.append(measure)
                             except ProviderException as e:
-                                self.log.warn(f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                                self.log.warning(
+                                    f"Error while processing measure '{key}' for station '{station_id}': {e}")
                             except Exception as e:
                                 self.log.exception(
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}")
@@ -127,7 +128,7 @@ class Slf(Provider):
                     self.insert_new_measures(measures_collection, station, new_measures)
 
                 except ProviderException as e:
-                    self.log.warn(f"Error while processing station '{station_id}': {e}")
+                    self.log.warning(f"Error while processing station '{station_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing station '{station_id}': {e}")
 

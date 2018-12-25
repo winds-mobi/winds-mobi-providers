@@ -67,7 +67,7 @@ class YVBeach(Provider):
             self.insert_new_measures(measures_collection, station, new_measures)
 
         except ProviderException as e:
-            self.log.warn(f"Error while processing station '{station_id}': {e}")
+            self.log.warning(f"Error while processing station '{station_id}': {e}")
         except Exception as e:
             self.log.exception(f"Error while processing station '{station_id}': {e}")
 

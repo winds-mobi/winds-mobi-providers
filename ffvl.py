@@ -36,12 +36,12 @@ class Ffvl(Provider):
                     stations[station['_id']] = station
 
                 except ProviderException as e:
-                    self.log.warn(f"Error while processing station '{ffvl_id}': {e}")
+                    self.log.warning(f"Error while processing station '{ffvl_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing station '{ffvl_id}': {e}")
 
         except ProviderException as e:
-            self.log.warn(f'Error while processing stations: {e}')
+            self.log.warning(f'Error while processing stations: {e}')
         except Exception as e:
             self.log.exception(f'Error while processing stations: {e}')
 
@@ -86,12 +86,12 @@ class Ffvl(Provider):
                     self.insert_new_measures(measures_collection, station, new_measures)
 
                 except ProviderException as e:
-                    self.log.warn(f"Error while processing measures for station '{station_id}': {e}")
+                    self.log.warning(f"Error while processing measures for station '{station_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing measures for station '{station_id}': {e}")
 
         except ProviderException as e:
-            self.log.warn(f'Error while processing FFVL: {e}')
+            self.log.warning(f'Error while processing FFVL: {e}')
         except Exception as e:
             self.log.exception(f'Error while processing FFVL: {e}')
 

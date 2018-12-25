@@ -111,7 +111,7 @@ class MetarNoaa(Provider):
                                     key = arrow.get(metar.time).timestamp
                                     stations[metar.station_id][key] = metar
                             except Exception as e:
-                                self.log.warn(f'Error while parsing METAR data: {e}')
+                                self.log.warning(f'Error while parsing METAR data: {e}')
                                 continue
 
             for metar_id in stations:
@@ -161,7 +161,7 @@ class MetarNoaa(Provider):
                             if not isinstance(e, ProviderException):
                                 self.log.exception('Error while getting CheckWX data')
                             else:
-                                self.log.warn(f'Error while getting CheckWX data: {e}')
+                                self.log.warning(f'Error while getting CheckWX data: {e}')
                             self.add_redis_key(checkwx_key, {
                                 'error': repr(e),
                                 'date': arrow.now().format('YYYY-MM-DD HH:mm:ssZZ'),
@@ -215,7 +215,7 @@ class MetarNoaa(Provider):
                     station_id = station['_id']
 
                     if metar.station_id not in icao:
-                        self.log.warn(f"Missing '{metar.station_id}' ICAO in database. Is it '{station['name']}'?")
+                        self.log.warning(f"Missing '{metar.station_id}' ICAO in database. Is it '{station['name']}'?")
 
                     measures_collection = self.measures_collection(station_id)
                     new_measures = []
@@ -242,7 +242,7 @@ class MetarNoaa(Provider):
                     self.insert_new_measures(measures_collection, station, new_measures)
 
                 except ProviderException as e:
-                    self.log.warn(f"Error while processing station '{metar_id}': {e}")
+                    self.log.warning(f"Error while processing station '{metar_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing station '{metar_id}': {e}")
 
