@@ -75,7 +75,7 @@ class Romma(Provider):
                         continue
 
                     measures_collection = self.measures_collection(station_id)
-                    key = arrow.get(report.xpath('date')[0].text, 'D.MM.YYYY HH[:]mm').replace(
+                    key = arrow.get(report.xpath('date')[0].text, 'D.MM.YYYY H:mm').replace(
                         tzinfo=romma_tz).timestamp
 
                     if not self.has_measure(measures_collection, key):

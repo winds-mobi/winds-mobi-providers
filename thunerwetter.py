@@ -68,7 +68,7 @@ class ThunerWetter(Provider):
             )
             station_id = station['_id']
 
-            key = arrow.get(f'{date["date"]} {date["time"]}', 'DD.MM.YYYY HH[:]mm').replace(
+            key = arrow.get(f'{date["date"]} {date["time"]}', 'DD.MM.YYYY HH:mm').replace(
                 tzinfo=thun_tz).timestamp
 
             measures_collection = self.measures_collection(station_id)
@@ -92,7 +92,7 @@ class ThunerWetter(Provider):
                 date_element = air_tree.xpath('//td[text()[contains(.,"Messwerte von Thun")]]')[0]
                 date_text = date_element.text.strip()
                 date = date_pattern.search(date_text).groupdict()
-                air_date = arrow.get(f'{date["date"]} {date["time"]}', 'DD.MM.YYYY HH[:]mm').replace(
+                air_date = arrow.get(f'{date["date"]} {date["time"]}', 'DD.MM.YYYY HH:mm').replace(
                     tzinfo=thun_tz).timestamp
 
                 if air_date != key:
