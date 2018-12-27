@@ -1,7 +1,9 @@
+import logging
+
 import arrow
 import requests
 from dateutil import tz
-from tenacity import retry, wait_random, stop_after_delay
+from tenacity import retry, wait_random_exponential, stop_after_delay, after_log
 
 from commons.provider import Provider, ProviderException, Status, Pressure
 
@@ -46,7 +48,8 @@ class Ffvl(Provider):
             self.log.exception(f'Error while processing stations: {e}')
 
         try:
-            @retry(wait=wait_random(min=1, max=3), stop=(stop_after_delay(15)))
+            @retry(wait=wait_random_exponential(multiplier=2, min=2), stop=stop_after_delay(60),
+                   after=after_log(self.log, logging.WARNING))
             def request_data():
                 # data.ffvl.fr randomly returns an empty file instead the json doc
                 result = requests.get(
