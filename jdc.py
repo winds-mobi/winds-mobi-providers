@@ -1,6 +1,8 @@
+import logging
 import urllib.parse
 
 import requests
+from tenacity import retry, wait_random_exponential, stop_after_delay, after_log
 
 from commons.provider import Provider, ProviderException, Status, Pressure
 
@@ -26,8 +28,15 @@ class Jdc(Provider):
     def process_data(self):
         try:
             self.log.info('Processing JDC data...')
-            result = requests.get('http://meteo.jdc.ch/API/?Action=StationView&flags=all',
-                                  timeout=(self.connect_timeout, self.read_timeout))
+
+            @retry(wait=wait_random_exponential(multiplier=2, min=2), stop=stop_after_delay(60),
+                   after=after_log(self.log, logging.WARNING))
+            def request_data():
+                # jdc.ch randomly timeout early in the morning... backup tasks?
+                return requests.get('http://meteo.jdc.ch/API/?Action=StationView&flags=all',
+                                    timeout=(self.connect_timeout, self.read_timeout))
+
+            result = request_data()
 
             try:
                 jdc_stations = result.json()['Stations']
