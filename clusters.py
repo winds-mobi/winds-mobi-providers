@@ -2,11 +2,12 @@ import argparse
 from datetime import datetime
 
 import numpy as np
-from commons.provider import get_logger
-from pymongo import MongoClient, uri_parser
+from pymongo import MongoClient
 from scipy.spatial import KDTree
-from settings import MONGODB_URL
 from sklearn.cluster import AgglomerativeClustering
+
+from commons.provider import get_logger
+from settings import MONGODB_URL
 
 log = get_logger('clusters')
 
@@ -14,12 +15,10 @@ parser = argparse.ArgumentParser(description='Save clusters membership in mongod
 parser.add_argument('--num', type=int, default=50, help='Specify the number of cluster levels [default: %(default)s]')
 args = vars(parser.parse_args())
 
-uri = uri_parser.parse_uri(MONGODB_URL)
-client = MongoClient(uri['nodelist'][0][0], uri['nodelist'][0][1])
-db = client.windmobile
+mongo_db = MongoClient(MONGODB_URL).get_database()
 
 now = datetime.now().timestamp()
-all_stations = list(db.stations.find({
+all_stations = list(mongo_db.stations.find({
     'status': {'$ne': 'hidden'},
     'last._id': {'$gt': now - 30 * 24 * 3600}
 }))
@@ -34,7 +33,7 @@ X = X.T
 
 
 try:
-    mongo_bulk = db.stations.initialize_ordered_bulk_op()
+    mongo_bulk = mongo_db.stations.initialize_ordered_bulk_op()
     mongo_bulk.find({}).update({'$set': {'clusters': []}})
 
     for n_clusters in reversed(range_clusters):
@@ -51,7 +50,7 @@ try:
 
             indexes = np.where((X == middle).all(axis=1))[0]
             if len(indexes) > 1:
-                stations = list(db.stations.find({'_id': {
+                stations = list(mongo_db.stations.find({'_id': {
                     '$in': [ids[index] for index in indexes.tolist()]
                 }}, {'last._id': 1}))
                 values = {station['_id']: station.get('last', {}).get('_id', 0) for station in stations}

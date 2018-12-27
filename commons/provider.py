@@ -13,7 +13,7 @@ import requests
 import sentry_sdk
 import yaml
 from pint import UnitRegistry
-from pymongo import uri_parser, MongoClient, GEOSPHERE, ASCENDING
+from pymongo import MongoClient, GEOSPHERE, ASCENDING
 
 from commons.uwxutils import TWxUtils
 from settings import WINDMOBILE_LOG_DIR, MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL
@@ -89,9 +89,7 @@ class Provider:
         return (60 + randint(-2, 2)) * 24 * 3600
 
     def __init__(self):
-        uri = uri_parser.parse_uri(MONGODB_URL)
-        client = MongoClient(uri['nodelist'][0][0], uri['nodelist'][0][1])
-        self.mongo_db = client[uri['database']]
+        self.mongo_db = MongoClient(MONGODB_URL).get_database()
         self.__stations_collection = self.mongo_db.stations
         self.__stations_collection.create_index([('loc', GEOSPHERE), ('status', ASCENDING), ('pv-code', ASCENDING),
                                                  ('short', ASCENDING), ('name', ASCENDING)])

@@ -1,7 +1,7 @@
 import argparse
 
 import arrow
-from pymongo import uri_parser, MongoClient
+from pymongo import MongoClient
 
 from commons.provider import get_logger
 from settings import MONGODB_URL
@@ -15,9 +15,7 @@ parser.add_argument(
 parser.add_argument('--provider', help="Delete only stations from this 'provider', for example 'jdc'")
 args = vars(parser.parse_args())
 
-uri = uri_parser.parse_uri(MONGODB_URL)
-client = MongoClient(uri['nodelist'][0][0], uri['nodelist'][0][1])
-mongo_db = client[uri['database']]
+mongo_db = MongoClient(MONGODB_URL).get_database()
 
 log.info(f"Deleting stations from '{args['provider'] or 'any'}' provider not seen since {str(args['days'])} days...")
 
