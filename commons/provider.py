@@ -16,7 +16,7 @@ from pint import UnitRegistry
 from pymongo import MongoClient, GEOSPHERE, ASCENDING
 
 from commons.uwxutils import TWxUtils
-from settings import WINDMOBILE_LOG_DIR, MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL
+from settings import LOG_DIR, MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL
 
 ureg = UnitRegistry()
 Q_ = ureg.Quantity
@@ -24,10 +24,10 @@ Pressure = namedtuple('Pressure', ['qfe', 'qnh', 'qff'])
 
 
 def get_logger(name):
-    if WINDMOBILE_LOG_DIR:
+    if LOG_DIR:
         with open(path.join(path.dirname(path.abspath(__file__)), 'logging_file.yml')) as f:
             dict = yaml.load(f)
-            dict['handlers']['file']['filename'] = path.join(path.expanduser(WINDMOBILE_LOG_DIR), f'{name}.log')
+            dict['handlers']['file']['filename'] = path.join(path.expanduser(LOG_DIR), f'{name}.log')
             logging.config.dictConfig(dict)
     else:
         with open(path.join(path.dirname(path.abspath(__file__)), 'logging_console.yml')) as f:

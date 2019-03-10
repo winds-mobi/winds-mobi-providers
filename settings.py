@@ -1,7 +1,7 @@
 MONGODB_URL = 'mongodb://localhost:27017/windmobile'
 REDIS_URL = 'redis://localhost:6379/0'
 
-WINDMOBILE_LOG_DIR = None
+LOG_DIR = None
 SENTRY_URL = ''
 
 GOOGLE_API_KEY = ''
