@@ -16,5 +16,5 @@ $json->last_measures = $data->getLastMesures();
 // $json->measures_blocs = $data->getMeasuresByBlocs();
 // $json->measures_sensors = $data->getMeasuresBySensors();
 
-echo json_encode($json, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_INVALID_UTF8_IGNORE);
+echo json_encode($json, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
 ?>
