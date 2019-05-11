@@ -9,6 +9,10 @@ WINDLINE_SQL_URL = ''
 CHECKWX_API_KEY = ''
 ROMMA_KEY = ''
 
+JDC_IMAP_SERVER = ''
+JDC_IMAP_USERNAME = ''
+JDC_IMAP_PASSWORD = ''
+
 try:
     from local_settings import *  # noqa
 except ImportError:
