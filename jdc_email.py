@@ -1,11 +1,15 @@
 import email
 import imaplib
 import json
+import os
 import subprocess
 from email.policy import EmailPolicy
+from os import path
 
 from commons.provider import Provider
-from settings import JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD
+from settings import JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS
+
+current_dir = path.dirname(os.path.abspath(__file__))
 
 
 class Jdc(Provider):
@@ -13,15 +17,17 @@ class Jdc(Provider):
     provider_name = 'madd.ch'
     provider_url = 'https://www.jdc.ch'
 
-    def __init__(self):
+    def __init__(self, imap_server, imap_username, imap_password, delete_emails):
         super().__init__()
 
-        self.imap_server = JDC_IMAP_SERVER
-        self.imap_username = JDC_IMAP_USERNAME
-        self.imap_password = JDC_IMAP_PASSWORD
+        self.imap_server = imap_server
+        self.imap_username = imap_username
+        self.imap_password = imap_password
+        self.delete_emails = delete_emails
 
     def m2a_to_json(self, data: bytes):
-        proc = subprocess.Popen(['php', 'm2a_to_json.php'], cwd='jdc', stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        proc = subprocess.Popen(
+            ['php', 'm2a_to_json.php'], cwd=path.join(current_dir, 'jdc'), stdout=subprocess.PIPE, stdin=subprocess.PIPE)
         proc.stdin.write(data)
         proc.stdin.close()
         result = proc.stdout.read()
@@ -50,8 +56,8 @@ class Jdc(Provider):
                             jdc_station = self.m2a_to_json(jdc_content)
                             jdc_id = jdc_station['infos']['serial']
                             jdc_name = jdc_station['infos']['site']
-                            measures = jdc_station['last_measures']
-                            self.log.info(f"Station '{jdc_id}' ({jdc_name}) found {len(measures)} sensor values")
+                            historic = jdc_station['historic']
+                            self.log.info(f"Station '{jdc_id}' ({jdc_name}) found {len(historic['measures'])} values")
                             typ, data = mail.store(str(i), '+FLAGS', r'\Deleted')
                             if not typ == 'OK':
                                 self.log.warning(f"Unable to delete email '{message['subject']}'")
@@ -60,7 +66,8 @@ class Jdc(Provider):
                     except Exception:
                         self.log.exception(f'Unable to load email #{i}')
             finally:
-                mail.expunge()
+                if self.delete_emails:
+                    mail.expunge()
                 mail.logout()
 
         except Exception as e:
@@ -69,4 +76,4 @@ class Jdc(Provider):
         self.log.info('Done !')
 
 
-Jdc().process_data()
+Jdc(JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS).process_data()

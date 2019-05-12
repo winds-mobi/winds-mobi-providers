@@ -5,13 +5,15 @@ LOG_DIR = None
 SENTRY_URL = ''
 
 GOOGLE_API_KEY = ''
-WINDLINE_SQL_URL = ''
 CHECKWX_API_KEY = ''
 ROMMA_KEY = ''
+
+WINDLINE_SQL_URL = ''
 
 JDC_IMAP_SERVER = ''
 JDC_IMAP_USERNAME = ''
 JDC_IMAP_PASSWORD = ''
+JDC_DELETE_EMAILS = False
 
 try:
     from local_settings import *  # noqa

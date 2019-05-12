@@ -178,7 +178,7 @@ class m2a {
     $this->version = ord(substr($data,4,1))/10;
     $this->mode = dechex(ord(substr($data,5,1)));
     $this->nbCanaux = ord(substr($data,7,1));
-    $this->site = trim(substr($data,8,32));
+    $this->site = trim(utf8_encode(substr($data,8,32)));
 
     // Définir un timezone spécifique pour certaines stations
     switch ($this->serial) {
@@ -215,9 +215,10 @@ class m2a {
 
     // Calcul des tailles des mémoires
     $startOfPlu = (($this->type == 'M2') || ($this->version > 1.6))?1144:472;
-    $startOfMes = strpos($data, chr(255).chr(255).chr(255).chr(255), $startOfPlu);
+    $lenData = strlen($data);
+    $startOfMes = strpos($data, chr(255).chr(255).chr(255).chr(255), $startOfPlu < $lenData ? $startOfPlu : 0);
     $sizeOfPlu = $startOfMes - $startOfPlu;
-    $sizeOfMes = strlen($data) - $startOfMes;
+    $sizeOfMes = $lenData - $startOfMes;
     $this->pluMem = substr($data,$startOfPlu,$sizeOfPlu);
     $this->mesMem = substr($data,$startOfMes,$sizeOfMes);
 
@@ -338,7 +339,7 @@ class m2a {
                  'lastUSB' => date('d.m.Y H:i:s O',hex2time($this->histo[7],$this->version)),
                  'tension' => $this->tension,
                  'rssi' => $this->rssi,
-                 'mesures' => $this->getLastMesures());
+                 'measures' => $this->getLastMesures());
   }
 
   // Retourne un tableau des canaux actifs
@@ -647,7 +648,7 @@ class m2a_chconf {
     $this->adCanal = ord(substr($data,3,1));
     $this->idCanal = substr($data,4,2);
     $this->p10n = ord(substr($data,6,1));
-    $this->unit = trim(substr($data,7,5));
+    $this->unit = trim(utf8_encode(substr($data,7,5)));
     // L'offset est en big endian, contrairement au reste
     $off = unpack("n*",substr($data,12,4));
     if ($off[1] >= 32768)
