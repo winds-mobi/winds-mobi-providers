@@ -7,7 +7,7 @@ from email.policy import EmailPolicy
 from os import path
 
 from commons.provider import Provider
-from settings import JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS
+from settings import JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_PHP_PATH
 
 current_dir = path.dirname(os.path.abspath(__file__))
 
@@ -17,17 +17,18 @@ class Jdc(Provider):
     provider_name = 'madd.ch'
     provider_url = 'https://www.jdc.ch'
 
-    def __init__(self, imap_server, imap_username, imap_password, delete_emails):
+    def __init__(self, imap_server, imap_username, imap_password, delete_emails, php_path='php'):
         super().__init__()
 
         self.imap_server = imap_server
         self.imap_username = imap_username
         self.imap_password = imap_password
         self.delete_emails = delete_emails
+        self.php_path = php_path
 
     def m2a_to_json(self, data: bytes):
-        proc = subprocess.Popen(
-            ['php', 'm2a_to_json.php'], cwd=path.join(current_dir, 'jdc'), stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        proc = subprocess.Popen([self.php_path, 'm2a_to_json.php'], cwd=path.join(current_dir, 'jdc'),
+                                stdout=subprocess.PIPE, stdin=subprocess.PIPE)
         proc.stdin.write(data)
         proc.stdin.close()
         result = proc.stdout.read()
@@ -76,4 +77,4 @@ class Jdc(Provider):
         self.log.info('Done !')
 
 
-Jdc(JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS).process_data()
+Jdc(JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_PHP_PATH).process_data()

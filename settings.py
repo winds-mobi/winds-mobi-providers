@@ -14,6 +14,7 @@ JDC_IMAP_SERVER = ''
 JDC_IMAP_USERNAME = ''
 JDC_IMAP_PASSWORD = ''
 JDC_DELETE_EMAILS = False
+JDC_PHP_PATH = 'php'
 
 try:
     from local_settings import *  # noqa

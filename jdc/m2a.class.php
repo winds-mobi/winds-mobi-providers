@@ -195,7 +195,7 @@ class m2a {
     $tension = unpack("v",substr($data,92,2));
     $this->tension = round($tension[1]/1000,2);
     $rssi = substr($data,94,2);
-    $this->rssi = ($rssi == 99) ? 'NC' : $rssi * 2 - 113;
+    $this->rssi = (!is_numeric($rssi) or $rssi == 99) ? 'NC' : $rssi * 2 - 113;
     $this->lastMeasures = unpack("v*",substr($data,96,40));
 
     $this->chConf = array();
@@ -533,7 +533,7 @@ class m2a_mesBloc {
     $tension = unpack("v",substr($bloc,4,2));
     $this->tension = round($tension[1]/1000,2);
     $rssi = substr($bloc,6,2);
-    $this->rssi = ($rssi == 99) ? 'NC' : $rssi * 2 - 113;
+    $this->rssi = (!is_numeric($rssi) or $rssi == 99) ? 'NC' : $rssi * 2 - 113;
     $datetime = unpack("V",substr($bloc,8,4));
     $this->datetime = hex2time($datetime[1], $station->getVersion(), $station->getTimezone());
     $interval = unpack("v*",substr($bloc,12,4));
