@@ -7,6 +7,6 @@ PROVIDER=$1
 (
   flock -n 200 || exit 1
 
-  /home/windmobile/.pyenv/versions/providers/bin/python /home/windmobile/winds-mobi-providers/$PROVIDER.py 1>/dev/null 2>>/var/log/windmobile/$PROVIDER.err
+  /home/windmobile/.virtualenvs/winds-mobi-providers/bin/python /home/windmobile/winds-mobi-providers/$PROVIDER.py 1>/dev/null 2>>/data/var/log/winds.mobi/$PROVIDER.err
 
 ) 200>/home/windmobile/winds-mobi-providers/$PROVIDER.lock
