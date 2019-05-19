@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 su - windmobile -c "cd /home/windmobile/winds-mobi-providers/; git fetch; git pull"
-su - windmobile -c "/home/windmobile/.virtualenvs/winds-mobi-providers/bin/pipenv install --deploy"
+su - windmobile -c "cd /home/windmobile/winds-mobi-providers/; /home/windmobile/.pyenv/versions/3.6.6/bin/pipenv install --deploy"
