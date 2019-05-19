@@ -16,7 +16,6 @@ Google Cloud API results are cached with redis.
 
 ### Requirements
 
-Mandatory requirements:
 - python >= 3.6 
 - mongodb >= 3.0
 - redis
@@ -24,9 +23,10 @@ Mandatory requirements:
 
 See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master/settings.py)
 
-### How to build
+### Python environment
 
 - `pipenv install`
+- `pipenv shell`
 
 ### Run a provider
 
