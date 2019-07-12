@@ -16,7 +16,7 @@ from pint import UnitRegistry
 from pymongo import MongoClient, GEOSPHERE, ASCENDING
 
 from commons.uwxutils import TWxUtils
-from settings import LOG_DIR, MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL
+from settings import LOG_DIR, MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL, ENVIRONMENT
 
 ureg = UnitRegistry()
 Q_ = ureg.Quantity
@@ -97,7 +97,7 @@ class Provider:
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
         self.log = get_logger(self.provider_code)
-        sentry_sdk.init(SENTRY_URL)
+        sentry_sdk.init(SENTRY_URL, environment=ENVIRONMENT)
         with sentry_sdk.configure_scope() as scope:
             scope.set_tag('provider', self.provider_name)
 

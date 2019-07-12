@@ -3,6 +3,7 @@ REDIS_URL = 'redis://localhost:6379/0'
 
 LOG_DIR = None
 SENTRY_URL = ''
+ENVIRONMENT = 'development'
 
 GOOGLE_API_KEY = ''
 CHECKWX_API_KEY = ''
