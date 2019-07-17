@@ -1,3 +1,4 @@
+import base64
 import email
 import email.policy
 import imaplib
@@ -76,13 +77,13 @@ class Jdc(Provider):
             except Exception:
                 pass
 
-    def find_measure(self, measures, typ):
-        values = list(filter(lambda m: m['type'] == typ, measures))
+    def find_value(self, measure, typ):
+        values = list(filter(lambda m: m['type'] == typ, measure['mesures']))
         if len(values) > 1:
-            self.log.warning(f"Multiple measures found for '{typ}'")
+            self.log.warning(f"Multiple values found for '{typ}'")
         return values[-1]['valeur'] if len(values) > 0 else None
 
-    def save_measures(self, jdc_id, historic, stations_metadata):
+    def save_measures(self, jdc_id, blocs, stations_metadata):
         try:
             jdc_station = list(filter(lambda d: str(d['id']) == jdc_id, stations_metadata))[0]
             station = self.save_station(
@@ -97,33 +98,40 @@ class Jdc(Provider):
             )
             station_id = station['_id']
 
-            key = arrow.get(historic['lastMes'], 'DD.MM.YYYY HH:mm:ss Z').timestamp
-            jdc_measures = historic['measures']
+            try:
+                jdc_measures = blocs[0]['mesures']
+            except Exception:
+                self.log.warning('Unable to find a bloc with measures')
+                jdc_measures = []
+
+            self.log.info(f"Station '{jdc_id}' ({station['name']}) found {len(jdc_measures)} measures")
 
             measures_collection = self.measures_collection(station_id)
-            if not self.has_measure(measures_collection, key):
-                try:
-                    new_measure = self.create_measure(
-                        station,
-                        key,
-                        self.find_measure(jdc_measures, 'Direction du vent'),
-                        self.find_measure(jdc_measures, 'Vent moyen'),
-                        self.find_measure(jdc_measures, 'Vent max'),
-                        temperature=self.find_measure(jdc_measures, "Température de l'air"),
-                        humidity=self.find_measure(jdc_measures, 'Humidité'),
-                        pressure=Pressure(
-                            qfe=self.find_measure(jdc_measures, 'Pression atmosphérique'),
-                            qnh=None,
-                            qff=None),
-                        rain=self.find_measure(jdc_measures, 'Pluviométrie')
-                    )
-                    self.insert_new_measures(measures_collection, station, [new_measure])
-                except ProviderException as e:
-                    self.log.warning(
-                        f"Error while processing measure '{key}' for station '{station_id}': {e}")
-                except Exception as e:
-                    self.log.exception(
-                        f"Error while processing measure '{key}' for station '{station_id}': {e}")
+            for jdc_measure in jdc_measures:
+                key = jdc_measure['datetime']
+                if not self.has_measure(measures_collection, key):
+                    try:
+                        new_measure = self.create_measure(
+                            station,
+                            key,
+                            self.find_value(jdc_measure, 'Direction du vent'),
+                            self.find_value(jdc_measure, 'Vent moyen'),
+                            self.find_value(jdc_measure, 'Vent max'),
+                            temperature=self.find_value(jdc_measure, "Température de l'air"),
+                            humidity=self.find_value(jdc_measure, 'Humidité'),
+                            pressure=Pressure(
+                                qfe=self.find_value(jdc_measure, 'Pression atmosphérique'),
+                                qnh=None,
+                                qff=None),
+                            rain=self.find_value(jdc_measure, 'Pluviométrie')
+                        )
+                        self.insert_new_measures(measures_collection, station, [new_measure])
+                    except ProviderException as e:
+                        self.log.warning(
+                            f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                    except Exception as e:
+                        self.log.exception(
+                            f"Error while processing measure '{key}' for station '{station_id}': {e}")
 
         except ProviderException as e:
             self.log.warning(f"Error while processing station '{jdc_id}': {e}")
@@ -150,14 +158,11 @@ class Jdc(Provider):
                         message = email.message_from_bytes(data[0][1], policy=email.policy.default)
                         jdc_payload = message.get_payload(1)
                         jdc_filename = jdc_payload.get_filename()
-                        jdc_content = jdc_payload.get_payload(decode=True)
+                        jdc_content = base64.b64encode(jdc_payload.get_payload(decode=True))
                         try:
                             jdc_station = self.m2a_to_json(jdc_content)
                             jdc_id = jdc_station['infos']['serial']
-                            jdc_name = jdc_station['infos']['site']
-                            historic = jdc_station['historic']
-                            self.log.info(f"Station '{jdc_id}' ({jdc_name}) found {len(historic['measures'])} measures")
-                            self.save_measures(jdc_id, historic, stations_metadata)
+                            self.save_measures(jdc_id, jdc_station['blocs'], stations_metadata)
                         except Exception:
                             self.log.exception(f"Unable to parse attachment '{jdc_filename}'")
                         finally:
