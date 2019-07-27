@@ -9,7 +9,6 @@ import urllib
 import urllib.parse
 from os import path
 
-import arrow
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
