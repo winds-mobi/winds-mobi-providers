@@ -339,7 +339,7 @@ class m2a {
                  'lastUSB' => date('d.m.Y H:i:s O',hex2time($this->histo[7],$this->version)),
                  'tension' => $this->tension,
                  'rssi' => $this->rssi,
-                 'measures' => $this->getLastMesures());
+                 'mesures' => $this->getLastMesures());
   }
 
   // Retourne un tableau des canaux actifs
