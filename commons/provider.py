@@ -271,7 +271,7 @@ class Provider:
         return self.provider_code + '-' + str(provider_id)
 
     def __create_station(self, provider_id, short_name, name, latitude, longitude, altitude, is_peak, status, tz, urls,
-                         fixes=None):
+                         fixes):
         if fixes is None:
             fixes = {}
 
@@ -523,6 +523,20 @@ class Provider:
             measure['rain'] = self.__to_rain(rain)
 
         measure['time'] = arrow.now().timestamp
+
+        fixes = self.mongo_db.stations_fix.find_one(for_station['_id'])
+        if fixes and 'measures' in fixes:
+            for key, offset in fixes['measures'].items():
+                try:
+                    if key in measure:
+                        fixed_value = measure[key] + offset
+                        if key == 'w-dir':
+                            fixed_value = fixed_value % 360
+                        measure[key] = fixed_value
+
+                except Exception:
+                    self.log.exception(f"Unable to fix '{key}' with offset '{offset}'".format(key=key, offset=offset))
+
         return measure
 
     def has_measure(self, measure_collection, key):
