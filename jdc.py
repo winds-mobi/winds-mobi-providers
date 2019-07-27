@@ -38,7 +38,7 @@ class Jdc(Provider):
     def m2a_to_json(self, data: bytes):
         proc = subprocess.Popen([self.php_path, 'm2a_to_json.php'], cwd=path.join(current_dir, 'jdc'),
                                 stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        proc.stdin.write(data)
+        proc.stdin.write(base64.b64encode(data))
         proc.stdin.close()
         result = proc.stdout.read()
         proc.wait()
@@ -158,7 +158,7 @@ class Jdc(Provider):
                         message = email.message_from_bytes(data[0][1], policy=email.policy.default)
                         jdc_payload = message.get_payload(1)
                         jdc_filename = jdc_payload.get_filename()
-                        jdc_content = base64.b64encode(jdc_payload.get_payload(decode=True))
+                        jdc_content = jdc_payload.get_payload(decode=True)
                         try:
                             jdc_station = self.m2a_to_json(jdc_content)
                             jdc_id = jdc_station['infos']['serial']
