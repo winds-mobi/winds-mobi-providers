@@ -69,7 +69,7 @@ class Slf(Provider):
             session = requests.Session()
             session.headers.update(user_agents.chrome)
 
-            result = session.get('http://odb.slf.ch/odb/api/v1/stations',
+            result = session.get('https://odb.slf.ch/odb/api/v1/stations',
                                  timeout=(self.connect_timeout, self.read_timeout))
             slf_stations = result.json()
 
@@ -77,7 +77,7 @@ class Slf(Provider):
                 station_id = None
                 try:
                     slf_id = slf_station['id']
-                    result = session.get(f'http://odb.slf.ch/odb/api/v1/measurement?id={slf_id}',
+                    result = session.get(f'https://odb.slf.ch/odb/api/v1/measurement?id={slf_id}',
                                          timeout=(self.connect_timeout, self.read_timeout))
                     data = result.json()
                     if not self.has_wind_data(data):
