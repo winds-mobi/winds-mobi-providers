@@ -1,7 +1,5 @@
-import arrow
 import requests
 import urllib3
-from dateutil import tz
 from lxml import etree
 
 from commons.provider import Provider, Status, ProviderException
@@ -30,8 +28,6 @@ class IWeathar(Provider):
                              stream=True, verify=False,
                              timeout=(self.connect_timeout, self.read_timeout)).raw)
 
-            iweathar_tz = tz.gettz('Africa/Johannesburg')
-
             for item in result_tree.xpath('//ITEM'):
                 station_id = None
                 try:
@@ -50,16 +46,15 @@ class IWeathar(Provider):
                     )
                     station_id = station['_id']
 
+                    key_attr = item.xpath('UNIX_DATE_STAMP')
                     wind_dir_attr = item.xpath('WIND_ANG')
                     wind_avg_attr = item.xpath('WIND_AVG')
                     wind_max_attr = item.xpath('WIND_MAX')
-                    if not (wind_dir_attr and wind_avg_attr and wind_max_attr):
-                        self.log.warning(f"Station '{station_id}' has no wind measures")
+                    if not (key_attr and wind_dir_attr and wind_avg_attr and wind_max_attr):
+                        self.log.warning(f"Station '{station_id}' has invalid data")
                         continue
 
-                    key = arrow.get(
-                        item.xpath('LASTUPDATE')[0].text, 'YYYY-MM-DD HH:mm:ss').replace(tzinfo=iweathar_tz).timestamp
-
+                    key = int(key_attr[0].text)
                     measures_collection = self.measures_collection(station_id)
                     if not self.has_measure(measures_collection, key):
                         try:
