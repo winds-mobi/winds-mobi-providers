@@ -26,6 +26,9 @@ CHECKWX_API_KEY = ''
 # Romma
 ROMMA_KEY = ''
 
+# iWeathar
+IWEATHAR_KEY = ''
+
 try:
     from local_settings import *  # noqa
 except ImportError:
