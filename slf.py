@@ -33,12 +33,15 @@ class Slf(Provider):
         return self.Measure(key=values[0], wind_direction=values[7], wind_average=values[5], wind_maximum=values[6],
                             temperature=values[3])
 
-    def has_wind_data(self, data):
-        if not data:
-            return False
-        measure = self.parse_data(data[-1])
-        if measure.key and measure.wind_average and measure.wind_maximum:
-            return True
+    def filter_wrong_measures(self, data_list):
+        if not data_list:
+            return []
+        measures = []
+        for data in data_list:
+            measure = self.parse_data(data)
+            if measure.key and measure.wind_direction and measure.wind_average and measure.wind_maximum:
+                measures.append(measure)
+        return measures
 
     def add_metadata_from_kml(self, kml_path, slf_metadata):
         with open(path.join(path.dirname(__file__), kml_path)) as kml_file:
@@ -80,7 +83,8 @@ class Slf(Provider):
                     result = session.get(f'https://odb.slf.ch/odb/api/v1/measurement?id={slf_id}',
                                          timeout=(self.connect_timeout, self.read_timeout))
                     data = result.json()
-                    if not self.has_wind_data(data):
+                    measures = self.filter_wrong_measures(data)
+                    if not measures:
                         continue
 
                     name, altitude = self.name_pattern.search(slf_station['name']).groups()
@@ -104,8 +108,6 @@ class Slf(Provider):
                         altitude=altitude,
                         url=self.provider_urls)
                     station_id = station['_id']
-
-                    measures = [self.parse_data(line) for line in data]
 
                     measures_collection = self.measures_collection(station_id)
                     new_measures = []
