@@ -1,29 +1,33 @@
+import re
+
 import arrow
 import requests
 from dateutil import tz
 from lxml import etree as ET
 
-from commons.provider import Provider, Status, Pressure, ProviderException
-import re
+from commons.provider import Provider, Status, ProviderException
 
 oberwallis_tz = tz.gettz('Europe/Zurich')
 
-class FluggruppeAletsch(Provider):
 
-    url = "https://meteo-oberwallis.ch/wetter/{}/XML/daten.xml"
+class FluggruppeAletsch(Provider):
+    provider_code = 'aletsch'
+    provider_name = 'fluggruppe-aletsch.ch'
+    provider_url = 'https://fluggruppe-aletsch.ch'
+
+    url = 'https://meteo-oberwallis.ch/wetter/{}/XML/daten.xml'
+
     stations = [
-        "ried-brig",
-        "blitzingu",
-        "bellwald"
+        'ried-brig',
+        'blitzingu',
+        'bellwald'
     ]
 
     def process_data(self):
         self.log.info('Processing Fluggruppe Aletsch Data...')
         for fga_id in self.stations:
             try:
-                response = requests.get(self.url.format(fga_id),
-                                         timeout=(self.connect_timeout, 
-                                         self.read_timeout))
+                response = requests.get(self.url.format(fga_id), timeout=(self.connect_timeout, self.read_timeout))
                 parser = FgaStationParser(response.text)
 
                 station = self.save_station(
@@ -54,7 +58,7 @@ class FluggruppeAletsch(Provider):
                         self.log.warning(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
                     except Exception as e:
                         self.log.exception(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
- 
+
             except ProviderException as e:
                 self.log.warning(f"Error while processing station '{fga_id}': {e}")
             except Exception as e:
@@ -62,27 +66,28 @@ class FluggruppeAletsch(Provider):
 
         self.log.info('...Done!')
 
-class FgaStationParser():
+
+class FgaStationParser:
 
     def __init__(self, response):
-        self._fga_station = ET.fromstring(response.encode('utf-8')).find("./station")
+        self._fga_station = ET.fromstring(response.encode('utf-8')).find('./station')
 
     def name(self):
-        return self._get_value("./station/station")
+        return self._get_value('./station/station')
 
     def longitude(self):
-        deg = self._get_value("./station/station_longitude")
+        deg = self._get_value('./station/station_longitude')
         return parse_dms(deg)
 
     def latitude(self):
-        deg = self._get_value("./station/station_latitude")
+        deg = self._get_value('./station/station_latitude')
         return parse_dms(deg)
 
     def elevation(self):
-        return self._get_value("./elevation/elevation")
+        return self._get_value('./elevation/elevation')
 
     def key(self):
-        time = self._get_value("./time/date_time")
+        time = self._get_value('./time/date_time')
         return arrow.get(time, 'D.MM.YYYY H:mm:ss').replace(tzinfo=oberwallis_tz).timestamp
 
     def direction(self):
@@ -108,9 +113,11 @@ class FgaStationParser():
         element = self._fga_station.find(path)
         if element is None:
             return None
-        return element.attrib.get("value")
+        return element.attrib.get('value')
+
 
 dd_pattern = re.compile(r"(\d*)°.([\d\.]*)'.([ONWS]+)")
+
 
 def dms2dd(degrees, minutes, seconds, direction):
     dd = float(degrees) + float(minutes)/60 + float(seconds)/(60*60)
@@ -118,9 +125,11 @@ def dms2dd(degrees, minutes, seconds, direction):
         dd *= -1
     return dd
 
+
 def parse_dms(dms):
     parts = dd_pattern.match(dms).groups()
     lat = dms2dd(parts[0], parts[1], 0, parts[2])
     return lat
+
 
 FluggruppeAletsch().process_data()
