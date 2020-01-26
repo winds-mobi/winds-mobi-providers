@@ -19,9 +19,9 @@ class Holfuy(Provider):
     def process_data(self):
         try:
             self.log.info('Processing Holfuy data...')
-            holfuy_stations = requests.get('http://api.holfuy.com/stations/stations.json',
+            holfuy_stations = requests.get('https://api.holfuy.com/stations/stations.json',
                                            timeout=(self.connect_timeout, self.read_timeout)).json()
-            holfuy_data = requests.get('http://api.holfuy.com/live/?s=all&m=JSON&tu=C&su=km/h&utc',
+            holfuy_data = requests.get('https://api.holfuy.com/live/?s=all&m=JSON&tu=C&su=km/h&utc',
                                        timeout=(self.connect_timeout, self.read_timeout)).json()
             holfuy_measures = {}
             for holfuy_measure in holfuy_data['measurements']:
@@ -56,7 +56,7 @@ class Holfuy(Provider):
                     new_measures = []
 
                     if holfuy_id not in holfuy_measures:
-                        raise ProviderException("Station not found in 'api.holfuy.com/live/'")
+                        raise ProviderException(f"Station '{name}' not found in 'api.holfuy.com/live/'")
                     holfuy_measure = holfuy_measures[holfuy_id]
                     last_measure_date = arrow.get(holfuy_measure['dateTime'])
                     key = last_measure_date.timestamp
