@@ -1,7 +1,9 @@
 FROM python:3.7-slim-buster
 
+# PHP 7.3 is required by JDC provider
 RUN apt-get update; \
-apt-get --yes --no-install-recommends install build-essential python-scipy libpq-dev libmariadb-dev-compat; \
+DEBIAN_FRONTEND=noninteractive apt-get --yes --no-install-recommends install build-essential \
+python-scipy libpq-dev libmariadb-dev-compat php7.3-cli; \
 rm -rf /var/lib/apt/lists/*
 
 ADD . /app
