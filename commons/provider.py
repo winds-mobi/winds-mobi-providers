@@ -85,8 +85,12 @@ class Provider:
         return (12 + randint(-2, 2)) * 3600
 
     @property
-    def location_cache_duration(self):
+    def google_api_error_cache_duration(self):
         return (60 + randint(-2, 2)) * 24 * 3600
+
+    @property
+    def google_api_cache_duration(self):
+        return (120 + randint(-2, 2)) * 24 * 3600
 
     def __init__(self):
         self.mongo_db = MongoClient(MONGODB_URL).get_database()
@@ -338,7 +342,7 @@ class Provider:
                 self.add_redis_key(address_key, {
                     'short': address_short_name,
                     'name': address_long_name
-                }, self.location_cache_duration)
+                }, self.google_api_cache_duration)
             except TimeoutError as e:
                 raise e
             except UsageLimitException as e:
@@ -350,7 +354,7 @@ class Provider:
                     self.log.exception('Unable to call Google Geocoding API')
                 self.add_redis_key(address_key, {
                     'error': repr(e)
-                }, self.location_cache_duration)
+                }, self.google_api_error_cache_duration)
 
         address = lookup_name or name or short_name
         geolocation_key = f'geolocation/{address}'
@@ -364,7 +368,7 @@ class Provider:
                         'lat': lat,
                         'lon': lon,
                         'name': address_long_name
-                    }, self.location_cache_duration)
+                    }, self.google_api_cache_duration)
                 except TimeoutError as e:
                     raise e
                 except UsageLimitException as e:
@@ -376,7 +380,7 @@ class Provider:
                         self.log.exception('Unable to call Google Geocoding API')
                     self.add_redis_key(geolocation_key, {
                         'error': repr(e)
-                    }, self.location_cache_duration)
+                    }, self.google_api_error_cache_duration)
             if self.redis.exists(geolocation_key):
                 if self.redis.hexists(geolocation_key, 'error'):
                     raise ProviderException(
@@ -393,7 +397,7 @@ class Provider:
                 self.add_redis_key(alt_key, {
                     'alt': elevation,
                     'is_peak': is_peak
-                }, self.location_cache_duration)
+                }, self.google_api_cache_duration)
             except TimeoutError as e:
                 raise e
             except UsageLimitException as e:
@@ -405,7 +409,7 @@ class Provider:
                     self.log.exception('Unable to call Google Elevation API')
                 self.add_redis_key(alt_key, {
                     'error': repr(e)
-                }, self.location_cache_duration)
+                }, self.google_api_error_cache_duration)
 
         tz_key = f'tz/{lat},{lon}'
         if not tz and not self.redis.exists(tz_key):
@@ -427,7 +431,7 @@ class Provider:
                 dateutil.tz.gettz(tz)
                 self.add_redis_key(tz_key, {
                     'tz': tz
-                }, self.location_cache_duration)
+                }, self.google_api_cache_duration)
             except TimeoutError as e:
                 raise e
             except UsageLimitException as e:
@@ -439,7 +443,7 @@ class Provider:
                     self.log.exception('Unable to call Google Time Zone API')
                 self.add_redis_key(tz_key, {
                     'error': repr(e)
-                }, self.location_cache_duration)
+                }, self.google_api_error_cache_duration)
 
         if not short_name:
             if self.redis.hexists(address_key, 'error'):
