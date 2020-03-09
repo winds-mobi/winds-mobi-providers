@@ -1,5 +1,3 @@
-import urllib.parse
-
 import arrow
 import requests
 from arrow.parser import ParserError
@@ -9,8 +7,8 @@ from commons.provider import Provider, Status, ProviderException, Pressure
 
 class Pioupiou(Provider):
     provider_code = 'pioupiou'
-    provider_name = 'pioupiou.com'
-    provider_url = 'https://pioupiou.com'
+    provider_name = 'openwindmap.org'
+    provider_url = 'https://www.openwindmap.org'
 
     def get_status(self, station_id, status, location_date, location_status):
         if status == 'on':
@@ -34,8 +32,8 @@ class Pioupiou(Provider):
     def process_data(self):
         try:
             self.log.info('Processing Pioupiou data...')
-            result = requests.get('http://api.pioupiou.fr/v1/live-with-meta/all', timeout=(self.connect_timeout,
-                                                                                           self.read_timeout))
+            result = requests.get('https://api.pioupiou.fr/v1/live-with-meta/all', timeout=(self.connect_timeout,
+                                                                                            self.read_timeout))
             station_id = None
             for piou_station in result.json()['data']:
                 try:
@@ -61,7 +59,7 @@ class Pioupiou(Provider):
                         longitude,
                         self.get_status(station_id, piou_station['status']['state'], location_date,
                                         location['success']),
-                        url=urllib.parse.urljoin(self.provider_url, str(piou_id)),
+                        url=f'{self.provider_url}/PP{piou_id}',
                         default_name=piou_station.get('meta', {}).get('name', None))
                     station_id = station['_id']
 
