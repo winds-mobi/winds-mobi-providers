@@ -25,17 +25,19 @@ class Ffvl(Provider):
             for ffvl_station in ffvl_stations:
                 ffvl_id = None
                 try:
-                    ffvl_id = ffvl_station['idBalise']
-                    station = self.save_station(
-                        ffvl_id,
-                        ffvl_station['nom'],
-                        ffvl_station['nom'],
-                        ffvl_station['latitude'],
-                        ffvl_station['longitude'],
-                        Status.GREEN,
-                        altitude=ffvl_station['altitude'],
-                        url=ffvl_station['url'])
-                    stations[station['_id']] = station
+                    type = ffvl_station.get('station_type', '').lower()
+                    if type not in ['iweathar', 'holfuy']:
+                        ffvl_id = ffvl_station['idBalise']
+                        station = self.save_station(
+                            ffvl_id,
+                            ffvl_station['nom'],
+                            ffvl_station['nom'],
+                            ffvl_station['latitude'],
+                            ffvl_station['longitude'],
+                            Status.GREEN,
+                            altitude=ffvl_station['altitude'],
+                            url=ffvl_station['url'])
+                        stations[station['_id']] = station
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{ffvl_id}': {e}")
