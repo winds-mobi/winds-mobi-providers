@@ -26,7 +26,7 @@ class Ffvl(Provider):
                 ffvl_id = None
                 try:
                     type = ffvl_station.get('station_type', '').lower()
-                    if type not in ['iweathar', 'holfuy']:
+                    if type not in ['holfuy', 'pioupiou', 'iweathar']:
                         ffvl_id = ffvl_station['idBalise']
                         station = self.save_station(
                             ffvl_id,
