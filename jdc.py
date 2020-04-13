@@ -12,7 +12,7 @@ from os import path
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-from commons.provider import Provider, ProviderException, Status, Pressure
+from commons.provider import Provider, ProviderException, Status, Pressure, ureg, Q_
 from settings import (JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_ADMIN_DB_URL,
                       JDC_PHP_PATH)
 
@@ -23,6 +23,11 @@ class Jdc(Provider):
     provider_code = 'jdc'
     provider_name = 'jdc.ch'
     provider_url = 'http://meteo.jdc.ch'
+
+    speed_units = {
+        'm/s': ureg.meter / ureg.second,
+        'km/h': ureg.kilometer / ureg.hour,
+    }
 
     def __init__(self, imap_server, imap_username, imap_password, delete_emails, admin_db_url, php_path='php'):
         super().__init__()
@@ -80,7 +85,16 @@ class Jdc(Provider):
         values = list(filter(lambda m: m['type'] == typ, measure['mesures']))
         if len(values) > 1:
             self.log.warning(f"Multiple values found for '{typ}'")
-        return values[-1]['valeur'] if len(values) > 0 else None
+
+        if len(values) > 0:
+            value = values[-1]['valeur']
+            unit = values[-1]['unit']
+            if unit in self.speed_units:
+                return Q_(value, self.speed_units[unit])
+            else:
+                return value
+        else:
+            return None
 
     def save_measures(self, jdc_id, blocs, stations_metadata):
         try:
