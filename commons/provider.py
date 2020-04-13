@@ -14,6 +14,7 @@ import sentry_sdk
 import yaml
 from pint import UnitRegistry
 from pymongo import MongoClient, GEOSPHERE, ASCENDING
+from sentry_sdk.integrations.redis import RedisIntegration
 
 from commons.uwxutils import TWxUtils
 from settings import LOG_DIR, MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL, ENVIRONMENT
@@ -101,7 +102,7 @@ class Provider:
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
         self.log = get_logger(self.provider_code)
-        sentry_sdk.init(SENTRY_URL, environment=ENVIRONMENT)
+        sentry_sdk.init(SENTRY_URL, environment=ENVIRONMENT, integrations=[RedisIntegration()])
         with sentry_sdk.configure_scope() as scope:
             scope.set_tag('provider', self.provider_name)
 
