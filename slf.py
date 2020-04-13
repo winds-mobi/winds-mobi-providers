@@ -8,6 +8,9 @@ from lxml import etree
 from commons import user_agents
 from commons.provider import Provider, ProviderException, Status
 
+Measure = collections.namedtuple(
+    'Measure', ('key', 'wind_direction', 'wind_average', 'wind_maximum', 'temperature'))
+
 
 class Slf(Provider):
     provider_code = 'slf'
@@ -25,13 +28,10 @@ class Slf(Provider):
     description_pattern = re.compile(r'<strong>Code:</strong> ([A-Z,0-9]{4})<br/>', re.MULTILINE)
     name_pattern = re.compile(r'(.*?) ([0-9]{2,4}) m')
 
-    Measure = collections.namedtuple(
-        'Measure', ('key', 'wind_direction', 'wind_average', 'wind_maximum', 'temperature'))
-
     def parse_data(self, line) -> Measure:
         values = line.split(';')
-        return self.Measure(key=values[0], wind_direction=values[7], wind_average=values[5], wind_maximum=values[6],
-                            temperature=values[3])
+        return Measure(key=values[0], wind_direction=values[7], wind_average=values[5], wind_maximum=values[6],
+                       temperature=values[3])
 
     def filter_wrong_measures(self, data_list):
         if not data_list:

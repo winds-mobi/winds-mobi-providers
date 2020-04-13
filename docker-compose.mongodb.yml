@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: mongo:3.0.15
+    ports:
+      - 27017:27017
+    networks:
+      - winds.mobi
+    volumes:
+      - ./volumes/mongodb:/data/db
+
+networks:
+  winds.mobi:
+    driver: bridge

@@ -23,6 +23,14 @@ Google Cloud API results are cached with redis.
 
 See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master/settings.py)
 
+#### macOS
+
+- `brew install mysql-client`
+- `export PATH=/usr/local/opt/mysql-client/bin:$PATH`
+
+- `brew install libpq`
+- `export PATH=/usr/local/opt/libpq/bin:$PATH`
+
 ### Python environment
 
 - `pipenv install`
