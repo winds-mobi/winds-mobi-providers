@@ -13,7 +13,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 
 from commons.provider import Provider, ProviderException, Status, Pressure, ureg, Q_
-from settings import (JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_ADMIN_DB_URL,
+from settings import (ADMIN_DB_URL, JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS,
                       JDC_PHP_PATH)
 
 current_dir = path.dirname(os.path.abspath(__file__))
@@ -29,14 +29,14 @@ class Jdc(Provider):
         'km/h': ureg.kilometer / ureg.hour,
     }
 
-    def __init__(self, imap_server, imap_username, imap_password, delete_emails, admin_db_url, php_path='php'):
+    def __init__(self, admin_db_url, imap_server, imap_username, imap_password, delete_emails, php_path='php'):
         super().__init__()
 
+        self.admin_db_url = admin_db_url
         self.imap_server = imap_server
         self.imap_username = imap_username
         self.imap_password = imap_password
         self.delete_emails = delete_emails
-        self.admin_db_url = admin_db_url
         self.php_path = php_path
 
     def m2a_to_json(self, data: bytes):
@@ -195,5 +195,4 @@ class Jdc(Provider):
         self.log.info('Done !')
 
 
-Jdc(JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_ADMIN_DB_URL, JDC_PHP_PATH
-    ).process_data()
+Jdc(ADMIN_DB_URL, JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_PHP_PATH).process_data()

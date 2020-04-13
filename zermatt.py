@@ -1,0 +1,154 @@
+import re
+
+import arrow
+import psycopg2
+import requests
+from dateutil import tz
+from lxml import html
+from psycopg2.extras import RealDictCursor
+
+from commons import user_agents
+from commons.provider import Provider, ProviderException, Status
+from settings import ADMIN_DB_URL
+
+
+class Zermatt(Provider):
+    provider_code = 'zermatt'
+    provider_name = 'zermatt.net'
+    provider_url = 'http://www.zermatt.net/info/wetter-all.html'
+
+    pylon_pattern = re.compile(r'(Stütze( |\xa0)|(St.( |\xa0)))(?P<pylon>\d+)')
+    wind_pattern = re.compile(r'(?P<wind>[0-9]{1,3}) km/h')
+
+    wind_directions = {
+        'N': 0,
+        'NO': 1 * (360 / 8),
+        'O': 2 * (360 / 8),
+        'SO': 3 * (360 / 8),
+        'S': 4 * (360 / 8),
+        'SW': 5 * (360 / 8),
+        'W': 6 * (360 / 8),
+        'NW': 7 * (360 / 8),
+    }
+
+    default_tz = tz.gettz('Europe/Paris')
+
+    def __init__(self, admin_db_url):
+        super().__init__()
+        self.admin_db_url = admin_db_url
+
+    def get_stations_metadata(self):
+        connection = None
+        cursor = None
+        try:
+            connection = psycopg2.connect(self.admin_db_url)
+            cursor = connection.cursor(cursor_factory=RealDictCursor)
+            cursor.execute('select * from winds_mobi_zermatt_station')
+            return cursor.fetchall()
+        finally:
+            try:
+                cursor.close()
+                connection.close()
+            except Exception:
+                pass
+
+    def cleanup_id(self, name):
+        return name.strip().replace(' ', '_').replace('.', '_').lower()
+
+    def process_data(self):
+        station_id = None
+        try:
+            self.log.info('Processing Zermatt data...')
+
+            stations_metadata = self.get_stations_metadata()
+
+            session = requests.Session()
+            session.headers.update(user_agents.chrome)
+
+            wind_tree = html.fromstring(
+                session.get(self.provider_url, timeout=(self.connect_timeout, self.read_timeout)).text)
+
+            # Groups
+            groups = wind_tree.xpath("//table[@class='w-all']")
+
+            for group in groups:
+                stations = group.xpath('tbody/tr')
+                i = 0
+                while i < len(stations):
+                    is_station = stations[i].xpath("td[@class='station']")
+                    if len(is_station) == 1:
+                        has_data = 'kein' not in stations[i + 1].xpath('td')[0].text.lower()
+                        try:
+                            id_main = self.cleanup_id(stations[i].xpath('td')[0].text)
+                            id_subs = []
+                            sub_path = stations[i].xpath('td/span')
+                            if len(sub_path) > 0:
+                                sub_texts = sub_path[0].text.replace('(', '').replace(')', '').split(',')
+                                for sub_text in sub_texts:
+                                    sub_text = sub_text.strip()
+                                    match = self.pylon_pattern.search(sub_text)
+                                    if match:
+                                        id_subs.append(match['pylon'])
+                                    else:
+                                        id_subs.append(sub_text)
+
+                            id_sub = '-'.join(id_subs)
+                            station_id = self.cleanup_id(f'{id_main}-{id_sub}' if id_sub else id_main)
+                            print(station_id)
+
+                            try:
+                                # Fetch metadata from admin
+                                zermatt_station = list(filter(
+                                    lambda d: str(d['id']) == station_id, stations_metadata))[0]
+                            except Exception:
+                                continue
+
+                            station = self.save_station(
+                                station_id,
+                                zermatt_station['name'],
+                                zermatt_station['short_name'],
+                                zermatt_station['latitude'],
+                                zermatt_station['longitude'],
+                                Status.GREEN if has_data else Status.RED,
+                                altitude=zermatt_station['altitude'] if 'altitude' in zermatt_station else None,
+                                url=self.provider_url
+                            )
+                            if has_data:
+                                key_text = stations[i + 1].xpath("td[@class='c5']")[0].text.strip()
+                                key = arrow.get(key_text, 'DD.MM.YYYY H:mm').replace(tzinfo=self.default_tz).timestamp
+
+                                measures_collection = self.measures_collection(station_id)
+                                if not self.has_measure(measures_collection, key):
+                                    wind_dir_text = stations[i+1].xpath("td[@class='c4']")[0].text.strip()
+                                    wind_dir = self.wind_directions[wind_dir_text]
+
+                                    wind_avg_text = stations[i+1].xpath("td[@class='c3']")[0].text.strip()
+                                    wind_avg = self.wind_pattern.match(wind_avg_text)['wind']
+
+                                    measure = self.create_measure(
+                                        station,
+                                        key,
+                                        wind_dir,
+                                        wind_avg,
+                                        wind_avg,
+                                    )
+                                    self.insert_new_measures(measures_collection, station, [measure])
+                            else:
+                                self.log.warning(f"No data for station '{station_id}'")
+                        except ProviderException as e:
+                            self.log.warning(f"Error while processing station '{station_id}': {e}")
+                        except Exception as e:
+                            self.log.exception(f"Error while processing station '{station_id}': {e}")
+                        finally:
+                            if has_data:
+                                i += 4
+                            else:
+                                i += 2
+                    else:
+                        raise ProviderException('Invalid html table order')
+
+        except Exception as e:
+            self.log.exception(f'Error while processing Zermatt: {e}')
+
+
+Zermatt(ADMIN_DB_URL).process_data()

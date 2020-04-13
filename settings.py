@@ -11,13 +11,14 @@ SENTRY_URL = os.environ.get('SENTRY_URL')
 ENVIRONMENT = os.environ.get('ENVIRONMENT') or 'development'
 
 # PROVIDERS
+ADMIN_DB_URL = os.environ.get('ADMIN_DB_URL') or 'postgres://postgres:postgres@localhost:5432/winds_mobi'
+
 # JDC
 JDC_IMAP_SERVER = os.environ.get('JDC_IMAP_SERVER') or ''
 JDC_IMAP_USERNAME = os.environ.get('JDC_IMAP_USERNAME') or ''
 JDC_IMAP_PASSWORD = os.environ.get('JDC_IMAP_PASSWORD') or ''
 JDC_DELETE_EMAILS = os.environ.get('JDC_DELETE_EMAILS', 'false').lower() in ['true', '1']
 JDC_PHP_PATH = os.environ.get('JDC_PHP_PATH') or 'php'
-JDC_ADMIN_DB_URL = os.environ.get('JDC_ADMIN_DB_URL') or 'postgres://postgres:postgres@localhost:5432/winds_mobi'
 
 # Windline
 WINDLINE_SQL_URL = os.environ.get('WINDLINE_SQL_URL') or ''
