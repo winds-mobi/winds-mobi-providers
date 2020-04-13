@@ -20,6 +20,8 @@ class Zermatt(Provider):
     pylon_pattern = re.compile(r'(Stütze( |\xa0)|(St.( |\xa0)))(?P<pylon>\d+)')
     wind_pattern = re.compile(r'(?P<wind>[0-9]{1,3}) km/h')
 
+    default_tz = tz.gettz('Europe/Zurich')
+
     wind_directions = {
         'N': 0,
         'NO': 1 * (360 / 8),
@@ -30,8 +32,6 @@ class Zermatt(Provider):
         'W': 6 * (360 / 8),
         'NW': 7 * (360 / 8),
     }
-
-    default_tz = tz.gettz('Europe/Paris')
 
     def __init__(self, admin_db_url):
         super().__init__()
@@ -93,18 +93,17 @@ class Zermatt(Provider):
                                         id_subs.append(sub_text)
 
                             id_sub = '-'.join(id_subs)
-                            station_id = self.cleanup_id(f'{id_main}-{id_sub}' if id_sub else id_main)
-                            print(station_id)
+                            zermatt_id = self.cleanup_id(f'{id_main}-{id_sub}' if id_sub else id_main)
 
                             try:
                                 # Fetch metadata from admin
                                 zermatt_station = list(filter(
-                                    lambda d: str(d['id']) == station_id, stations_metadata))[0]
+                                    lambda d: str(d['id']) == zermatt_id, stations_metadata))[0]
                             except Exception:
                                 continue
 
                             station = self.save_station(
-                                station_id,
+                                zermatt_id,
                                 zermatt_station['name'],
                                 zermatt_station['short_name'],
                                 zermatt_station['latitude'],
@@ -113,6 +112,8 @@ class Zermatt(Provider):
                                 altitude=zermatt_station['altitude'] if 'altitude' in zermatt_station else None,
                                 url=self.provider_url
                             )
+                            station_id = station['_id']
+
                             if has_data:
                                 key_text = stations[i + 1].xpath("td[@class='c5']")[0].text.strip()
                                 key = arrow.get(key_text, 'DD.MM.YYYY H:mm').replace(tzinfo=self.default_tz).timestamp
