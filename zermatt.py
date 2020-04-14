@@ -19,7 +19,7 @@ class Zermatt(Provider):
 
     pylon_pattern = re.compile(r'(Stütze( |\xa0)|(St.( |\xa0)))(?P<pylon>\d+)')
     wind_pattern = re.compile(r'(?P<wind>[0-9]{1,3}) km/h')
-    temp_pattern = re.compile(r'(?P<temp>[0-9]{1,2})°')
+    temp_pattern = re.compile(r'(?P<temp>-?[0-9]{1,2})°')
 
     default_tz = tz.gettz('Europe/Zurich')
 
