@@ -508,7 +508,7 @@ class Provider:
         if all((wind_direction is None, wind_average is None, wind_maximum is None)):
             raise ProviderException('All mandatory values are null!')
 
-        # Mandatory keys: json 'null' if not present
+        # Mandatory keys: 0 if not present
         measure = {
             '_id': int(round(_id)),
             'w-dir': self.__to_wind_direction(wind_direction),

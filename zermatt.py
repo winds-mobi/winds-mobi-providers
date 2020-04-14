@@ -19,10 +19,12 @@ class Zermatt(Provider):
 
     pylon_pattern = re.compile(r'(Stütze( |\xa0)|(St.( |\xa0)))(?P<pylon>\d+)')
     wind_pattern = re.compile(r'(?P<wind>[0-9]{1,3}) km/h')
+    temp_pattern = re.compile(r'(?P<temp>[0-9]{1,2})°')
 
     default_tz = tz.gettz('Europe/Zurich')
 
     wind_directions = {
+        '-': None,
         'N': 0,
         'NO': 1 * (360 / 8),
         'O': 2 * (360 / 8),
@@ -115,23 +117,31 @@ class Zermatt(Provider):
                             station_id = station['_id']
 
                             if has_data:
-                                key_text = stations[i + 1].xpath("td[@class='c5']")[0].text.strip()
-                                key = arrow.get(key_text, 'DD.MM.YYYY H:mm').replace(tzinfo=self.default_tz).timestamp
+                                key_text = stations[i + 1].xpath("td[@class='c5']")[0].text
+                                key = arrow.get(key_text.strip(), 'DD.MM.YYYY H:mm').replace(
+                                    tzinfo=self.default_tz).timestamp
 
                                 measures_collection = self.measures_collection(station_id)
                                 if not self.has_measure(measures_collection, key):
-                                    wind_dir_text = stations[i+1].xpath("td[@class='c4']")[0].text.strip()
-                                    wind_dir = self.wind_directions[wind_dir_text]
+                                    wind_dir_text = stations[i+1].xpath("td[@class='c4']")[0].text
+                                    wind_dir = self.wind_directions[wind_dir_text.strip()]
 
-                                    wind_avg_text = stations[i+1].xpath("td[@class='c3']")[0].text.strip()
-                                    wind_avg = self.wind_pattern.match(wind_avg_text)['wind']
+                                    wind_avg_text = stations[i+1].xpath("td[@class='c3']")[0].text
+                                    wind_avg = self.wind_pattern.match(wind_avg_text.strip())['wind']
+
+                                    wind_max_text = stations[i+2].xpath("td[@class='c3']")[0].text
+                                    wind_max = self.wind_pattern.match(wind_max_text.strip())['wind']
+
+                                    temp_text = stations[i+1].xpath("td[@class='c2']")[0].text
+                                    temp = self.temp_pattern.match(temp_text.strip())['temp'] if temp_text else None
 
                                     measure = self.create_measure(
                                         station,
                                         key,
                                         wind_dir,
                                         wind_avg,
-                                        wind_avg,
+                                        wind_max,
+                                        temperature=temp
                                     )
                                     self.insert_new_measures(measures_collection, station, [measure])
                             else:
