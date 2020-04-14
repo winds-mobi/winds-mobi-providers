@@ -129,8 +129,9 @@ class Zermatt(Provider):
                                     wind_avg_text = stations[i+1].xpath("td[@class='c3']")[0].text
                                     wind_avg = self.wind_pattern.match(wind_avg_text.strip())['wind']
 
-                                    wind_max_text = stations[i+2].xpath("td[@class='c3']")[0].text
-                                    wind_max = self.wind_pattern.match(wind_max_text.strip())['wind']
+                                    # zermatt.net is providing wind_max for the last 3 hours. Using wind_avg instead.
+                                    # wind_max_text = stations[i+2].xpath("td[@class='c3']")[0].text
+                                    # wind_max = self.wind_pattern.match(wind_max_text.strip())['wind']
 
                                     temp_text = stations[i+1].xpath("td[@class='c2']")[0].text
                                     temp = self.temp_pattern.match(temp_text.strip())['temp'] if temp_text else None
@@ -140,7 +141,7 @@ class Zermatt(Provider):
                                         key,
                                         wind_dir,
                                         wind_avg,
-                                        wind_max,
+                                        wind_avg,
                                         temperature=temp
                                     )
                                     self.insert_new_measures(measures_collection, station, [measure])
