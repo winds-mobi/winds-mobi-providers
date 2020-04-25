@@ -48,8 +48,7 @@ class Windspots(Provider):
 
                         new_measures = []
                         try:
-                            # Weird, there are timezone mistakes in windspots provider!
-                            key = arrow.get(windspots_measure['@lastUpdate']).replace(tzinfo='Europe/Zurich').timestamp
+                            key = arrow.get(windspots_measure['@lastUpdate'], 'YYYY-M-DTHH:mm:ssZZ').timestamp
                         except arrow.parser.ParserError:
                             raise ProviderException(
                                 f"Unable to parse measure date: '{windspots_measure['@lastUpdate']}")
@@ -57,14 +56,12 @@ class Windspots(Provider):
                         wind_direction_last = windspots_measure['windDirectionChart']['serie']['points'][0]
                         wind_direction_key = int(wind_direction_last['date']) // 1000
                         if arrow.get(key).minute != arrow.get(wind_direction_key).minute:
+                            key_time = arrow.get(key).to('local').format('YY-MM-DD HH:mm:ssZZ')
+                            direction_time = arrow.get(wind_direction_key).to('local').format('YY-MM-DD HH:mm:ssZZ')
                             self.log.warning(
-                                "{name} ({id}): wind direction time '{direction}' is inconsistent with measure "
-                                "time '{key}'"
-                                .format(
-                                    name=station['short'],
-                                    id=station_id,
-                                    key=arrow.get(key).to('local').format('YY-MM-DD HH:mm:ssZZ'),
-                                    direction=arrow.get(wind_direction_key).to('local').format('YY-MM-DD HH:mm:ssZZ')))
+                                f"{station['short']} ({station_id}): wind direction time '{direction_time}' is "
+                                f"inconsistent with measure time '{key_time}'"
+                            )
 
                         if not self.has_measure(measures_collection, key):
                             try:
