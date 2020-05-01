@@ -20,7 +20,8 @@ class FluggruppeAletsch(Provider):
     stations = [
         'ried-brig',
         'blitzingu',
-        'bellwald'
+        'bellwald',
+        'fieschertal'
     ]
 
     def process_data(self):
