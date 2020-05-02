@@ -8,8 +8,8 @@ from lxml import html
 from psycopg2.extras import RealDictCursor
 
 from settings import ADMIN_DB_URL
-from winds_mobi_providers import Provider, ProviderException, StationStatus
-from winds_mobi_providers import user_agents
+from winds_mobi_provider import Provider, ProviderException, StationStatus
+from winds_mobi_provider import user_agents
 
 
 class Zermatt(Provider):

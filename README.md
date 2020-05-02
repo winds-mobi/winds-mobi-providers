@@ -52,7 +52,7 @@ my_provider.py
 import arrow
 import requests
 
-from winds_mobi_providers import Provider, StationStatus, ureg, Q_, Pressure
+from winds_mobi_provider import Provider, StationStatus, ureg, Q_, Pressure
 
 
 class MyProvider(Provider):

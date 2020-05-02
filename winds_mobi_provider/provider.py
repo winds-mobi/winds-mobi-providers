@@ -12,9 +12,9 @@ from pymongo import MongoClient, GEOSPHERE, ASCENDING
 from sentry_sdk.integrations.redis import RedisIntegration
 
 from settings import MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL, ENVIRONMENT
-from winds_mobi_providers.logging import get_logger
-from winds_mobi_providers.units import ureg, Pressure
-from winds_mobi_providers.uwxutils import TWxUtils
+from winds_mobi_provider.logging import get_logger
+from winds_mobi_provider.units import ureg, Pressure
+from winds_mobi_provider.uwxutils import TWxUtils
 
 
 class StationStatus(Enum):

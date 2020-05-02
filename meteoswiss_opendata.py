@@ -1,8 +1,8 @@
 import arrow
 import requests
 
-from winds_mobi_providers import Provider, StationStatus, ProviderException, ureg, Q_, Pressure
-from winds_mobi_providers.projections import ch_to_wgs_lat, ch_to_wgs_lon
+from winds_mobi_provider import Provider, StationStatus, ProviderException, ureg, Q_, Pressure
+from winds_mobi_provider.projections import ch_to_wgs_lat, ch_to_wgs_lon
 
 
 class MeteoSwiss(Provider):

@@ -2,7 +2,7 @@ import arrow
 import arrow.parser
 import requests
 
-from winds_mobi_providers import Provider, ProviderException, StationStatus, Q_, ureg, Pressure
+from winds_mobi_provider import Provider, ProviderException, StationStatus, Q_, ureg, Pressure
 
 
 class Holfuy(Provider):

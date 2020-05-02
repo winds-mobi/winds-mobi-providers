@@ -6,8 +6,8 @@ import arrow
 from cachetools import hashkey, cached
 
 from settings import WINDLINE_SQL_URL
-from winds_mobi_providers import Provider, ProviderException, StationStatus, ureg, Q_
-from winds_mobi_providers import wgs84
+from winds_mobi_provider import Provider, ProviderException, StationStatus, ureg, Q_
+from winds_mobi_provider import wgs84
 
 
 class NoMeasure(Exception):

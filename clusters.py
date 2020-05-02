@@ -7,7 +7,7 @@ from scipy.spatial import KDTree
 from sklearn.cluster import AgglomerativeClustering
 
 from settings import MONGODB_URL
-from winds_mobi_providers.logging import get_logger
+from winds_mobi_provider.logging import get_logger
 
 log = get_logger('clusters')
 

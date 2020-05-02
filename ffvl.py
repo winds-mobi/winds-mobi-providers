@@ -5,7 +5,7 @@ import requests
 from dateutil import tz
 from tenacity import retry, wait_random_exponential, stop_after_delay, after_log
 
-from winds_mobi_providers import Provider, ProviderException, StationStatus, Pressure
+from winds_mobi_provider import Provider, ProviderException, StationStatus, Pressure
 
 
 class Ffvl(Provider):

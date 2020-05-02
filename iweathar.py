@@ -3,7 +3,7 @@ import urllib3
 from lxml import etree
 
 from settings import IWEATHAR_KEY
-from winds_mobi_providers import Provider, StationStatus, ProviderException, ureg, Q_, Pressure
+from winds_mobi_provider import Provider, StationStatus, ProviderException, ureg, Q_, Pressure
 
 # Disable urllib3 warning because https://iweathar.co.za has a certificates chain issue
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
