@@ -461,8 +461,8 @@ class Provider:
                             fixed_value = fixed_value % 360
                         measure[key] = fixed_value
 
-                except Exception:
-                    self.log.exception(f"Unable to fix '{key}' with offset '{offset}'".format(key=key, offset=offset))
+                except Exception as e:
+                    self.log.exception(f"Unable to fix '{key}' with offset '{offset}': {e}")
 
         return measure
 
