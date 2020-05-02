@@ -3,7 +3,7 @@ import arrow.parser
 import requests
 import urllib3
 
-from winds_mobi_providers.provider import Provider, ProviderException
+from winds_mobi_providers.provider import Provider, ProviderException, StationStatus
 
 # Disable urllib3 warning because https://www.windspots.com has a certificates chain issue
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -30,7 +30,7 @@ class Windspots(Provider):
                         windspots_station['@name'],
                         windspots_station['@wgs84Latitude'],
                         windspots_station['@wgs84Longitude'],
-                        windspots_station['@maintenanceStatus'],
+                        StationStatus(windspots_station['@maintenanceStatus']),
                         altitude=windspots_station['@altitude'])
                     station_id = station['_id']
 
@@ -84,18 +84,10 @@ class Windspots(Provider):
 
                         self.insert_new_measures(measures_collection, station, new_measures)
 
-                    except ProviderException as e:
-                        self.log.warning(f"Error while processing measure for station '{station_id}': {e}")
                     except Exception as e:
                         self.log.exception(f"Error while processing measure for station '{station_id}': {e}")
-
-                except ProviderException as e:
-                    self.log.warning(f"Error while processing station '{station_id}': {e}")
                 except Exception as e:
                     self.log.exception(f"Error while processing station '{station_id}': {e}")
-
-        except ProviderException as e:
-            self.log.warning(f'Error while processing Windspots: {e}')
         except Exception as e:
             self.log.exception(f'Error while processing Windspots: {e}')
 
