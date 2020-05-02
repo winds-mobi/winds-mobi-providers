@@ -33,9 +33,9 @@ class Romma(Provider):
         'NNO': 15 * (360 / 16),
     }
 
-    def __init__(self):
+    def __init__(self, romma_key):
         super().__init__()
-        self.romma_key = ROMMA_KEY
+        self.romma_key = romma_key
 
     def get_value(self, value):
         if value == '--' or value == '---':
@@ -112,4 +112,4 @@ class Romma(Provider):
 
 
 if __name__ == '__main__':
-    Romma().process_data()
+    Romma(ROMMA_KEY).process_data()
