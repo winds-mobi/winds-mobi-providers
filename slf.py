@@ -5,8 +5,8 @@ from os import path
 import requests
 from lxml import etree
 
-from commons import user_agents
-from commons.provider import Provider, ProviderException, Status
+from winds_mobi_providers import user_agents
+from winds_mobi_providers.provider import Provider, ProviderException, StationStatus
 
 Measure = collections.namedtuple(
     'Measure', ('key', 'wind_direction', 'wind_average', 'wind_maximum', 'temperature'))
@@ -93,10 +93,10 @@ class Slf(Provider):
                         metadata_name = slf_metadata[slf_id]['name']
                         lat = slf_metadata[slf_id]['lat']
                         lon = slf_metadata[slf_id]['lon']
-                        status = Status.GREEN
+                        status = StationStatus.GREEN
                     else:
                         self.log.warning(f'No metadata found for station {slf_id}/{name}')
-                        status = Status.ORANGE
+                        status = StationStatus.ORANGE
 
                     station = self.save_station(
                         slf_id,
@@ -144,4 +144,5 @@ class Slf(Provider):
         self.log.info('Done !')
 
 
-Slf().process_data()
+if __name__ == '__main__':
+    Slf().process_data()

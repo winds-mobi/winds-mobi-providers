@@ -9,8 +9,10 @@ import arrow.parser
 import requests
 from metar.Metar import Metar
 
-from commons.provider import Provider, ProviderException, Status, ureg, Q_, UsageLimitException, Pressure
 from settings import CHECKWX_API_KEY
+from winds_mobi_providers.provider import (
+    Provider, ProviderException, StationStatus, ureg, Q_, UsageLimitException, Pressure
+)
 
 
 class MetarNoaa(Provider):
@@ -206,7 +208,7 @@ class MetarNoaa(Provider):
                         name,
                         lat,
                         lon,
-                        Status.GREEN,
+                        StationStatus.GREEN,
                         altitude=altitude,
                         tz=tz,
                         url=os.path.join(self.provider_url, f'site?id={metar.station_id}&db=metar'),
@@ -252,6 +254,7 @@ class MetarNoaa(Provider):
         self.log.info('Done !')
 
 
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore')
-    MetarNoaa().process_data()
+if __name__ == '__main__':
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        MetarNoaa().process_data()

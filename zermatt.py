@@ -7,9 +7,9 @@ from dateutil import tz
 from lxml import html
 from psycopg2.extras import RealDictCursor
 
-from commons import user_agents
-from commons.provider import Provider, ProviderException, Status
 from settings import ADMIN_DB_URL
+from winds_mobi_providers import user_agents
+from winds_mobi_providers.provider import Provider, ProviderException, StationStatus
 
 
 class Zermatt(Provider):
@@ -110,7 +110,7 @@ class Zermatt(Provider):
                                 zermatt_station['short_name'],
                                 zermatt_station['latitude'],
                                 zermatt_station['longitude'],
-                                Status.GREEN if has_data else Status.RED,
+                                StationStatus.GREEN if has_data else StationStatus.RED,
                                 altitude=zermatt_station['altitude'] if 'altitude' in zermatt_station else None,
                                 url=self.provider_url
                             )
@@ -163,4 +163,5 @@ class Zermatt(Provider):
             self.log.exception(f'Error while processing Zermatt: {e}')
 
 
-Zermatt(ADMIN_DB_URL).process_data()
+if __name__ == '__main__':
+    Zermatt(ADMIN_DB_URL).process_data()

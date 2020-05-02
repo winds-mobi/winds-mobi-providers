@@ -4,8 +4,8 @@ import arrow
 import requests
 from dateutil import tz
 
-from commons import user_agents
-from commons.provider import Provider, Status, ProviderException
+from winds_mobi_providers import user_agents
+from winds_mobi_providers.provider import Provider, StationStatus, ProviderException
 
 
 class YVBeach(Provider):
@@ -38,7 +38,7 @@ class YVBeach(Provider):
                 'Yvonand plage',
                 float(46.805410),
                 float(6.714839),
-                Status.GREEN,
+                StationStatus.GREEN,
                 url=self.provider_url
             )
             station_id = station['_id']
@@ -74,4 +74,5 @@ class YVBeach(Provider):
         self.log.info('...Done!')
 
 
-YVBeach().process_data()
+if __name__ == '__main__':
+    YVBeach().process_data()

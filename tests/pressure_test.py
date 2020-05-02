@@ -1,6 +1,6 @@
 import argparse
 
-from commons.uwxutils import TWxUtils
+from winds_mobi_providers.uwxutils import TWxUtils
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

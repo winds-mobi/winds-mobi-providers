@@ -5,8 +5,8 @@ import requests
 from dateutil import tz
 from lxml import etree
 
-from commons.provider import Provider, Status, Pressure, ProviderException
 from settings import ROMMA_KEY
+from winds_mobi_providers.provider import Provider, StationStatus, Pressure, ProviderException
 
 
 class Romma(Provider):
@@ -56,7 +56,7 @@ class Romma(Provider):
                 try:
                     romma_id = report.xpath('id')[0].text
                     name = report.xpath('station')[0].text
-                    status = Status.GREEN if report.xpath('valide')[0].text == '1' else Status.RED
+                    status = StationStatus.GREEN if report.xpath('valide')[0].text == '1' else StationStatus.RED
 
                     station = self.save_station(
                         romma_id,
@@ -111,4 +111,5 @@ class Romma(Provider):
         self.log.info('...Done!')
 
 
-Romma().process_data()
+if __name__ == '__main__':
+    Romma().process_data()

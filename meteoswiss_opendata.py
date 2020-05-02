@@ -1,8 +1,8 @@
 import arrow
 import requests
 
-from commons.projections import ch_to_wgs_lat, ch_to_wgs_lon
-from commons.provider import Provider, Status, ProviderException, ureg, Q_, Pressure
+from winds_mobi_providers.projections import ch_to_wgs_lat, ch_to_wgs_lon
+from winds_mobi_providers.provider import Provider, StationStatus, ProviderException, ureg, Q_, Pressure
 
 
 class MeteoSwiss(Provider):
@@ -88,7 +88,7 @@ class MeteoSwiss(Provider):
                         meteoswiss_station['properties']['station_name'],
                         ch_to_wgs_lat(location[0], location[1]),
                         ch_to_wgs_lon(location[0], location[1]),
-                        Status.GREEN,
+                        StationStatus.GREEN,
                         altitude=meteoswiss_station['properties']['altitude'],
                         tz='Europe/Zurich',
                         url=urls)
@@ -155,4 +155,5 @@ class MeteoSwiss(Provider):
         self.log.info('...Done!')
 
 
-MeteoSwiss().process_data()
+if __name__ == '__main__':
+    MeteoSwiss().process_data()

@@ -12,9 +12,10 @@ from os import path
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-from commons.provider import Provider, ProviderException, Status, Pressure, ureg, Q_
-from settings import (ADMIN_DB_URL, JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS,
-                      JDC_PHP_PATH)
+from settings import (
+    ADMIN_DB_URL, JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_PHP_PATH
+)
+from winds_mobi_providers.provider import Provider, ProviderException, StationStatus, Pressure, ureg, Q_
 
 current_dir = path.dirname(os.path.abspath(__file__))
 
@@ -50,21 +51,21 @@ class Jdc(Provider):
 
     def get_status(self, status):
         if status == 'unactive':
-            return Status.HIDDEN
+            return StationStatus.HIDDEN
         elif status == 'active':
-            return Status.GREEN
+            return StationStatus.GREEN
         elif status == 'maintenance':
-            return Status.RED
+            return StationStatus.RED
         elif status == 'test':
-            return Status.ORANGE
+            return StationStatus.ORANGE
         elif status == 'waiting':
-            return Status.RED
+            return StationStatus.RED
         elif status == 'wintering':
-            return Status.RED
+            return StationStatus.RED
         elif status == 'moved':
-            return Status.ORANGE
+            return StationStatus.ORANGE
         else:
-            return Status.HIDDEN
+            return StationStatus.HIDDEN
 
     def get_stations_metadata(self):
         connection = None
@@ -195,4 +196,7 @@ class Jdc(Provider):
         self.log.info('Done !')
 
 
-Jdc(ADMIN_DB_URL, JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_PHP_PATH).process_data()
+if __name__ == '__main__':
+    Jdc(
+        ADMIN_DB_URL, JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_PHP_PATH
+    ).process_data()

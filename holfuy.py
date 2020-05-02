@@ -2,7 +2,7 @@ import arrow
 import arrow.parser
 import requests
 
-from commons.provider import Provider, ProviderException, Status, Q_, ureg, Pressure
+from winds_mobi_providers.provider import Provider, ProviderException, StationStatus, Q_, ureg, Pressure
 
 
 class Holfuy(Provider):
@@ -47,7 +47,7 @@ class Holfuy(Provider):
                         name,
                         latitude,
                         longitude,
-                        Status.GREEN,
+                        StationStatus.GREEN,
                         altitude=altitude,
                         url=urls)
                     station_id = station['_id']
@@ -89,4 +89,5 @@ class Holfuy(Provider):
         self.log.info('Done !')
 
 
-Holfuy().process_data()
+if __name__ == '__main__':
+    Holfuy().process_data()

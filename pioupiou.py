@@ -2,7 +2,7 @@ import arrow
 import requests
 from arrow.parser import ParserError
 
-from commons.provider import Provider, Status, ProviderException, Pressure
+from winds_mobi_providers.provider import Provider, StationStatus, ProviderException, Pressure
 
 
 class Pioupiou(Provider):
@@ -20,14 +20,14 @@ class Pioupiou(Provider):
                     up_to_date = False
             else:
                 self.log.warning(f"'{station_id}': no last known location")
-                return Status.RED
+                return StationStatus.RED
 
             if location_status and up_to_date:
-                return Status.GREEN
+                return StationStatus.GREEN
             else:
-                return Status.ORANGE
+                return StationStatus.ORANGE
         else:
-            return Status.HIDDEN
+            return StationStatus.HIDDEN
 
     def process_data(self):
         try:
@@ -93,4 +93,5 @@ class Pioupiou(Provider):
         self.log.info('Done !')
 
 
-Pioupiou().process_data()
+if __name__ == '__main__':
+    Pioupiou().process_data()
