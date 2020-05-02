@@ -1,11 +1,11 @@
 import arrow
 import arrow.parser
 import requests
-# Disable urllib3 warning because https://www.windspots.com has a certificates chain issue
 import urllib3
 
-from commons.provider import Provider, ProviderException
+from winds_mobi_providers.provider import Provider, ProviderException
 
+# Disable urllib3 warning because https://www.windspots.com has a certificates chain issue
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -102,4 +102,5 @@ class Windspots(Provider):
         self.log.info('Done !')
 
 
-Windspots().process_data()
+if __name__ == '__main__':
+    Windspots().process_data()

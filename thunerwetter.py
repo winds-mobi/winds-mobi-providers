@@ -5,8 +5,8 @@ import requests
 from dateutil import tz
 from lxml import html
 
-from commons import user_agents
-from commons.provider import Provider, Status, ProviderException
+from winds_mobi_providers import user_agents
+from winds_mobi_providers.provider import Provider, StationStatus, ProviderException
 
 
 class ThunerWetter(Provider):
@@ -63,7 +63,7 @@ class ThunerWetter(Provider):
                 'Thun Westquartier',
                 float(46.7536663),
                 float(7.6211841),
-                Status.GREEN,
+                StationStatus.GREEN,
                 url=self.provider_url
             )
             station_id = station['_id']
@@ -129,4 +129,5 @@ class ThunerWetter(Provider):
         self.log.info('...Done!')
 
 
-ThunerWetter().process_data()
+if __name__ == '__main__':
+    ThunerWetter().process_data()

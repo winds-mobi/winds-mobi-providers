@@ -5,7 +5,7 @@ import requests
 from dateutil import tz
 from tenacity import retry, wait_random_exponential, stop_after_delay, after_log
 
-from commons.provider import Provider, ProviderException, Status, Pressure
+from winds_mobi_providers.provider import Provider, ProviderException, StationStatus, Pressure
 
 
 class Ffvl(Provider):
@@ -34,7 +34,7 @@ class Ffvl(Provider):
                             ffvl_station['nom'],
                             ffvl_station['latitude'],
                             ffvl_station['longitude'],
-                            Status.GREEN,
+                            StationStatus.GREEN,
                             altitude=ffvl_station['altitude'],
                             url=ffvl_station['url'])
                         stations[station['_id']] = station
@@ -103,4 +103,5 @@ class Ffvl(Provider):
         self.log.info('...Done!')
 
 
-Ffvl().process_data()
+if __name__ == '__main__':
+    Ffvl().process_data()

@@ -5,7 +5,7 @@ import requests
 from dateutil import tz
 from lxml import etree as ET
 
-from commons.provider import Provider, Status, ProviderException
+from winds_mobi_providers.provider import Provider, StationStatus, ProviderException
 
 oberwallis_tz = tz.gettz('Europe/Zurich')
 
@@ -37,7 +37,7 @@ class FluggruppeAletsch(Provider):
                     parser.name(),
                     parser.latitude(),
                     parser.longitude(),
-                    Status.GREEN,
+                    StationStatus.GREEN,
                     altitude=parser.elevation())
 
                 measures_collection = self.measures_collection(station['_id'])
@@ -133,4 +133,5 @@ def parse_dms(dms):
     return lat
 
 
-FluggruppeAletsch().process_data()
+if __name__ == '__main__':
+    FluggruppeAletsch().process_data()

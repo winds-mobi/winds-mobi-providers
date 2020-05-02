@@ -5,9 +5,9 @@ import MySQLdb
 import arrow
 from cachetools import hashkey, cached
 
-from commons import wgs84
-from commons.provider import Provider, ProviderException, Status, ureg, Q_
 from settings import WINDLINE_SQL_URL
+from winds_mobi_providers import wgs84
+from winds_mobi_providers.provider import Provider, ProviderException, StationStatus, ureg, Q_
 
 
 class NoMeasure(Exception):
@@ -41,15 +41,15 @@ class Windline(Provider):
     # Windline status: offline, maintenance, demo or online
     def get_status(self, status):
         if status == 'offline':
-            return Status.HIDDEN
+            return StationStatus.HIDDEN
         elif status == 'maintenance':
-            return Status.RED
+            return StationStatus.RED
         elif status == 'demo':
-            return Status.ORANGE
+            return StationStatus.ORANGE
         elif status == 'online':
-            return Status.GREEN
+            return StationStatus.GREEN
         else:
-            return Status.HIDDEN
+            return StationStatus.HIDDEN
 
     def get_property_id(self, cursor, key):
         cursor.execute('SELECT tblstationpropertylistno FROM tblstationpropertylist WHERE uniquename=%s', (key,))
@@ -248,4 +248,5 @@ class Windline(Provider):
         self.log.info('Done !')
 
 
-Windline().process_data()
+if __name__ == '__main__':
+    Windline().process_data()

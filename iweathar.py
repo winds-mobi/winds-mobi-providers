@@ -2,9 +2,9 @@ import requests
 import urllib3
 from lxml import etree
 
-from commons.provider import Provider, Status, ProviderException
-from commons.provider import Q_, ureg, Pressure
 from settings import IWEATHAR_KEY
+from winds_mobi_providers.provider import Provider, StationStatus, ProviderException
+from winds_mobi_providers.provider import Q_, ureg, Pressure
 
 # Disable urllib3 warning because https://iweathar.co.za has a certificates chain issue
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -33,7 +33,7 @@ class IWeathar(Provider):
                 try:
                     iweathar_id = item.xpath('STATION_ID')[0].text
                     name = item.xpath('LOCATION')[0].text
-                    status = Status.GREEN if item.xpath('STATUS')[0].text == 'ON-LINE' else Status.RED
+                    status = StationStatus.GREEN if item.xpath('STATUS')[0].text == 'ON-LINE' else StationStatus.RED
 
                     station = self.save_station(
                         iweathar_id,
@@ -111,4 +111,5 @@ class IWeathar(Provider):
         self.log.info('...Done!')
 
 
-IWeathar().process_data()
+if __name__ == '__main__':
+    IWeathar().process_data()

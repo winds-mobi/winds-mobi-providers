@@ -1,9 +1,6 @@
-import logging
-import logging.config
-import logging.handlers
 import math
 from collections import namedtuple
-from os import path
+from enum import Enum
 from random import randint
 
 import arrow
@@ -11,66 +8,25 @@ import dateutil
 import redis
 import requests
 import sentry_sdk
-import yaml
+from furl import furl
 from pint import UnitRegistry
 from pymongo import MongoClient, GEOSPHERE, ASCENDING
 from sentry_sdk.integrations.redis import RedisIntegration
 
-from commons.uwxutils import TWxUtils
-from settings import LOG_DIR, MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL, ENVIRONMENT
+from winds_mobi_providers.logging import get_logger
+from winds_mobi_providers.uwxutils import TWxUtils
+from settings import MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL, ENVIRONMENT
 
 ureg = UnitRegistry()
 Q_ = ureg.Quantity
 Pressure = namedtuple('Pressure', ['qfe', 'qnh', 'qff'])
 
 
-def get_logger(name):
-    if LOG_DIR:
-        with open(path.join(path.dirname(path.abspath(__file__)), 'logging_file.yml')) as f:
-            dict = yaml.load(f, Loader=yaml.FullLoader)
-            dict['handlers']['file']['filename'] = path.join(path.expanduser(LOG_DIR), f'{name}.log')
-            logging.config.dictConfig(dict)
-    else:
-        with open(path.join(path.dirname(path.abspath(__file__)), 'logging_console.yml')) as f:
-            logging.config.dictConfig(yaml.load(f, Loader=yaml.FullLoader))
-    return logging.getLogger(name)
-
-
-class ProviderException(Exception):
-    pass
-
-
-class UsageLimitException(ProviderException):
-    pass
-
-
-class Status:
+class StationStatus(Enum):
     HIDDEN = 'hidden'
     RED = 'red'
     ORANGE = 'orange'
     GREEN = 'green'
-
-
-def to_int(value, mandatory=False):
-    try:
-        return int(round(float(value)))
-    except (TypeError, ValueError):
-        if mandatory:
-            return 0
-        return None
-
-
-def to_float(value, ndigits=1, mandatory=False):
-    try:
-        return round(float(value), ndigits)
-    except (TypeError, ValueError):
-        if mandatory:
-            return 0.0
-        return None
-
-
-def to_bool(value):
-    return str(value).lower() in ['true', 'yes']
 
 
 class Provider:
@@ -105,6 +61,15 @@ class Provider:
         sentry_sdk.init(SENTRY_URL, environment=ENVIRONMENT, integrations=[RedisIntegration()])
         with sentry_sdk.configure_scope() as scope:
             scope.set_tag('provider', self.provider_name)
+
+    def stations_collection(self):
+        return self.__stations_collection
+
+    def measures_collection(self, station_id):
+        if station_id not in self.collection_names:
+            self.mongo_db.create_collection(station_id, **{'capped': True, 'size': 500000, 'max': 5000})
+            self.collection_names.append(station_id)
+        return self.mongo_db[station_id]
 
     def __to_wind_direction(self, value):
         if isinstance(value, ureg.Quantity):
@@ -167,20 +132,23 @@ class Provider:
         else:
             return to_float(value, 1)
 
-    def stations_collection(self):
-        return self.__stations_collection
-
-    def measures_collection(self, station_id):
-        if station_id not in self.collection_names:
-            self.mongo_db.create_collection(station_id, **{'capped': True, 'size': 500000, 'max': 5000})
-            self.collection_names.append(station_id)
-        return self.mongo_db[station_id]
-
     def add_redis_key(self, key, values, cache_duration):
         pipe = self.redis.pipeline()
         pipe.hmset(key, values)
         pipe.expire(key, cache_duration)
         pipe.execute()
+
+    def call_google_api(self, api_url, api_name):
+        url = furl(api_url)
+        url.args['key'] = self.google_api_key
+        result = requests.get(url.url, timeout=(self.connect_timeout, self.read_timeout)).json()
+        if result['status'] == 'OVER_QUERY_LIMIT':
+            raise UsageLimitException(f'{api_name} OVER_QUERY_LIMIT')
+        elif result['status'] == 'INVALID_REQUEST':
+            raise ProviderException(f'{api_name} INVALID_REQUEST: {result.get("error_message", "")}')
+        elif result['status'] == 'ZERO_RESULTS':
+            raise ProviderException(f'{api_name} ZERO_RESULTS')
+        return result
 
     def __compute_elevation(self, lat, lon):
         radius = 500
@@ -196,16 +164,9 @@ class Provider:
             if k < nb - 1:
                 path += '|'
 
-        result = requests.get(
-            f'https://maps.googleapis.com/maps/api/elevation/json?locations={path}&key={self.google_api_key}',
-            timeout=(self.connect_timeout, self.read_timeout)).json()
-        if result['status'] == 'OVER_QUERY_LIMIT':
-            raise UsageLimitException('Google Elevation API OVER_QUERY_LIMIT')
-        elif result['status'] == 'INVALID_REQUEST':
-            raise ProviderException(f'Google Elevation API INVALID_REQUEST: {result.get("error_message", "")}')
-        elif result['status'] == 'ZERO_RESULTS':
-            raise ProviderException('Google Elevation API ZERO_RESULTS')
-
+        result = self.call_google_api(
+            f'https://maps.googleapis.com/maps/api/elevation/json?locations={path}', 'Google Elevation API'
+        )
         elevation = float(result['results'][0]['elevation'])
         is_peak = False
         for point in result['results'][1:]:
@@ -233,50 +194,28 @@ class Provider:
         return lat, lon, address_long_name
 
     def __get_place_autocomplete(self, name):
-        results = requests.get(
-            f'https://maps.googleapis.com/maps/api/place/autocomplete/json?input={name}&key={self.google_api_key}',
-            timeout=(self.connect_timeout, self.read_timeout)).json()
-
-        if results['status'] == 'OVER_QUERY_LIMIT':
-            raise UsageLimitException('Google Places API OVER_QUERY_LIMIT')
-        elif results['status'] == 'INVALID_REQUEST':
-            raise ProviderException(f'Google Places API INVALID_REQUEST: {results.get("error_message", "")}')
-        elif results['status'] == 'ZERO_RESULTS':
-            raise ProviderException(f"Google Places API ZERO_RESULTS for '{name}'")
-
+        results = self.call_google_api(
+            f'https://maps.googleapis.com/maps/api/place/autocomplete/json?input={name}', 'Google Places API'
+        )
         place_id = results['predictions'][0]['place_id']
 
-        results = requests.get(
-            f'https://maps.googleapis.com/maps/api/geocode/json?place_id={place_id}&key={self.google_api_key}',
-            timeout=(self.connect_timeout, self.read_timeout)).json()
-
-        if results['status'] == 'OVER_QUERY_LIMIT':
-            raise UsageLimitException('Google Geocoding API OVER_QUERY_LIMIT')
-        elif results['status'] == 'INVALID_REQUEST':
-            raise ProviderException(f'Google Geocoding API INVALID_REQUEST: {results.get("error_message", "")}')
-        elif results['status'] == 'ZERO_RESULTS':
-            raise ProviderException(f"Google Geocoding API ZERO_RESULTS for '{name}'")
-
+        results = self.call_google_api(
+            f'https://maps.googleapis.com/maps/api/geocode/json?place_id={place_id}', 'Google Geocoding API'
+        )
         return self.__get_place_geocoding_results(results)
 
     def __get_place_geocoding(self, name):
-        results = requests.get(
-            f'https://maps.googleapis.com/maps/api/geocode/json?address={name}&key={self.google_api_key}',
-            timeout=(self.connect_timeout, self.read_timeout)).json()
-        if results['status'] == 'OVER_QUERY_LIMIT':
-            raise UsageLimitException('Google Geocoding API OVER_QUERY_LIMIT')
-        elif results['status'] == 'INVALID_REQUEST':
-            raise ProviderException(f'Google Geocoding API INVALID_REQUEST: {results.get("error_message", "")}')
-        elif results['status'] == 'ZERO_RESULTS':
-            raise ProviderException(f"Google Geocoding API ZERO_RESULTS for '{name}'")
-
+        results = self.call_google_api(
+            f'https://maps.googleapis.com/maps/api/geocode/json?address={name}', 'Google Geocoding API'
+        )
         return self.__get_place_geocoding_results(results)
 
     def get_station_id(self, provider_id):
         return self.provider_code + '-' + str(provider_id)
 
-    def __create_station(self, provider_id, short_name, name, latitude, longitude, altitude, is_peak, status, tz, urls,
-                         fixes):
+    def __create_station(
+        self, provider_id, short_name, name, latitude, longitude, altitude, is_peak, status, tz, urls, fixes
+    ):
         if fixes is None:
             fixes = {}
 
@@ -305,9 +244,10 @@ class Provider:
         }
         return station
 
-    def save_station(self, provider_id, short_name, name, latitude, longitude, status, altitude=None, tz=None, url=None,
-                     default_name=None, lookup_name=None):
-
+    def save_station(
+        self, provider_id, short_name, name, latitude, longitude, status: StationStatus, altitude=None, tz=None,
+        url=None, default_name=None, lookup_name=None
+    ):
         if provider_id is None:
             raise ProviderException("'provider id' is none!")
         station_id = self.get_station_id(provider_id)
@@ -317,18 +257,11 @@ class Provider:
         address_key = f'address/{lat},{lon}'
         if (not short_name or not name) and not self.redis.exists(address_key):
             try:
-                results = requests.get(
+                results = self.call_google_api(
                     f'https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}'
-                    f'&result_type=airport|colloquial_area|locality|natural_feature|point_of_interest|neighborhood'
-                    f'&key={self.google_api_key}',
-                    timeout=(self.connect_timeout, self.read_timeout)).json()
-
-                if results['status'] == 'OVER_QUERY_LIMIT':
-                    raise UsageLimitException('Google Geocoding API OVER_QUERY_LIMIT')
-                elif results['status'] == 'INVALID_REQUEST':
-                    raise ProviderException(f'Google Geocoding API INVALID_REQUEST: {results.get("error_message", "")}')
-                elif results['status'] == 'ZERO_RESULTS':
-                    raise ProviderException('Google Geocoding API ZERO_RESULTS')
+                    f'&result_type=airport|colloquial_area|locality|natural_feature|point_of_interest|neighborhood',
+                    'Google Geocoding API'
+                )
 
                 address_short_name = None
                 address_long_name = None
@@ -416,17 +349,10 @@ class Provider:
         if not tz and not self.redis.exists(tz_key):
             try:
                 now = arrow.utcnow().timestamp
-                result = requests.get(
-                    f'https://maps.googleapis.com/maps/api/timezone/json?location={lat},{lon}'
-                    f'&timestamp={now}&key={self.google_api_key}',
-                    timeout=(self.connect_timeout, self.read_timeout)).json()
-
-                if result['status'] == 'OVER_QUERY_LIMIT':
-                    raise UsageLimitException('Google Time Zone API OVER_QUERY_LIMIT')
-                elif result['status'] == 'INVALID_REQUEST':
-                    raise ProviderException(f'Google Time Zone API INVALID_REQUEST: {result.get("error_message", "")}')
-                elif result['status'] == 'ZERO_RESULTS':
-                    raise ProviderException('Google Time Zone API ZERO_RESULTS')
+                result = self.call_google_api(
+                    f'https://maps.googleapis.com/maps/api/timezone/json?location={lat},{lon}&timestamp={now}',
+                    'Google Time Zone API'
+                )
 
                 tz = result['timeZoneId']
                 dateutil.tz.gettz(tz)
@@ -496,8 +422,9 @@ class Provider:
             raise ProviderException('Invalid url')
 
         fixes = self.mongo_db.stations_fix.find_one(station_id)
-        station = self.__create_station(provider_id, short_name, name, lat, lon, altitude, is_peak, status, tz, urls,
-                                        fixes)
+        station = self.__create_station(
+            provider_id, short_name, name, lat, lon, altitude, is_peak, status.value, tz, urls, fixes
+        )
         self.stations_collection().update({'_id': station_id}, {'$set': station}, upsert=True)
         station['_id'] = station_id
         return station
@@ -547,6 +474,11 @@ class Provider:
     def has_measure(self, measure_collection, key):
         return measure_collection.find({'_id': key}).count() > 0
 
+    def __add_last_measure(self, measure_collection, station_id):
+        last_measure = measure_collection.find_one({'$query': {}, '$orderby': {'_id': -1}})
+        if last_measure:
+            self.stations_collection().update({'_id': station_id}, {'$set': {'last': last_measure}})
+
     def insert_new_measures(self, measure_collection, station, new_measures):
         if len(new_measures) > 0:
             measure_collection.insert(sorted(new_measures, key=lambda m: m['_id']))
@@ -563,7 +495,32 @@ class Provider:
 
             self.__add_last_measure(measure_collection, station['_id'])
 
-    def __add_last_measure(self, measure_collection, station_id):
-        last_measure = measure_collection.find_one({'$query': {}, '$orderby': {'_id': -1}})
-        if last_measure:
-            self.stations_collection().update({'_id': station_id}, {'$set': {'last': last_measure}})
+
+class ProviderException(Exception):
+    pass
+
+
+class UsageLimitException(ProviderException):
+    pass
+
+
+def to_int(value, mandatory=False):
+    try:
+        return int(round(float(value)))
+    except (TypeError, ValueError):
+        if mandatory:
+            return 0
+        return None
+
+
+def to_float(value, ndigits=1, mandatory=False):
+    try:
+        return round(float(value), ndigits)
+    except (TypeError, ValueError):
+        if mandatory:
+            return 0.0
+        return None
+
+
+def to_bool(value):
+    return str(value).lower() in ['true', 'yes']
