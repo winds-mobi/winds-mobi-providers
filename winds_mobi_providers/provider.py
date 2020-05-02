@@ -1,25 +1,20 @@
 import math
-from collections import namedtuple
 from enum import Enum
 from random import randint
 
 import arrow
-import dateutil
 import redis
 import requests
 import sentry_sdk
+from dateutil.tz import gettz
 from furl import furl
-from pint import UnitRegistry
 from pymongo import MongoClient, GEOSPHERE, ASCENDING
 from sentry_sdk.integrations.redis import RedisIntegration
 
-from winds_mobi_providers.logging import get_logger
-from winds_mobi_providers.uwxutils import TWxUtils
 from settings import MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL, ENVIRONMENT
-
-ureg = UnitRegistry()
-Q_ = ureg.Quantity
-Pressure = namedtuple('Pressure', ['qfe', 'qnh', 'qff'])
+from winds_mobi_providers import get_logger
+from winds_mobi_providers.units import ureg, Pressure
+from winds_mobi_providers.uwxutils import TWxUtils
 
 
 class StationStatus(Enum):
@@ -355,7 +350,7 @@ class Provider:
                 )
 
                 tz = result['timeZoneId']
-                dateutil.tz.gettz(tz)
+                gettz(tz)
                 self.add_redis_key(tz_key, {
                     'tz': tz
                 }, self.google_api_cache_duration)
@@ -483,7 +478,7 @@ class Provider:
         if len(new_measures) > 0:
             measure_collection.insert(sorted(new_measures, key=lambda m: m['_id']))
 
-            end_date = arrow.Arrow.fromtimestamp(new_measures[-1]['_id'], dateutil.tz.gettz(station['tz']))
+            end_date = arrow.Arrow.fromtimestamp(new_measures[-1]['_id'], gettz(station['tz']))
             self.log.info(
                 '--> {end_date} ({end_date_local}), {short}/{name} ({id}): {nb} values inserted'.format(
                     end_date=end_date.format('YY-MM-DD HH:mm:ssZZ'),

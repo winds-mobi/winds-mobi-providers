@@ -15,7 +15,7 @@ from psycopg2.extras import RealDictCursor
 from settings import (
     ADMIN_DB_URL, JDC_IMAP_SERVER, JDC_IMAP_USERNAME, JDC_IMAP_PASSWORD, JDC_DELETE_EMAILS, JDC_PHP_PATH
 )
-from winds_mobi_providers.provider import Provider, ProviderException, StationStatus, Pressure, ureg, Q_
+from winds_mobi_providers import Provider, ProviderException, StationStatus, Pressure, ureg, Q_
 
 current_dir = path.dirname(os.path.abspath(__file__))
 
