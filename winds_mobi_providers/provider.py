@@ -13,7 +13,7 @@ from sentry_sdk.integrations.redis import RedisIntegration
 
 from settings import MONGODB_URL, REDIS_URL, GOOGLE_API_KEY, SENTRY_URL, ENVIRONMENT
 from winds_mobi_providers import get_logger
-from winds_mobi_providers.unit import ureg, Pressure
+from winds_mobi_providers.units import ureg, Pressure
 from winds_mobi_providers.uwxutils import TWxUtils
 
 
