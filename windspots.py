@@ -44,9 +44,6 @@ class Windspots(Provider):
                         except ValueError:
                             raise ProviderException('Action=Data return invalid json response')
 
-                        measures_collection = self.measures_collection(station_id)
-
-                        new_measures = []
                         try:
                             key = arrow.get(windspots_measure['@lastUpdate'], 'YYYY-M-DTHH:mm:ssZZ').timestamp
                         except arrow.parser.ParserError:
@@ -63,6 +60,7 @@ class Windspots(Provider):
                                 f"inconsistent with measure time '{key_time}'"
                             )
 
+                        measures_collection = self.measures_collection(station_id)
                         if not self.has_measure(measures_collection, key):
                             try:
                                 measure = self.create_measure(
@@ -74,15 +72,13 @@ class Windspots(Provider):
                                     temperature=windspots_measure.get('airTemperature'),
                                     humidity=windspots_measure.get('airHumidity'),
                                 )
-                                new_measures.append(measure)
+                                self.insert_new_measures(measures_collection, station, [measure])
                             except ProviderException as e:
                                 self.log.warning(
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}")
                             except Exception as e:
                                 self.log.exception(
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}")
-
-                        self.insert_new_measures(measures_collection, station, new_measures)
 
                     except Exception as e:
                         self.log.exception(f"Error while processing measure for station '{station_id}': {e}")
