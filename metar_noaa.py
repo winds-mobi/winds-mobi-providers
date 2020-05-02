@@ -10,9 +10,7 @@ import requests
 from metar.Metar import Metar
 
 from settings import CHECKWX_API_KEY
-from winds_mobi_providers.provider import (
-    Provider, ProviderException, StationStatus, ureg, Q_, UsageLimitException, Pressure
-)
+from winds_mobi_providers import Provider, ProviderException, StationStatus, ureg, Q_, UsageLimitException, Pressure
 
 
 class MetarNoaa(Provider):

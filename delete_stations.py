@@ -4,7 +4,7 @@ import arrow
 from pymongo import MongoClient
 
 from settings import MONGODB_URL
-from winds_mobi_providers.logging import get_logger
+from winds_mobi_providers import get_logger
 
 log = get_logger('delete_stations')
 

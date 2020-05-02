@@ -2,7 +2,7 @@ import arrow
 import requests
 from arrow.parser import ParserError
 
-from winds_mobi_providers.provider import Provider, StationStatus, ProviderException, Pressure
+from winds_mobi_providers import Provider, StationStatus, ProviderException, Pressure
 
 
 class Pioupiou(Provider):

@@ -3,7 +3,7 @@ import arrow.parser
 import requests
 import urllib3
 
-from winds_mobi_providers.provider import Provider, ProviderException, StationStatus
+from winds_mobi_providers import Provider, ProviderException, StationStatus
 
 # Disable urllib3 warning because https://www.windspots.com has a certificates chain issue
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

@@ -5,8 +5,8 @@ from os import path
 import requests
 from lxml import etree
 
+from winds_mobi_providers import Provider, ProviderException, StationStatus
 from winds_mobi_providers import user_agents
-from winds_mobi_providers.provider import Provider, ProviderException, StationStatus
 
 Measure = collections.namedtuple(
     'Measure', ('key', 'wind_direction', 'wind_average', 'wind_maximum', 'temperature'))

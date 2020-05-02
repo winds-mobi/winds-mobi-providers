@@ -6,7 +6,7 @@ from dateutil import tz
 from lxml import etree
 
 from settings import ROMMA_KEY
-from winds_mobi_providers.provider import Provider, StationStatus, Pressure, ProviderException
+from winds_mobi_providers import Provider, StationStatus, Pressure, ProviderException
 
 
 class Romma(Provider):
