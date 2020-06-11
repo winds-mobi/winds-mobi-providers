@@ -1,8 +1,8 @@
 import arrow
 import requests
+from pyproj import CRS, Transformer
 
 from winds_mobi_provider import Provider, StationStatus, ProviderException, ureg, Q_, Pressure
-from winds_mobi_provider.projections import ch_to_wgs_lat, ch_to_wgs_lon
 
 
 class MeteoSwiss(Provider):
@@ -22,6 +22,13 @@ class MeteoSwiss(Provider):
         'it': 'https://www.meteosvizzera.admin.ch'
               '/home/valori-attuali.html?param={param}&station={id}',
     }
+
+    def __init__(self):
+        super().__init__()
+
+        lv95 = CRS.from_epsg(2056)
+        wgs84 = CRS.from_epsg(4326)
+        self.lv85_to_wgs84 = Transformer.from_crs(lv95, wgs84)
 
     def to_dict(self, features):
         return {feature['id']: feature for feature in features}
@@ -82,12 +89,13 @@ class MeteoSwiss(Provider):
                     urls = {lang: url.format(param='messwerte-windgeschwindigkeit-kmh-10min', id=meteoswiss_id) for
                             lang, url in self.provider_urls.items()}
 
+                    lat, lon = self.lv85_to_wgs84.transform(location[0], location[1])
+
                     station = self.save_station(
                         meteoswiss_id,
                         meteoswiss_station['properties']['station_name'],
                         meteoswiss_station['properties']['station_name'],
-                        ch_to_wgs_lat(location[0], location[1]),
-                        ch_to_wgs_lon(location[0], location[1]),
+                        lat, lon,
                         StationStatus.GREEN,
                         altitude=meteoswiss_station['properties']['altitude'],
                         tz='Europe/Zurich',
