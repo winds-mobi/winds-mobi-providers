@@ -203,13 +203,21 @@ class Windline(Provider):
                                         station_no,
                                         self.wind_direction_type)
 
-                                    temperature = self.get_last_measure_value(
-                                        temperature_rows,
-                                        measure_date + timedelta(seconds=10))
+                                    try:
+                                        temperature = self.get_last_measure_value(
+                                            temperature_rows,
+                                            measure_date + timedelta(seconds=10))
+                                    except NoMeasure:
+                                        temperature = None
+                                        pass
 
-                                    humidity = self.get_last_measure_value(
-                                        humidity_rows,
-                                        measure_date + timedelta(seconds=10))
+                                    try:
+                                        humidity = self.get_last_measure_value(
+                                            humidity_rows,
+                                            measure_date + timedelta(seconds=10))
+                                    except NoMeasure:
+                                        humidity = None
+                                        pass
 
                                     measure = self.create_measure(
                                         station,
