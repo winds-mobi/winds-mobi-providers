@@ -62,7 +62,7 @@ class MeteoSwiss(Provider):
                 self.connect_timeout, self.read_timeout)).json()
             pressure_qnh = requests.get(url_pattern.format(parameter='luftdruck-qnh-10min'), timeout=(
                 self.connect_timeout, self.read_timeout)).json()
-            pressure_qff = requests.get(url_pattern.format(parameter='luftdruck-qnh-10min'), timeout=(
+            pressure_qff = requests.get(url_pattern.format(parameter='luftdruck-qff-10min'), timeout=(
                 self.connect_timeout, self.read_timeout)).json()
             rain = requests.get(url_pattern.format(parameter='niederschlag-10min'), timeout=(
                 self.connect_timeout, self.read_timeout)).json()
