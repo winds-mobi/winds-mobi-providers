@@ -43,6 +43,12 @@ class MeteoSwiss(Provider):
             return Q_(properties['value'], unit)
         return None
 
+    def get_pressure_value(self, pressure_data, meteoswiss_id):
+        try:
+            return self.get_value(pressure_data[meteoswiss_id]['properties'])
+        except KeyError:
+            return None
+
     def process_data(self):
         try:
             self.log.info('Processing MeteoSwiss data...')
@@ -123,9 +129,9 @@ class MeteoSwiss(Provider):
 
                     if meteoswiss_id in pressure_qfe_data:
                         pressure = Pressure(
-                            qfe=self.get_value(pressure_qfe_data[meteoswiss_id]['properties']),
-                            qnh=self.get_value(pressure_qnh_data[meteoswiss_id]['properties']),
-                            qff=self.get_value(pressure_qff_data[meteoswiss_id]['properties']))
+                            qfe=self.get_pressure_value(pressure_qfe_data, meteoswiss_id),
+                            qnh=self.get_pressure_value(pressure_qnh_data, meteoswiss_id),
+                            qff=self.get_pressure_value(pressure_qff_data, meteoswiss_id))
                     else:
                         pressure = None
 
