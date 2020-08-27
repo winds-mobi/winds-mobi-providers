@@ -22,7 +22,8 @@ class FluggruppeAletsch(Provider):
         'blitzingu',
         'bellwald',
         'fieschertal',
-        'chaeserstatt'
+        'chaeserstatt',
+        'jeizinen'
     ]
 
     def process_data(self):
