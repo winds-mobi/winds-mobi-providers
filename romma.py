@@ -12,7 +12,7 @@ from winds_mobi_provider import Provider, StationStatus, Pressure, ProviderExcep
 class Romma(Provider):
     provider_code = 'romma'
     provider_name = 'romma.fr'
-    provider_url = 'http://romma.fr'
+    provider_url = 'https://romma.fr'
 
     wind_directions = {
         'N': 0,
@@ -48,7 +48,7 @@ class Romma(Provider):
 
             romma_tz = tz.gettz('Europe/Paris')
 
-            result_tree = etree.fromstring(requests.get(f'http://romma.fr/releves_romma_xml.php?id={self.romma_key}',
+            result_tree = etree.fromstring(requests.get(f'https://romma.fr/releves_romma_xml.php?id={self.romma_key}',
                                                         timeout=(self.connect_timeout, self.read_timeout)).text)
 
             for report in result_tree.xpath('//releves/releve'):
