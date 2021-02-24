@@ -109,7 +109,7 @@ class MeteoSwiss(Provider):
                     station_id = station['_id']
 
                     timestamp = meteoswiss_station['properties'].get('reference_ts', None)
-                    if not timestamp:
+                    if not timestamp or timestamp == '-':
                         self.log.warning(f"'{station_id}' has no timestamp field")
                         continue
                     key = arrow.get(meteoswiss_station['properties']['reference_ts'], 'YY-MM-DDTHH:mm:ZZ').timestamp
