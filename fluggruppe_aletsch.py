@@ -23,7 +23,9 @@ class FluggruppeAletsch(Provider):
         'bellwald',
         'fieschertal',
         'chaeserstatt',
-        'jeizinen'
+        'jeizinen',
+        'rothorli',
+        'klaena'
     ]
 
     def process_data(self):
