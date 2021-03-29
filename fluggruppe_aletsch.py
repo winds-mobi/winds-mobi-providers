@@ -18,21 +18,21 @@ class FluggruppeAletsch(Provider):
     url = 'https://meteo-oberwallis.ch/wetter/{}/daten.xml'
 
     stations = [
-        'ried-brig/XML',
-        'blitzingu/XML',
-        'bellwald/XML',
-        'fieschertal/XML',
-        'chaeserstatt/XML',
-        'jeizinen/XML',
-        'rothorli',
-        'klaena'
+        ['ried-brig', 'ried-brig/XML'],
+        ['blitzingu', 'blitzingu/XML'],
+        ['bellwald', 'bellwald/XML'],
+        ['fieschertal', 'fieschertal/XML'],
+        ['chaeserstatt', 'chaeserstatt/XML'],
+        ['jeizinen', 'jeizinen/XML'],
+        ['rothorli', 'rothorli'],
+        ['klaena', 'klaena']
     ]
 
     def process_data(self):
         self.log.info('Processing Fluggruppe Aletsch Data...')
-        for fga_id in self.stations:
+        for fga_id, fga_path in self.stations:
             try:
-                response = requests.get(self.url.format(fga_id), timeout=(self.connect_timeout, self.read_timeout))
+                response = requests.get(self.url.format(fga_path), timeout=(self.connect_timeout, self.read_timeout))
                 parser = FgaStationParser(response.text)
 
                 station = self.save_station(
