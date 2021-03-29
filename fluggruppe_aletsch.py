@@ -15,15 +15,15 @@ class FluggruppeAletsch(Provider):
     provider_name = 'fluggruppe-aletsch.ch'
     provider_url = 'https://fluggruppe-aletsch.ch'
 
-    url = 'https://meteo-oberwallis.ch/wetter/{}/XML/daten.xml'
+    url = 'https://meteo-oberwallis.ch/wetter/{}/daten.xml'
 
     stations = [
-        'ried-brig',
-        'blitzingu',
-        'bellwald',
-        'fieschertal',
-        'chaeserstatt',
-        'jeizinen',
+        'ried-brig/XML',
+        'blitzingu/XML',
+        'bellwald/XML',
+        'fieschertal/XML',
+        'chaeserstatt/XML',
+        'jeizinen/XML',
         'rothorli',
         'klaena'
     ]
