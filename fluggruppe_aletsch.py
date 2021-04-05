@@ -24,8 +24,8 @@ class FluggruppeAletsch(Provider):
         ['fieschertal', 'fieschertal/XML'],
         ['chaeserstatt', 'chaeserstatt/XML'],
         ['jeizinen', 'jeizinen/XML'],
-        ['rothorli', 'rothorli'],
-        ['klaena', 'klaena']
+        # ['rothorli', 'rothorli'],
+        # ['klaena', 'klaena'],
     ]
 
     def process_data(self):
