@@ -21,11 +21,9 @@ class FluggruppeAletsch(Provider):
         ['ried-brig', 'ried-brig/XML'],
         ['blitzingu', 'blitzingu/XML'],
         ['bellwald', 'bellwald/XML'],
-        ['fieschertal', 'fieschertal/XML'],
+        ['fieschertal', 'fiesch/XML'],
         ['chaeserstatt', 'chaeserstatt/XML'],
-        ['jeizinen', 'jeizinen/XML'],
-        # ['rothorli', 'rothorli'],
-        # ['klaena', 'klaena'],
+        ['jeizinen', 'jeizinen/XML']
     ]
 
     def process_data(self):
@@ -69,11 +67,57 @@ class FluggruppeAletsch(Provider):
             except Exception as e:
                 self.log.exception(f"Error while processing station '{fga_id}': {e}")
 
-        self.log.info('...Done!')
+        self.log.info('...Done Type1 via Meteo Oberwallis!')
+    
+    
+    stationstype2 = [
+       ['rothorli', 'rothorli', 'Visperterminen Rothorn', '7.938', '46.2497'],
+       ['klaena', 'klaena', 'Rosswald Klaena', '8.0632', '46.3135']
+    ]
+    
+    def process_data2(self):
+        self.log.info('Processing Fluggruppe Aletsch Data Type 2...')
+        for fga_id, fga_path, fga_desc, fga_long, fga_lat in self.stationstype2:
+            try:
+                response = requests.get(self.url.format(fga_path), timeout=(self.connect_timeout, self.read_timeout))
+                parser = FgaStationParserType2(response.text)
 
+                station = self.save_station(
+                    fga_id,
+                    fga_desc,
+                    fga_desc,
+                    fga_lat,
+                    fga_long,
+                    StationStatus.GREEN,
+                    altitude=parser.elevation())
+
+                measures_collection = self.measures_collection(station['_id'])
+                key = parser.key()
+                if not self.has_measure(measures_collection, key):
+                    try:
+                        measure = self.create_measure(
+                            station,
+                            key,
+                            parser.direction(),
+                            parser.speed(),
+                            parser.speed_max(),
+                            rain=parser.rain(),
+                            temperature=parser.temperature(),
+                            humidity=parser.humidity())
+
+                        self.insert_new_measures(measures_collection, station, [measure])
+                    except ProviderException as e:
+                        self.log.warning(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
+                    except Exception as e:
+                        self.log.exception(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
+
+            except ProviderException as e:
+                self.log.warning(f"Error while processing station '{fga_id}': {e}")
+            except Exception as e:
+                self.log.exception(f"Error while processing station '{fga_id}': {e}")
+        self.log.info('...Done Type2 via Meteo Oberwallis!')
 
 class FgaStationParser:
-
     def __init__(self, response):
         self._fga_station = ET.fromstring(response.encode('utf-8')).find('./station')
 
@@ -120,6 +164,40 @@ class FgaStationParser:
             return None
         return element.attrib.get('value')
 
+class FgaStationParserType2:
+    def __init__(self, response):
+        self._fga_station = ET.fromstring(response.encode('utf-8')).find('./station')
+
+    def elevation(self):
+        return self._get_value('./elevation/elevation')
+
+    def key(self):
+        time = self._get_value('./time/date_time')
+        return arrow.get(time, 'D.MM.YYYY H:mm:ss').replace(tzinfo=oberwallis_tz).timestamp
+
+    def direction(self):
+        return self._get_value('./wind/direction_wind')
+
+    def speed(self):
+        return self._get_value('./wind/speed')
+
+    def speed_max(self):
+        return self._get_value('./gust/gust_max')
+
+    def rain(self):
+        return self._get_value('./precipitation/rain')
+
+    def temperature(self):
+        return self._get_value('./temperature/temperature')
+
+    def humidity(self):
+        return self._get_value('./humidity/humidity')
+
+    def _get_value(self, path):
+        element = self._fga_station.find(path)
+        if element is None:
+            return None
+        return element.attrib.get('value')
 
 dd_pattern = re.compile(r"(\d*)°.([\d\.]*)'.([ONWS]+)")
 
@@ -139,3 +217,4 @@ def parse_dms(dms):
 
 if __name__ == '__main__':
     FluggruppeAletsch().process_data()
+    FluggruppeAletsch().process_data2()
