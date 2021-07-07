@@ -68,16 +68,15 @@ class FluggruppeAletsch(Provider):
                 self.log.exception(f"Error while processing station '{fga_id}': {e}")
 
         self.log.info('...Done Type1 via Meteo Oberwallis!')
-    
-    
-    stationstype2 = [
-       ['rothorli', 'rothorli', 'Visperterminen Rothorn', '7.938', '46.2497'],
-       ['klaena', 'klaena', 'Rosswald Klaena', '8.0632', '46.3135']
+
+    stations_type_2 = [
+        ['rothorli', 'rothorli', 'Visperterminen Rothorn', '7.938', '46.2497'],
+        ['klaena', 'klaena', 'Rosswald Klaena', '8.0632', '46.3135']
     ]
-    
+
     def process_data2(self):
         self.log.info('Processing Fluggruppe Aletsch Data Type 2...')
-        for fga_id, fga_path, fga_desc, fga_long, fga_lat in self.stationstype2:
+        for fga_id, fga_path, fga_desc, fga_long, fga_lat in self.stations_type_2:
             try:
                 response = requests.get(self.url.format(fga_path), timeout=(self.connect_timeout, self.read_timeout))
                 parser = FgaStationParserType2(response.text)
@@ -116,6 +115,7 @@ class FluggruppeAletsch(Provider):
             except Exception as e:
                 self.log.exception(f"Error while processing station '{fga_id}': {e}")
         self.log.info('...Done Type2 via Meteo Oberwallis!')
+
 
 class FgaStationParser:
     def __init__(self, response):
@@ -164,6 +164,7 @@ class FgaStationParser:
             return None
         return element.attrib.get('value')
 
+
 class FgaStationParserType2:
     def __init__(self, response):
         self._fga_station = ET.fromstring(response.encode('utf-8')).find('./station')
@@ -199,11 +200,12 @@ class FgaStationParserType2:
             return None
         return element.attrib.get('value')
 
+
 dd_pattern = re.compile(r"(\d*)°.([\d\.]*)'.([ONWS]+)")
 
 
 def dms2dd(degrees, minutes, seconds, direction):
-    dd = float(degrees) + float(minutes)/60 + float(seconds)/(60*60)
+    dd = float(degrees) + float(minutes) / 60 + float(seconds) / (60 * 60)
     if direction == 'W' or direction == 'S':
         dd *= -1
     return dd
@@ -216,5 +218,6 @@ def parse_dms(dms):
 
 
 if __name__ == '__main__':
-    FluggruppeAletsch().process_data()
-    FluggruppeAletsch().process_data2()
+    aletsch_provider = FluggruppeAletsch()
+    aletsch_provider.process_data()
+    aletsch_provider.process_data2()
