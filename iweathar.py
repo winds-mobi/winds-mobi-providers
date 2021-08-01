@@ -14,9 +14,9 @@ class IWeathar(Provider):
     provider_name = 'iweathar.co.za'
     provider_url = 'https://iweathar.co.za'
 
-    def __init__(self):
+    def __init__(self, iweathar_key):
         super().__init__()
-        self.iweathar_key = IWEATHAR_KEY
+        self.iweathar_key = iweathar_key
 
     def process_data(self):
         try:
@@ -111,4 +111,4 @@ class IWeathar(Provider):
 
 
 if __name__ == '__main__':
-    IWeathar().process_data()
+    IWeathar(IWEATHAR_KEY).process_data()

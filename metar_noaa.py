@@ -189,7 +189,7 @@ class MetarNoaa(Provider):
                         try:
                             tz = checkwx_data['timezone']['tzid']
                         except KeyError:
-                            raise ProviderException(f'Unable to get the timezone')
+                            raise ProviderException('Unable to get the timezone')
                         elevation = checkwx_data.get('elevation', None)
                         altitude = None
                         if elevation:

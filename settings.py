@@ -32,6 +32,10 @@ ROMMA_KEY = os.environ.get('ROMMA_KEY') or ''
 # iWeathar
 IWEATHAR_KEY = os.environ.get('IWEATHAR_KEY') or ''
 
+# BornToFly
+BORN_TO_FLY_VENDOR_ID = os.environ.get('BORN_TO_FLY_VENDOR_ID') or ''
+BORN_TO_FLY_DEVICE_ID = os.environ.get('BORN_TO_FLY_DEVICE_ID') or ''
+
 try:
     from local_settings import *  # noqa
 except ImportError:
