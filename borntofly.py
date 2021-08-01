@@ -65,8 +65,8 @@ class BornToFly(Provider):
                 'stechelberg',
                 'Stechelberg',
                 None,
-                46.5692979,
-                7.9079288,
+                46.569360,
+                7.910003,
                 StationStatus.GREEN,
                 altitude=830,
             )
