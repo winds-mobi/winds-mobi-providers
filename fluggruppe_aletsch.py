@@ -183,7 +183,7 @@ class FgaStationParserType2:
         return self._get_value('./wind/speed')
 
     def speed_max(self):
-        return self._get_value('./wind/speed_max')
+        return self._get_value('./gust/gust_1h_max')
 
     def rain(self):
         return self._get_value('./precipitation/rain')
