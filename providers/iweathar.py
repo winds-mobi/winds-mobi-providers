@@ -10,9 +10,9 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class IWeathar(Provider):
-    provider_code = 'iweathar'
-    provider_name = 'iweathar.co.za'
-    provider_url = 'https://iweathar.co.za'
+    provider_code = "iweathar"
+    provider_name = "iweathar.co.za"
+    provider_url = "https://iweathar.co.za"
 
     def __init__(self, iweathar_key):
         super().__init__()
@@ -20,35 +20,38 @@ class IWeathar(Provider):
 
     def process_data(self):
         try:
-            self.log.info('Processing iWeathar data...')
+            self.log.info("Processing iWeathar data...")
 
             result_tree = etree.parse(
-                requests.get(f'https://iweathar.co.za/live_data.php?unit=kmh&key={self.iweathar_key}',
-                             stream=True, verify=False,
-                             timeout=(self.connect_timeout, self.read_timeout)).raw)
+                requests.get(
+                    f"https://iweathar.co.za/live_data.php?unit=kmh&key={self.iweathar_key}",
+                    stream=True,
+                    timeout=(self.connect_timeout, self.read_timeout),
+                ).raw
+            )
 
-            for item in result_tree.xpath('//ITEM'):
+            for item in result_tree.xpath("//ITEM"):
                 station_id = None
                 try:
-                    iweathar_id = item.xpath('STATION_ID')[0].text
-                    name = item.xpath('LOCATION')[0].text
-                    status = StationStatus.GREEN if item.xpath('STATUS')[0].text == 'ON-LINE' else StationStatus.RED
+                    iweathar_id = item.xpath("STATION_ID")[0].text
+                    name = item.xpath("LOCATION")[0].text
+                    status = StationStatus.GREEN if item.xpath("STATUS")[0].text == "ON-LINE" else StationStatus.RED
 
                     station = self.save_station(
                         iweathar_id,
                         name,
                         name,
-                        item.xpath('LAT')[0].text,
-                        item.xpath('LONG')[0].text,
+                        item.xpath("LAT")[0].text,
+                        item.xpath("LONG")[0].text,
                         status,
-                        url=f'{self.provider_url}/display?s_id={iweathar_id}'
+                        url=f"{self.provider_url}/display?s_id={iweathar_id}",
                     )
-                    station_id = station['_id']
+                    station_id = station["_id"]
 
-                    key_attr = item.xpath('UNIX_DATE_STAMP')
-                    wind_dir_attr = item.xpath('WIND_ANG')
-                    wind_avg_attr = item.xpath('WIND_AVG')
-                    wind_max_attr = item.xpath('WIND_MAX')
+                    key_attr = item.xpath("UNIX_DATE_STAMP")
+                    wind_dir_attr = item.xpath("WIND_ANG")
+                    wind_avg_attr = item.xpath("WIND_AVG")
+                    wind_max_attr = item.xpath("WIND_MAX")
                     if not (key_attr and wind_dir_attr and wind_avg_attr and wind_max_attr):
                         self.log.warning(f"Station '{station_id}' has invalid data")
                         continue
@@ -57,25 +60,25 @@ class IWeathar(Provider):
                     measures_collection = self.measures_collection(station_id)
                     if not self.has_measure(measures_collection, key):
                         try:
-                            temperature_attr = item.xpath('TEMPERATURE_C')
+                            temperature_attr = item.xpath("TEMPERATURE_C")
                             if temperature_attr and temperature_attr[0].text:
                                 temperature = Q_(temperature_attr[0].text, ureg.degC)
                             else:
                                 temperature = None
 
-                            humidity_attr = item.xpath('HUMIDITY_PERC')
+                            humidity_attr = item.xpath("HUMIDITY_PERC")
                             if humidity_attr and humidity_attr[0].text:
                                 humidity = humidity_attr[0].text
                             else:
                                 humidity = None
 
-                            pressure_attr = item.xpath('PRESSURE_MB')
+                            pressure_attr = item.xpath("PRESSURE_MB")
                             if pressure_attr and pressure_attr[0].text:
                                 pressure = Pressure(qfe=pressure_attr[0].text, qnh=None, qff=None)
                             else:
                                 pressure = None
 
-                            rain_attr = item.xpath('RAINFALL_MM')
+                            rain_attr = item.xpath("RAINFALL_MM")
                             if rain_attr and rain_attr[0].text:
                                 rain = Q_(rain_attr[0].text, ureg.liter / (ureg.meter ** 2))
                             else:
@@ -90,14 +93,15 @@ class IWeathar(Provider):
                                 temperature=temperature,
                                 humidity=humidity,
                                 pressure=pressure,
-                                rain=rain
+                                rain=rain,
                             )
                             self.insert_new_measures(measures_collection, station, [measure])
                         except ProviderException as e:
                             self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
                         except Exception as e:
                             self.log.exception(
-                                f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                                f"Error while processing measure '{key}' for station '{station_id}': {e}"
+                            )
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station_id}': {e}")
@@ -105,10 +109,10 @@ class IWeathar(Provider):
                     self.log.exception(f"Error while processing station '{station_id}': {e}")
 
         except Exception as e:
-            self.log.exception(f'Error while processing iWeathar: {e}')
+            self.log.exception(f"Error while processing iWeathar: {e}")
 
-        self.log.info('...Done!')
+        self.log.info("...Done!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     IWeathar(IWEATHAR_KEY).process_data()

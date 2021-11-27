@@ -1,17 +1,29 @@
-FROM python:3.7-slim-buster
+FROM python:3.9-slim-buster AS base
 
-# PHP 7.3 is required by JDC provider
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
 RUN apt-get update; \
-DEBIAN_FRONTEND=noninteractive apt-get --yes --no-install-recommends install build-essential \
-python-scipy libpq-dev libmariadb-dev-compat php7.3-cli; \
-rm -rf /var/lib/apt/lists/*
+apt-get --yes --no-install-recommends install python-scipy libpq5 libmariadb3
 
-ADD . /app
-WORKDIR /app
+FROM base AS python-deps
+
+RUN apt-get update; \
+apt-get --yes --no-install-recommends install build-essential python-scipy libpq-dev libmariadb-dev
 
 RUN pip install pipenv
-RUN pipenv install --system --deploy
 
-RUN apt-get --yes --purge autoremove build-essential
+COPY . .
+RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 
-ENTRYPOINT ["python"]
+FROM base AS runtime
+
+ENV PATH="/.venv/bin:$PATH"
+
+WORKDIR /app
+COPY . .
+
+FROM runtime AS production
+
+COPY --from=python-deps /.venv /.venv
+ENTRYPOINT ["python", "run_providers.py"]

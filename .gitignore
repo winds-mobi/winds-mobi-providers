@@ -1,5 +1,5 @@
 *.pyc
 .idea/
-/local_settings.py
-/env.list
 /volumes/
+.env
+.env.localhost

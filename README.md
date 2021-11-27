@@ -10,14 +10,14 @@ on your smartphone, your tablet or your computer.
 winds-mobi-providers
 --------------------
 
-Python 3.6 cronjobs that get the weather data from different providers and save it in a common format into mongodb. 
+Python scripts that get the weather data from different providers and save it in a common format into mongodb. 
 This project use Google Cloud APIs to compute any missing station details (altitude, name, timezone, ...).
 Google Cloud API results are cached with redis.
 
 ### Requirements
 
-- python >= 3.6 
-- mongodb >= 3.0
+- python 3.9 
+- mongodb 4.4
 - redis
 - Google Cloud API key
 
@@ -39,9 +39,23 @@ See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master
 - `pipenv install`
 - `pipenv shell`
 
-### Run a provider
+### Run the project with docker compose
 
-- `python holfuy.py`
+Create a `.env` file from `.env.template` and fill the missing secrets.
+
+- `docker compose up`
+
+### Run the project locally
+
+Create a `.env.localhost` file from `.env.localhost.template` and fill the missing secrets.
+
+#### Run the scheduler
+
+- `dotenv -f .env.localhost run python run_providers.py`
+
+#### Run a provider
+
+- `PYTHONPATH=. dotenv -f .env.localhost run python providers/ffvl.py`
 
 ### Add a new provider to winds.mobi
 
@@ -77,7 +91,7 @@ class MyProvider(Provider):
                 status=StationStatus.GREEN if data_dict['status'] == 'ok' else StationStatus.RED
             )
 
-            measure_key = arrow.get(data_dict['lastMeasure']['time'], 'YYYY-MM-DD HH:mm:ssZZ').timestamp
+            measure_key = arrow.get(data_dict['lastMeasure']['time'], 'YYYY-MM-DD HH:mm:ssZZ').int_timestamp
             measures_collection = self.measures_collection(station['_id'])
             
             if not self.has_measure(measures_collection, measure_key):
