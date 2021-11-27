@@ -1,4 +1,4 @@
 [flake8]
 max-line-length = 120
-multiline-quotes = '''
+extend-ignore = E203
 exclude = winds_mobi_provider/uwxutils.py

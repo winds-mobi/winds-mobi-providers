@@ -1,6 +1,6 @@
 import re
 
-p = re.compile('[^\\d\\w]+')
+p = re.compile("[^\\d\\w]+")
 
 
 def parse_dms(input):
@@ -11,7 +11,7 @@ def parse_dms(input):
 def convert_dms_to_dd(days, minutes, seconds, direction):
     dd = float(days) + float(minutes) / 60 + float(seconds) / (60 * 60)
 
-    if (direction.lower() == 's') or (direction.lower() == 'w'):
+    if (direction.lower() == "s") or (direction.lower() == "w"):
         dd *= -1
 
     return dd

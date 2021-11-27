@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:4.4.10
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./volumes/mongodb:/data/db
+
+  providers:
+    build:
+      context: .
+    profiles:
+      - application
+    environment:
+      MONGODB_URL: ${MONGODB_URL}
+      REDIS_URL: ${REDIS_URL}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      WINDLINE_SQL_URL: ${WINDLINE_SQL_URL}
+      CHECKWX_API_KEY: ${CHECKWX_API_KEY}
+      ROMMA_KEY: ${ROMMA_KEY}
+      IWEATHAR_KEY: ${IWEATHAR_KEY}
+      BORN_TO_FLY_VENDOR_ID: ${BORN_TO_FLY_VENDOR_ID}
+      BORN_TO_FLY_DEVICE_ID: ${BORN_TO_FLY_DEVICE_ID}
+
+networks:
+  default:
+    name: winds-mobi-providers
