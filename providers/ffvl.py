@@ -106,5 +106,9 @@ class Ffvl(Provider):
         self.log.info("...Done!")
 
 
-if __name__ == "__main__":
+def ffvl():
     Ffvl().process_data()
+
+
+if __name__ == "__main__":
+    ffvl()

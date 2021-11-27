@@ -110,5 +110,9 @@ class BornToFly(Provider):
         self.log.info("Done !")
 
 
-if __name__ == "__main__":
+def borntofly():
     BornToFly(BORN_TO_FLY_VENDOR_ID, BORN_TO_FLY_DEVICE_ID).process_data()
+
+
+if __name__ == "__main__":
+    borntofly()

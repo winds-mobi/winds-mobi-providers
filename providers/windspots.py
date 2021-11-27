@@ -99,5 +99,9 @@ class Windspots(Provider):
         self.log.info("Done !")
 
 
-if __name__ == "__main__":
+def windspots():
     Windspots().process_data()
+
+
+if __name__ == "__main__":
+    windspots()

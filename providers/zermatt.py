@@ -163,5 +163,9 @@ class Zermatt(Provider):
             self.log.exception(f"Error while processing Zermatt: {e}")
 
 
-if __name__ == "__main__":
+def zermatt():
     Zermatt(ADMIN_DB_URL).process_data()
+
+
+if __name__ == "__main__":
+    zermatt()

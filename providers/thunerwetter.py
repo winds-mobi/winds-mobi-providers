@@ -134,5 +134,9 @@ class ThunerWetter(Provider):
         self.log.info("...Done!")
 
 
-if __name__ == "__main__":
+def thunerwetter():
     ThunerWetter().process_data()
+
+
+if __name__ == "__main__":
+    thunerwetter()

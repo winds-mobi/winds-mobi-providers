@@ -96,5 +96,9 @@ class Pioupiou(Provider):
         self.log.info("Done !")
 
 
-if __name__ == "__main__":
+def pioupiou():
     Pioupiou().process_data()
+
+
+if __name__ == "__main__":
+    pioupiou()

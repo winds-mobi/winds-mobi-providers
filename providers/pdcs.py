@@ -59,5 +59,9 @@ class Pdcs(Provider):
         self.log.info("Done !")
 
 
-if __name__ == "__main__":
+def pdcs():
     Pdcs().process_data()
+
+
+if __name__ == "__main__":
+    pdcs()

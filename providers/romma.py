@@ -116,5 +116,9 @@ class Romma(Provider):
         self.log.info("...Done!")
 
 
-if __name__ == "__main__":
+def romma():
     Romma(ROMMA_KEY).process_data()
+
+
+if __name__ == "__main__":
+    romma()

@@ -154,5 +154,9 @@ class Slf(Provider):
         self.log.info("Done !")
 
 
-if __name__ == "__main__":
+def slf():
     Slf().process_data()
+
+
+if __name__ == "__main__":
+    slf()

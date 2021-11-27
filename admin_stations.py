@@ -1,17 +1,20 @@
 import argparse
+import logging
 from typing import Optional
 
 import arrow
 from pymongo import MongoClient
 
 from settings import MONGODB_URL
-from winds_mobi_provider.logging import configure_logger
+from winds_mobi_provider.logging import configure_logging
 
-log = configure_logger("delete_stations")
+configure_logging()
+log = logging.getLogger(__file__)
 
 
-def delete_stations(mongo_db, days: int, provider: Optional[str]):
+def delete_stations(days: int, provider: Optional[str]):
     log.info(f"Deleting stations from '{provider or 'any'}' provider not seen since {days} days...")
+    mongo_db = MongoClient(MONGODB_URL).get_database()
 
     now = arrow.now().int_timestamp
     query = {"seen": {"$lt": now - days * 3600 * 24}}
@@ -40,4 +43,4 @@ if __name__ == "__main__":
     )
     args = vars(parser.parse_args())
 
-    delete_stations(MongoClient(MONGODB_URL).get_database(), args["days"], args["provider"])
+    delete_stations(args["days"], args["provider"])

@@ -1,20 +1,23 @@
+import logging
+import math
 from enum import Enum
 from random import randint
+from typing import Tuple
 
 import arrow
-import math
 import redis
 import requests
 import sentry_sdk
 from dateutil.tz import gettz
 from furl import furl
 from pymongo import ASCENDING, GEOSPHERE, MongoClient
-from sentry_sdk.integrations.redis import RedisIntegration
 
-from settings import ENVIRONMENT, GOOGLE_API_KEY, MONGODB_URL, REDIS_URL, SENTRY_URL
-from winds_mobi_provider.logging import configure_logger
+from settings import GOOGLE_API_KEY, MONGODB_URL, REDIS_URL
+from winds_mobi_provider.logging import configure_logging
 from winds_mobi_provider.units import Pressure, ureg
 from winds_mobi_provider.uwxutils import TWxUtils
+
+configure_logging()
 
 
 class StationStatus(Enum):
@@ -59,10 +62,8 @@ class Provider:
         self.collection_names = self.mongo_db.collection_names()
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
-        self.log = configure_logger(self.provider_code)
-        sentry_sdk.init(SENTRY_URL, environment=ENVIRONMENT, integrations=[RedisIntegration()])
-        with sentry_sdk.configure_scope() as scope:
-            scope.set_tag("provider", self.provider_name)
+        self.log = logging.getLogger(self.provider_code)
+        sentry_sdk.set_tag("provider", self.provider_name)
 
     def stations_collection(self):
         return self.__stations_collection
@@ -150,7 +151,7 @@ class Provider:
             raise ProviderException(f"{api_name} ZERO_RESULTS")
         return result
 
-    def __compute_elevation(self, lat, lon):
+    def __compute_elevation(self, lat, lon) -> Tuple[float, bool]:
         radius = 500
         nb = 6
         path = f"{lat},{lon}|"
@@ -333,7 +334,7 @@ class Provider:
         if not self.redis.exists(alt_key):
             try:
                 elevation, is_peak = self.__compute_elevation(lat, lon)
-                self.add_redis_key(alt_key, {"alt": elevation, "is_peak": is_peak}, self.google_api_cache_duration)
+                self.add_redis_key(alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.google_api_cache_duration)
             except TimeoutError as e:
                 raise e
             except UsageLimitException as e:
@@ -393,7 +394,7 @@ class Provider:
 
         if self.redis.hexists(alt_key, "error") == "error":
             raise ProviderException(f"Unable to determine station 'peak': {self.redis.hget(alt_key, 'error')}")
-        is_peak = self.redis.hget(alt_key, "is_peak")
+        is_peak = self.redis.hget(alt_key, "is_peak") == "True"
 
         if not tz:
             if self.redis.hexists(tz_key, "error"):
@@ -486,7 +487,7 @@ class Provider:
 
             end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], gettz(station["tz"]))
             self.log.info(
-                "--> {end_date} ({end_date_local}), {short}/{name} ({id}): {nb} values inserted".format(
+                "⏱ {end_date} ({end_date_local}), {short}/{name} ({id}): {nb} values inserted".format(
                     end_date=end_date.format("YY-MM-DD HH:mm:ssZZ"),
                     end_date_local=end_date.to("local").format("YY-MM-DD HH:mm:ssZZ"),
                     short=station["short"],

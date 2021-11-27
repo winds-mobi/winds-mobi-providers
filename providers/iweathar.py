@@ -114,5 +114,9 @@ class IWeathar(Provider):
         self.log.info("...Done!")
 
 
-if __name__ == "__main__":
+def iweathar():
     IWeathar(IWEATHAR_KEY).process_data()
+
+
+if __name__ == "__main__":
+    iweathar()

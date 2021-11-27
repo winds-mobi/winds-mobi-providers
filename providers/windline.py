@@ -270,5 +270,9 @@ class Windline(Provider):
         self.log.info("Done !")
 
 
-if __name__ == "__main__":
+def windline():
     Windline(WINDLINE_SQL_URL).process_data()
+
+
+if __name__ == "__main__":
+    windline()

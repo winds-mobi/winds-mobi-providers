@@ -1,4 +1,5 @@
 import argparse
+import logging
 from datetime import datetime
 
 import numpy as np
@@ -7,12 +8,16 @@ from scipy.spatial import KDTree
 from sklearn.cluster import AgglomerativeClustering
 
 from settings import MONGODB_URL
-from winds_mobi_provider.logging import configure_logger
+from winds_mobi_provider.logging import configure_logging
 
-log = configure_logger("clusters")
+configure_logging()
+log = logging.getLogger(__file__)
 
 
-def save_clusters(mongo_db, nb_clusters):
+def save_clusters(nb_clusters):
+    log.info(f"Creating {nb_clusters} station's clusters")
+    mongo_db = MongoClient(MONGODB_URL).get_database()
+
     now = datetime.now().timestamp()
     all_stations = list(
         mongo_db.stations.find({"status": {"$ne": "hidden"}, "last._id": {"$gt": now - 30 * 24 * 3600}})
@@ -68,10 +73,10 @@ def save_clusters(mongo_db, nb_clusters):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Save clusters membership in mongodb")
+    parser = argparse.ArgumentParser(description="Save station's clusters in mongodb")
     parser.add_argument(
         "--num", type=int, default=50, help="Specify the number of cluster levels [default: %(default)s]"
     )
     args = vars(parser.parse_args())
 
-    save_clusters(MongoClient(MONGODB_URL).get_database(), args["num"])
+    save_clusters(args["num"])

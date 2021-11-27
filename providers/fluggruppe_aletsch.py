@@ -215,7 +215,11 @@ def parse_dms(dms):
     return lat
 
 
-if __name__ == "__main__":
+def fluggruppe_aletsch():
     aletsch_provider = FluggruppeAletsch()
     aletsch_provider.process_data()
     aletsch_provider.process_data2()
+
+
+if __name__ == "__main__":
+    fluggruppe_aletsch()
