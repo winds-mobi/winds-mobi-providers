@@ -1,21 +1,11 @@
-import argparse
+import pytest
 
 from winds_mobi_provider.uwxutils import TWxUtils
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--alt', type=int, help='Altitude')
-    parser.add_argument('--qnh', type=float, help='QNH')
-    parser.add_argument('--qfe', type=float, help='QFE')
-    args = parser.parse_args()
 
-    if args.alt is None:
-        raise Exception('Altitude not provided')
+def test_altimeter_to_station():
+    assert TWxUtils.AltimeterToStationPressure(1013, elevationM=1588) == pytest.approx(836.25, rel=1e-3)
 
-    if args.qfe is None:
-        qfe = TWxUtils.AltimeterToStationPressure(args.qnh, elevationM=args.alt)
-        print(f'qfe={qfe}')
 
-    if args.qnh is None:
-        qnh = TWxUtils.StationToAltimeter(args.qfe, elevationM=args.alt, algorithm='aaMADIS')
-        print(f'qnh={qnh}')
+def test_station_to_altimeter():
+    assert TWxUtils.StationToAltimeter(836.25, elevationM=1588, algorithm="aaMADIS") == pytest.approx(1013, rel=1e-3)
