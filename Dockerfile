@@ -1,16 +1,15 @@
-FROM python:3.9-slim-buster AS base
+FROM python:3.9.9-slim-bullseye AS base
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-RUN apt-get update; \
-apt-get --yes --no-install-recommends install python-scipy libpq5 libmariadb3
+RUN apt update; \
+    apt --yes --no-install-recommends install libpq5 libmariadb3
 
-FROM base AS python-deps
+FROM base AS python
 
-RUN apt-get update; \
-apt-get --yes --no-install-recommends install build-essential python-scipy libpq-dev libmariadb-dev
-
+RUN apt update; \
+    apt --yes --no-install-recommends install build-essential libpq-dev libmariadb-dev
 RUN pip install pipenv
 
 COPY . .
@@ -20,10 +19,9 @@ FROM base AS runtime
 
 ENV PATH="/.venv/bin:$PATH"
 
-WORKDIR /app
 COPY . .
 
 FROM runtime AS production
 
-COPY --from=python-deps /.venv /.venv
+COPY --from=python /.venv /.venv
 ENTRYPOINT ["python", "run_providers.py"]

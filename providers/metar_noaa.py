@@ -86,10 +86,10 @@ class MetarNoaa(Provider):
                     file = f"http://tgftp.nws.noaa.gov/data/observations/metar/cycles/{cycle:02d}Z.TXT"
                     self.log.info(f"Processing '{file}' ...")
 
-                    content = requests.get(file, timeout=(self.connect_timeout, self.read_timeout)).content
-                    text = content.decode("iso-8859-1")
-                    for data in text.splitlines():
-                        if data:
+                    request = requests.get(file, stream=True, timeout=(self.connect_timeout, self.read_timeout))
+                    for line in request.iter_lines():
+                        if line:
+                            data = line.decode("iso-8859-1")
                             try:
                                 # Is this line a date with format "2017/05/12 23:55" ?
                                 arrow.get(data, "YYYY/MM/DD HH:mm")
