@@ -11,7 +11,7 @@ from settings import MONGODB_URL
 from winds_mobi_provider.logging import configure_logging
 
 configure_logging()
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 
 def save_clusters(nb_clusters):
@@ -68,6 +68,7 @@ def save_clusters(nb_clusters):
                 mongo_bulk.find({"_id": ids[index]}).update({"$addToSet": {"clusters": int(n_clusters)}})
 
         mongo_bulk.execute()
+        log.info(f"Done, created {nb_clusters} clusters")
     except Exception as e:
         log.exception(f"Error while creating clusters: {e}")
 

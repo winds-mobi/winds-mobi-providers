@@ -9,7 +9,7 @@ from settings import MONGODB_URL
 from winds_mobi_provider.logging import configure_logging
 
 configure_logging()
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 
 def delete_stations(days: int, provider: Optional[str]):
@@ -20,6 +20,7 @@ def delete_stations(days: int, provider: Optional[str]):
     query = {"seen": {"$lt": now - days * 3600 * 24}}
     if provider:
         query["pv-code"] = provider
+    nb = 0
     for station in mongo_db.stations.find(query):
         seen = arrow.Arrow.fromtimestamp(station["seen"])
         log.info(
@@ -27,6 +28,8 @@ def delete_stations(days: int, provider: Optional[str]):
         )
         mongo_db[station["_id"]].drop()
         mongo_db.stations.remove({"_id": station["_id"]})
+        nb += 1
+    log.info(f"Done, deleted {nb} stations")
 
 
 if __name__ == "__main__":

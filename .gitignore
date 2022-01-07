@@ -1,4 +1,6 @@
 *.pyc
+dist/
+.pytest_cache
 .idea/
 /volumes/
 .env
