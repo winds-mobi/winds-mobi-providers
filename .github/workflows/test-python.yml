@@ -20,16 +20,16 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install python dependencies with pipenv
+      - name: Install python dependencies with poetry
         run: |
-          pip install pipenv
-          pipenv install --deploy --dev
+          pip install poetry
+          poetry install
 
       - name: Check python code format
-        run: pipenv run black --check .
+        run: poetry run black --check .
 
       - name: Run python linter
-        run: pipenv run flake8 .
+        run: poetry run flake8 .
 
       - name: Run python tests
-        run: pipenv run pytest
+        run: poetry run pytest

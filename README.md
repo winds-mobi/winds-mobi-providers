@@ -16,7 +16,7 @@ Google Cloud API results are cached with redis.
 
 ### Requirements
 
-- python 3.9 
+- python 3.9 and poetry 
 - mongodb 4.4
 - redis
 - Google Cloud API key
@@ -24,6 +24,9 @@ Google Cloud API results are cached with redis.
 See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master/settings.py)
 
 #### macOS 11
+
+- `brew install openssl`
+- `export LDFLAGS=-L/usr/local/opt/openssl/lib`
 
 - `brew install mysql-client`
 - `export PATH=/usr/local/opt/mysql-client/bin:$PATH`
@@ -36,8 +39,8 @@ See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master
 
 ### Python environment
 
-- `pipenv install`
-- `pipenv shell`
+- `poetry install`
+- `poetry shell`
 
 ### Run the project with docker compose
 

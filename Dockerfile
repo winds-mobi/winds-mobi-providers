@@ -10,10 +10,10 @@ FROM base AS python
 
 RUN apt update; \
     apt --yes --no-install-recommends install build-essential libpq-dev libmariadb-dev
-RUN pip install pipenv
+RUN pip install poetry
 
 COPY . .
-RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
+RUN POETRY_VIRTUALENVS_IN_PROJECT=true poetry install --no-dev
 
 FROM base AS runtime
 
