@@ -167,7 +167,6 @@ class Windline(Provider):
                     station_id = station["_id"]
 
                     try:
-                        measures_collection = self.measures_collection(station_id)
                         new_measures = []
 
                         wind_average_rows = self.get_measures(
@@ -189,7 +188,7 @@ class Windline(Provider):
                             try:
                                 key = arrow.get(wind_average_row[0]).int_timestamp
                                 if key not in [measure["_id"] for measure in new_measures] and not self.has_measure(
-                                    measures_collection, key
+                                    station_id, key
                                 ):
 
                                     wind_average = Q_(float(wind_average_row[1]), ureg.meter / ureg.second)
@@ -246,7 +245,7 @@ class Windline(Provider):
                             except NoMeasure:
                                 pass
 
-                        self.insert_new_measures(measures_collection, station, new_measures)
+                        self.insert_new_measures(station_id, station, new_measures)
 
                     except ProviderException as e:
                         self.log.warning(f"Error while processing measures for station '{station_id}': {e}")

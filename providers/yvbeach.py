@@ -53,10 +53,9 @@ class YVBeach(Provider):
                 .int_timestamp
             )
 
-            measures_collection = self.measures_collection(station_id)
             new_measures = []
 
-            if not self.has_measure(measures_collection, key):
+            if not self.has_measure(station_id, key):
                 wind = wind_pattern.search(content).groupdict()
                 temp = temp_pattern.search(content).groupdict()
 
@@ -70,7 +69,7 @@ class YVBeach(Provider):
                 )
                 new_measures.append(measure)
 
-            self.insert_new_measures(measures_collection, station, new_measures)
+            self.insert_new_measures(station_id, station, new_measures)
 
         except ProviderException as e:
             self.log.warning(f"Error while processing station '{station_id}': {e}")

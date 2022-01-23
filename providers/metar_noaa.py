@@ -237,11 +237,10 @@ class MetarNoaa(Provider):
                                 f"Missing '{metar.station_id}' ICAO in database. Is it '{station['name']}'?"
                             )
 
-                        measures_collection = self.measures_collection(station_id)
                         new_measures = []
                         for key in stations[metar_id]:
                             metar = stations[metar_id][key]
-                            if not self.has_measure(measures_collection, key):
+                            if not self.has_measure(station_id, key):
                                 temp = self.get_quantity(metar.temp, self.temperature_units)
                                 dew_point = self.get_quantity(metar.dewpt, self.temperature_units)
                                 humidity = self.compute_humidity(dew_point, temp)
@@ -261,7 +260,7 @@ class MetarNoaa(Provider):
                                 )
                                 new_measures.append(measure)
 
-                        self.insert_new_measures(measures_collection, station, new_measures)
+                        self.insert_new_measures(station_id, station, new_measures)
 
                     except ProviderException as e:
                         self.log.warning(f"Error while processing station '{metar_id}': {e}")

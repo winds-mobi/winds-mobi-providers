@@ -57,8 +57,7 @@ class IWeathar(Provider):
                         continue
 
                     key = int(key_attr[0].text)
-                    measures_collection = self.measures_collection(station_id)
-                    if not self.has_measure(measures_collection, key):
+                    if not self.has_measure(station_id, key):
                         try:
                             temperature_attr = item.xpath("TEMPERATURE_C")
                             if temperature_attr and temperature_attr[0].text:
@@ -95,7 +94,7 @@ class IWeathar(Provider):
                                 pressure=pressure,
                                 rain=rain,
                             )
-                            self.insert_new_measures(measures_collection, station, [measure])
+                            self.insert_new_measures(station_id, station, [measure])
                         except ProviderException as e:
                             self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
                         except Exception as e:

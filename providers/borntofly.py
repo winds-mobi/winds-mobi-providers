@@ -72,7 +72,6 @@ class BornToFly(Provider):
             )
             station_id = station["_id"]
 
-            measures_collection = self.measures_collection(station_id)
             with zipfile.ZipFile(BytesIO(response.content)) as zip_file:
                 with zip_file.open(zip_file.filelist[0].filename) as csv_file:
                     reader = csv.DictReader(
@@ -84,7 +83,7 @@ class BornToFly(Provider):
                     rows = list(reader)[:0:-1]
                     for row in rows:
                         key = arrow.get(row["time"], "DD.MM.YYYY HH:mm:ss").replace(tzinfo=borntofly_tz).int_timestamp
-                        if not self.has_measure(measures_collection, key):
+                        if not self.has_measure(station_id, key):
                             try:
                                 measure = self.create_measure(
                                     station,
@@ -94,7 +93,7 @@ class BornToFly(Provider):
                                     row["wind_max"].replace(",", "."),
                                 )
 
-                                self.insert_new_measures(measures_collection, station, [measure])
+                                self.insert_new_measures(station_id, station, [measure])
                             except ProviderException as e:
                                 self.log.warning(
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}"

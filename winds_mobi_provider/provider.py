@@ -10,9 +10,9 @@ import requests
 import sentry_sdk
 from dateutil.tz import gettz
 from furl import furl
-from pymongo import ASCENDING, GEOSPHERE, MongoClient
 
-from settings import GOOGLE_API_KEY, MONGODB_URL, REDIS_URL
+from settings import GOOGLE_API_KEY, REDIS_URL
+from winds_mobi_provider.db import db_connection
 from winds_mobi_provider.logging import configure_logging
 from winds_mobi_provider.units import Pressure, ureg
 from winds_mobi_provider.uwxutils import TWxUtils
@@ -48,31 +48,11 @@ class Provider:
         return (120 + randint(-2, 2)) * 24 * 3600
 
     def __init__(self):
-        self.mongo_db = MongoClient(MONGODB_URL).get_database()
-        self.__stations_collection = self.mongo_db.stations
-        self.__stations_collection.create_index(
-            [
-                ("loc", GEOSPHERE),
-                ("status", ASCENDING),
-                ("pv-code", ASCENDING),
-                ("short", ASCENDING),
-                ("name", ASCENDING),
-            ]
-        )
-        self.collection_names = self.mongo_db.collection_names()
+        self.db = db_connection()
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
         self.log = logging.getLogger(self.provider_code)
         sentry_sdk.set_tag("provider", self.provider_name)
-
-    def stations_collection(self):
-        return self.__stations_collection
-
-    def measures_collection(self, station_id):
-        if station_id not in self.collection_names:
-            self.mongo_db.create_collection(station_id, **{"capped": True, "size": 500000, "max": 5000})
-            self.collection_names.append(station_id)
-        return self.mongo_db[station_id]
 
     def __to_wind_direction(self, value):
         if isinstance(value, ureg.Quantity):
@@ -412,11 +392,11 @@ class Provider:
         else:
             raise ProviderException("Invalid url")
 
-        fixes = self.mongo_db.stations_fix.find_one(station_id)
+        fixes = self.db.stations_fixes(station_id)
         station = self.__create_station(
             provider_id, short_name, name, lat, lon, altitude, is_peak, status.value, tz, urls, fixes
         )
-        self.stations_collection().update({"_id": station_id}, {"$set": station}, upsert=True)
+        self.db.upsert_station(station_id, station)
         station["_id"] = station_id
         return station
 
@@ -458,7 +438,7 @@ class Provider:
 
         measure["time"] = arrow.now().int_timestamp
 
-        fixes = self.mongo_db.stations_fix.find_one(for_station["_id"])
+        fixes = self.db.stations_fixes(for_station["_id"])
         if fixes and "measures" in fixes:
             for key, offset in fixes["measures"].items():
                 try:
@@ -473,17 +453,12 @@ class Provider:
 
         return measure
 
-    def has_measure(self, measure_collection, key):
-        return measure_collection.find({"_id": key}).count() > 0
+    def has_measure(self, station_id, key):
+        return self.db.has_measure(station_id, key)
 
-    def __add_last_measure(self, measure_collection, station_id):
-        last_measure = measure_collection.find_one({"$query": {}, "$orderby": {"_id": -1}})
-        if last_measure:
-            self.stations_collection().update({"_id": station_id}, {"$set": {"last": last_measure}})
-
-    def insert_new_measures(self, measure_collection, station, new_measures):
+    def insert_new_measures(self, station_id, station, new_measures):
         if len(new_measures) > 0:
-            measure_collection.insert(sorted(new_measures, key=lambda m: m["_id"]))
+            self.db.insert_new_measures(station_id, station, new_measures)
 
             end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], gettz(station["tz"]))
             self.log.info(
@@ -496,8 +471,6 @@ class Provider:
                     nb=str(len(new_measures)),
                 )
             )
-
-            self.__add_last_measure(measure_collection, station["_id"])
 
 
 class ProviderException(Exception):

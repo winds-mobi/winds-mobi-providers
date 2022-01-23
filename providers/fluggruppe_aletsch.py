@@ -43,9 +43,8 @@ class FluggruppeAletsch(Provider):
                     altitude=parser.elevation(),
                 )
 
-                measures_collection = self.measures_collection(station["_id"])
                 key = parser.key()
-                if not self.has_measure(measures_collection, key):
+                if not self.has_measure(station["_id"], key):
                     try:
                         measure = self.create_measure(
                             station,
@@ -58,7 +57,7 @@ class FluggruppeAletsch(Provider):
                             humidity=parser.humidity(),
                         )
 
-                        self.insert_new_measures(measures_collection, station, [measure])
+                        self.insert_new_measures(station["_id"], station, [measure])
                     except ProviderException as e:
                         self.log.warning(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
                     except Exception as e:
@@ -87,9 +86,8 @@ class FluggruppeAletsch(Provider):
                     fga_id, fga_desc, fga_desc, fga_lat, fga_long, StationStatus.GREEN, altitude=parser.elevation()
                 )
 
-                measures_collection = self.measures_collection(station["_id"])
                 key = parser.key()
-                if not self.has_measure(measures_collection, key):
+                if not self.has_measure(station["_id"], key):
                     try:
                         measure = self.create_measure(
                             station,
@@ -102,7 +100,7 @@ class FluggruppeAletsch(Provider):
                             humidity=parser.humidity(),
                         )
 
-                        self.insert_new_measures(measures_collection, station, [measure])
+                        self.insert_new_measures(station["_id"], station, [measure])
                     except ProviderException as e:
                         self.log.warning(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
                     except Exception as e:

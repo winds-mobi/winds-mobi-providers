@@ -17,7 +17,7 @@ Google Cloud API results are cached with redis.
 ### Requirements
 
 - python 3.9 and poetry 
-- mongodb 4.4
+- mongodb 4.4 (local or docker)
 - redis
 - Google Cloud API key
 
@@ -41,6 +41,8 @@ See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master
 
 - `poetry install`
 - `poetry shell`
+
+See https://python-poetry.org/docs/#installation for installing poetry.
 
 ### Run the project with docker compose
 
@@ -95,9 +97,9 @@ class MyProvider(Provider):
             )
 
             measure_key = arrow.get(data_dict['lastMeasure']['time'], 'YYYY-MM-DD HH:mm:ssZZ').int_timestamp
-            measures_collection = self.measures_collection(station['_id'])
+            station_id = station['_id']
             
-            if not self.has_measure(measures_collection, measure_key):
+            if not self.has_measure(station_id, measure_key):
                 new_measure = self.create_measure(
                     for_station=station,
                     _id=measure_key,
@@ -107,7 +109,7 @@ class MyProvider(Provider):
                     temperature=Q_(data_dict['lastMeasure']['temp'], ureg.degC),
                     pressure=Pressure(qnh=Q_(data_dict['lastMeasure']['pressure'], ureg.hPa)),
                 )
-                self.insert_new_measures(measures_collection, station, [new_measure])
+                self.insert_new_measures(station_id, station, [new_measure])
         self.log.info('...Done !')
 ```
 
