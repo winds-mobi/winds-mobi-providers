@@ -24,6 +24,7 @@ class FluggruppeAletsch(Provider):
         ["fieschertal", "fiesch/XML"],
         ["chaeserstatt", "chaeserstatt/XML"],
         ["jeizinen", "jeizinen/XML"],
+        ["grimsel", "grimselpass/XML"],
     ]
 
     def process_data(self):
