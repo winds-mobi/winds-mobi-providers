@@ -2,6 +2,7 @@ import os
 
 # COMMONS
 MONGODB_URL = os.environ.get("MONGODB_URL") or "mongodb://localhost:27017/winds_mobi"
+POSTGRES_URL = os.environ.get("POSTGRES_URL")
 REDIS_URL = os.environ.get("REDIS_URL") or "redis://localhost:6379/0"
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 

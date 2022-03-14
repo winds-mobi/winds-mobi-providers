@@ -117,11 +117,10 @@ class Slf(Provider):
                     )
                     station_id = station["_id"]
 
-                    measures_collection = self.measures_collection(station_id)
                     new_measures = []
                     for slf_measure in measures:
                         key = int(slf_measure.key)
-                        if not self.has_measure(measures_collection, key):
+                        if not self.has_measure(station_id, key):
                             try:
                                 measure = self.create_measure(
                                     station,
@@ -141,7 +140,7 @@ class Slf(Provider):
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}"
                                 )
 
-                    self.insert_new_measures(measures_collection, station, new_measures)
+                    self.insert_new_measures(station_id, station, new_measures)
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station_id}': {e}")
