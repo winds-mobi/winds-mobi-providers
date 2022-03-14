@@ -26,7 +26,7 @@ class Windspots(Provider):
             for windspots_station in result.json()["stationInfo"]:
                 station_id = None
                 try:
-                    windspots_id = windspots_station["id"][10:]
+                    windspots_id = windspots_station["winId"][10:]
                     station = self.save_station(
                         windspots_id,
                         windspots_station["shortName"],
