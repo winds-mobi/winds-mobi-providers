@@ -18,7 +18,7 @@ class Windspots(Provider):
         try:
             self.log.info("Processing WindsSpots data...")
             result = requests.get(
-                "https://api.windspots.com/windmobile/stationinfos?allStation=true",
+                "https://api.windspots.com/windmobile/stationinfo",
                 timeout=(self.connect_timeout, self.read_timeout),
                 verify=False,
             )
@@ -26,15 +26,15 @@ class Windspots(Provider):
             for windspots_station in result.json()["stationInfo"]:
                 station_id = None
                 try:
-                    windspots_id = windspots_station["@id"][10:]
+                    windspots_id = windspots_station["winId"][10:]
                     station = self.save_station(
                         windspots_id,
-                        windspots_station["@shortName"],
-                        windspots_station["@name"],
-                        windspots_station["@wgs84Latitude"],
-                        windspots_station["@wgs84Longitude"],
-                        StationStatus(windspots_station["@maintenanceStatus"]),
-                        altitude=windspots_station["@altitude"],
+                        windspots_station["shortName"],
+                        windspots_station["name"],
+                        windspots_station["wgs84Latitude"],
+                        windspots_station["wgs84Longitude"],
+                        StationStatus(windspots_station["maintenanceStatus"]),
+                        altitude=windspots_station["altitude"],
                     )
                     station_id = station["_id"]
 
