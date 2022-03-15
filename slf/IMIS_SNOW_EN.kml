@@ -5,1556 +5,1669 @@
 <name>IMIS Snow Station</name>
 
 <Style id="IMIS_WIND">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_wind.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_wind.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Style id="IMIS_SNOW">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_snow.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_snow.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Style id="IMIS_SPECIAL">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_special.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_special.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
-<Style id="MESSFELD_MS">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
-</Style>
-
-<Style id="MESSFELD_VG">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<Style id="MESSFELD">
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Placemark>
-<Point><coordinates>7.24261428906644,46.3140312491649,2575</coordinates></Point>
-<name>Tsanfleuron 2575 m</name>
+<Point><coordinates>9.83622434620262,46.5809457020288,2322.0</coordinates></Point>
+<name>Teststation Albula</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
-<strong>Code:</strong> DIA2<br/>
-<strong>Begin of measuring:</strong> 1992<br/>
-<strong>Years of measuring:</strong> 26<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_DIA2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Code:</strong> ALB2<br/>
+<strong>Begin of measuring:</strong> 2019<br/>
+<strong>Years of measuring:</strong> 3<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ALB2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.9435421405803,46.6186492331629,2162</coordinates></Point>
-<name>Itramen 2162 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MAE2<br/>
-<strong>Begin of measuring:</strong> 1994<br/>
-<strong>Years of measuring:</strong> 25<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MAE2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.40948249417522,46.7860098508656,2149</coordinates></Point>
-<name>Titlisboden 2149 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TIT2<br/>
-<strong>Begin of measuring:</strong> 1993<br/>
-<strong>Years of measuring:</strong> 26<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TIT2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.26991849106118,46.105287470923,2550</coordinates></Point>
-<name>Lac des Vaux 2550 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ATT2<br/>
-<strong>Begin of measuring:</strong> 1993<br/>
-<strong>Years of measuring:</strong> 26<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ATT2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.09171550686959,46.4168110012547,2500</coordinates></Point>
-<name>Flesch 2500 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> EGH2<br/>
-<strong>Begin of measuring:</strong> 1993<br/>
-<strong>Years of measuring:</strong> 25<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_EGH2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.78359911385216,45.9871921623904,2953</coordinates></Point>
-<name>Gornergratsee 2953 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GOR2<br/>
-<strong>Begin of measuring:</strong> 1993<br/>
-<strong>Years of measuring:</strong> 26<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GOR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.18345537900562,46.8468720110651,2325</coordinates></Point>
-<name>La Fuorcla 2325 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> CMA2<br/>
-<strong>Begin of measuring:</strong> 1993<br/>
-<strong>Years of measuring:</strong> 26<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_CMA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.53738768920731,46.5800763351247,2429</coordinates></Point>
-<name>Colms da Parsonz 2429 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> PMA2<br/>
-<strong>Begin of measuring:</strong> 1993<br/>
-<strong>Years of measuring:</strong> 25<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_PMA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.80928943600516,46.8296382941581,2536</coordinates></Point>
-<name>Versuchsfeld Weissfluhjoch 2536 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> WFJ2<br/>
-<strong>Begin of measuring:</strong> 1992<br/>
-<strong>Years of measuring:</strong> 26<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_WFJ2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.91759159576764,46.4087263504025,1884</coordinates></Point>
-<name>Predanass 1884 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MTR2<br/>
-<strong>Begin of measuring:</strong> 1992<br/>
-<strong>Years of measuring:</strong> 26<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MTR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>10.2553213936194,46.8150383026398,2350</coordinates></Point>
-<name>Schlivèra 2350 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> NAS2<br/>
-<strong>Begin of measuring:</strong> 1992<br/>
-<strong>Years of measuring:</strong> 26<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_NAS2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>6.99329780710338,46.4886318893276,1708</coordinates></Point>
-<name>Chenau 1708 m</name>
+<Point><coordinates>6.99329780710338,46.4886318893276,1708.0</coordinates></Point>
+<name>Chenau</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ALI2<br/>
 <strong>Begin of measuring:</strong> 2004<br/>
-<strong>Years of measuring:</strong> 14<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ALI2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.16398672484049,46.3769626836762,2218</coordinates></Point>
-<name>Pierres Fendues 2218 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> CHA2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_CHA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.64164177726311,46.5296028687784,2143</coordinates></Point>
-<name>Elsige 2143 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ELS2<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ELS2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.49524946923817,46.5204134882195,1971</coordinates></Point>
-<name>Färmel 1971 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FAE2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FAE2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.06440341518719,46.668777117286,2111</coordinates></Point>
-<name>Schmidigen-Bidmeren 2111 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FIR2<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FIR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.67388342097644,46.4714650599305,2155</coordinates></Point>
-<name>Fisi 2155 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FIS2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FIS2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.39748839560539,46.7441893350388,2063</coordinates></Point>
-<name>Gschletteregg 2063 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GAD2<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GAD2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.28969169579199,46.6793100028691,2115</coordinates></Point>
-<name>Homad 2115 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GUT2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GUT2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.2745416987543,46.633048888548,1707</coordinates></Point>
-<name>Fochsen 1707 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> JAU2<br/>
-<strong>Begin of measuring:</strong> 2004<br/>
-<strong>Years of measuring:</strong> 14<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_JAU2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.37986767040874,46.4260294507536,1970</coordinates></Point>
-<name>Trüttlisbergpass 1970 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> LAU2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LAU2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.94374276253735,46.5827913072073,2150</coordinates></Point>
-<name>Russisprung 2150 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> LHO2<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LHO2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.94295489906423,46.5892537558818,2190</coordinates></Point>
-<name>Lauberhorn 2190 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> LHO3<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 7<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LHO3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.21438585164637,46.4217735133775,2097</coordinates></Point>
-<name>Obere Meiel 2097 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> OBM2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
 <strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_OBM2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ALI2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.56163683225869,46.5397021022525,2017</coordinates></Point>
-<name>Ottere 2017 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> OTT2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_OTT2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.9939413533756,46.7743194074202,1875</coordinates></Point>
-<name>Rotschalp 1875 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ROA2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ROA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.05800833057362,46.7801162174809,1700</coordinates></Point>
-<name>Giebelegg 1700 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ROA3<br/>
-<strong>Begin of measuring:</strong> 2006<br/>
-<strong>Years of measuring:</strong> 13<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ROA3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.83473262249093,46.576916451432,2332</coordinates></Point>
-<name>Türliboden 2332 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SCH2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SCH2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.8124495943938,46.748825793211,1852</coordinates></Point>
-<name>Schibe 1852 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SHE2<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SHE2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.51964915737677,46.6820490432178,1791</coordinates></Point>
-<name>Vorderstocken 1791 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> STH2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_STH2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.55101455836442,46.7437681321397,2220</coordinates></Point>
-<name>Laucheren 2220 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MEI2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MEI2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.74562138828972,46.9382177373277,2083</coordinates></Point>
-<name>Rupperslaui 2083 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MUO2<br/>
-<strong>Begin of measuring:</strong> 2006<br/>
-<strong>Years of measuring:</strong> 12<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MUO2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.62678887877818,46.68557084918,2400</coordinates></Point>
-<name>Rienzenstock 2400 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> RNZ2<br/>
-<strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 10<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_RNZ2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.71734318116799,46.8129550456096,2032</coordinates></Point>
-<name>Seewli 2032 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SCA2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SCA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.77953979715574,46.8915385299693,2338</coordinates></Point>
-<name>Alpler Tor 2338 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SCA3<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SCA3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.10343838444861,46.7793752474716,1777</coordinates></Point>
-<name>Schönbüel 1777 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SCB2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SCB2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.51385955864913,46.5867868627804,2169</coordinates></Point>
-<name>Giltnasen 2169 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> URS2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_URS2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.82541674946416,47.0354583698136,1701</coordinates></Point>
-<name>Wanne 1701 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> YBR2<br/>
-<strong>Begin of measuring:</strong> 2006<br/>
-<strong>Years of measuring:</strong> 12<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_YBR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.1468828875966,47.1708374216254,1610</coordinates></Point>
-<name>Bärenfall 1610 m</name>
+<Point><coordinates>9.1468828875966,47.1708374216254,1610.0</coordinates></Point>
+<name>Bärenfall</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> AMD2<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_AMD2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_AMD2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.1365009733191,46.9356092059481,2058</coordinates></Point>
-<name>Chüebodensee 2058 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ELM2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ELM2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.0375826326554,46.9966291841572,1632</coordinates></Point>
-<name>Guppen 1632 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GLA2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GLA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.61177054092798,47.0884686893631,1974</coordinates></Point>
-<name>Bärgtälli 1974 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MLB2<br/>
-<strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 11<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MLB2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.01748400125733,46.8587584939241,2481</coordinates></Point>
-<name>Mutten 2481 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MUT2<br/>
-<strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 10<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MUT2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.95854987856756,46.918082016133,1824</coordinates></Point>
-<name>Ortstock Matt 1824 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ORT2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ORT2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.97426476275786,47.0374944015709,1578</coordinates></Point>
-<name>Ruoggis, Ober Stafel 1578 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> RGS2<br/>
-<strong>Begin of measuring:</strong> 2017<br/>
-<strong>Years of measuring:</strong> 1<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_RGS2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.97083335209586,47.0307026781331,1258</coordinates></Point>
-<name>Ruoggis, Unter Stafel 1258 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> RGS3<br/>
-<strong>Begin of measuring:</strong> 2017<br/>
-<strong>Years of measuring:</strong> 1<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_RGS3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.39092523015202,46.9683647584304,2468</coordinates></Point>
-<name>Wildsee 2468 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TAM2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TAM2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.45816706665769,46.8909845077528,2166</coordinates></Point>
-<name>Schaftäli 2166 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TAM3<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TAM3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.53537232592505,46.1882775601548,2640</coordinates></Point>
-<name>Orzival 2640 m</name>
+<Point><coordinates>7.53537232592505,46.1882775601548,2640.0</coordinates></Point>
+<name>Orzival</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ANV2<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ANV2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ANV2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.6564016889829,46.1211647225094,2589</coordinates></Point>
-<name>Tracuit 2589 m</name>
+<Point><coordinates>7.6564016889829,46.1211647225094,2589.0</coordinates></Point>
+<name>Tracuit</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ANV3<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ANV3_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ANV3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.44585493655645,46.0287823983995,2847</coordinates></Point>
-<name>Les Fontanesses 2847 m</name>
+<Point><coordinates>7.44585493655645,46.0287823983995,2847.0</coordinates></Point>
+<name>Les Fontanesses</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ARO2<br/>
 <strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ARO2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ARO2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.56205990592659,46.0874205095501,2602</coordinates></Point>
-<name>Bréona 2602 m</name>
+<Point><coordinates>7.56205990592659,46.0874205095501,2602.0</coordinates></Point>
+<name>Bréona</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ARO3<br/>
 <strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ARO3_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ARO3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.97417522583145,46.3948467332503,2554</coordinates></Point>
-<name>Belalp 2554 m</name>
+<Point><coordinates>7.26991849106118,46.105287470923,2550.0</coordinates></Point>
+<name>Lac des Vaux</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
-<strong>Code:</strong> BEL2<br/>
-<strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 10<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BEL2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Code:</strong> ATT2<br/>
+<strong>Begin of measuring:</strong> 1993<br/>
+<strong>Years of measuring:</strong> 29<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ATT2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>8.10930225320016,46.2905311776728,2517</coordinates></Point>
-<name>Bortelsee 2517 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> BOR2<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BOR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.23720695672538,45.9847926612286,2687</coordinates></Point>
-<name>Pointe de Toules 2687 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> BOV2<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BOV2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.27420875750933,46.2897395710704,2229</coordinates></Point>
-<name>Etang de Trente Pas 2229 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> CON2<br/>
-<strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 16<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_CON2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>6.96410423112248,46.1007599043094,2252</coordinates></Point>
-<name>L'Ecreuleuse 2252 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FNH2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FNH2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.06723451055423,45.9717556343658,2800</coordinates></Point>
-<name>Glacier de Saleina 2800 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FOU2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FOU2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.08966127518766,46.1946845291407,2602</coordinates></Point>
-<name>Grand Cor 2602 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FUL2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FUL2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.76060627328351,46.4292610534168,2710</coordinates></Point>
-<name>Gandegg 2710 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GAN2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GAN2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.2324942228761,46.4204566775896,2439</coordinates></Point>
-<name>Bodmerchumma 2439 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GOM2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GOM2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.22855060231519,46.4891422520867,2427</coordinates></Point>
-<name>Treichbode 2427 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GOM3<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GOM3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>6.7835500643735,46.3460623818907,1984</coordinates></Point>
-<name>Loz 1984 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GRA2<br/>
-<strong>Begin of measuring:</strong> 2005<br/>
-<strong>Years of measuring:</strong> 13<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GRA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>6.82779720727212,46.1913560346611,2022</coordinates></Point>
-<name>Les Collines 2022 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ILI2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ILI2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.92520374817358,46.3330680727049,2205</coordinates></Point>
-<name>Chiematte 2205 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MUN2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MUN2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.3352968725788,46.1431841440701,2203</coordinates></Point>
-<name>Combatzeline 2203 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> NEN3<br/>
-<strong>Begin of measuring:</strong> 2013<br/>
-<strong>Years of measuring:</strong> 5<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_NEN3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.31595593868373,46.5452218766451,2432</coordinates></Point>
-<name>Jostsee 2432 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> OBW2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_OBW2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.35447840887315,46.5078627806443,2194</coordinates></Point>
-<name>Mällige 2194 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> OBW3<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_OBW3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.87935311747338,46.1718358878471,2480</coordinates></Point>
-<name>Seetal 2480 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SAA2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SAA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.98138596179335,46.1274838073656,2952</coordinates></Point>
-<name>Mälliga 2952 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SAA3<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SAA3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.90553096637996,46.1244673621239,2680</coordinates></Point>
-<name>Gibidum 2680 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SAA4<br/>
-<strong>Begin of measuring:</strong> 2009<br/>
-<strong>Years of measuring:</strong> 9<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SAA4_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.11762397970502,46.2294440918677,2620</coordinates></Point>
-<name>Ze Seewe 2620 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SPN2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SPN2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.0451752956639,46.1780125568757,2424</coordinates></Point>
-<name>Wenghorn 2424 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SPN3<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SPN3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.75055897669412,46.1678115804215,2914</coordinates></Point>
-<name>Oberer Stelligletscher 2914 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> STN2<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_STN2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.58557232606275,46.3709519169687,2459</coordinates></Point>
-<name>Trubelboden 2459 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TRU2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TRU2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.36750511962445,46.3215111310242,2385</coordinates></Point>
-<name>Donin du Jour 2385 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> VDS2<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_VDS2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.72740552202272,46.0421776391363,2752</coordinates></Point>
-<name>Triftchumme 2752 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ZER2<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ZER2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.70239110210637,45.997989855242,2408</coordinates></Point>
-<name>Alp Hermetje 2408 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ZER4<br/>
-<strong>Begin of measuring:</strong> 2004<br/>
-<strong>Years of measuring:</strong> 14<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ZER4_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.81941136139983,46.6988889844443,2558</coordinates></Point>
-<name>Bärentälli 2558 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> DAV2<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_DAV2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.77399051394934,46.788833109079,2455</coordinates></Point>
-<name>Hanengretji 2455 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> DAV3<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_DAV3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.71469450872067,46.5914252255484,2726</coordinates></Point>
-<name>Tschitta 2726 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ELA2<br/>
-<strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 11<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ELA2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.94644506119759,46.7527121108172,2394</coordinates></Point>
-<name>Flüelapass 2394 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FLU2<br/>
-<strong>Begin of measuring:</strong> 2003<br/>
-<strong>Years of measuring:</strong> 15<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FLU2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.20433545466491,46.5443794251159,2147</coordinates></Point>
-<name>Alp Piänetsch 2147 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> HTR2<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_HTR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.34852699798837,46.5365502480265,2200</coordinates></Point>
-<name>Unter Surettasee 2200 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> HTR3<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_HTR3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.69231151006273,46.4784972280234,2426</coordinates></Point>
-<name>Vairana 2426 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> JUL2<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_JUL2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.8738591619793,46.9091149998652,2147</coordinates></Point>
-<name>Madrisa 2147 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> KLO2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_KLO2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.93167229569342,46.8412712603804,2299</coordinates></Point>
-<name>Gatschiefer 2299 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> KLO3<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_KLO3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.783521662662,46.6041535172299,2555</coordinates></Point>
-<name>Lai Verd 2555 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> LUK2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LUK2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.86142530738795,46.7315844750713,2388</coordinates></Point>
-<name>Lumpegna 2388 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> LUM2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LUM2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.80484494583298,46.8517249839739,2290</coordinates></Point>
-<name>Kreuzweg 2290 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> PAR2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_PAR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.86245523673698,46.626351811613,2196</coordinates></Point>
-<name>Ils Plauns 2196 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> PUZ2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_PUZ2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.84826503817483,46.8127674751176,1563</coordinates></Point>
-<name>Davos Stilli (SLF) 1563 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SLF2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SLF2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.72375109940852,46.6838803108833,2262</coordinates></Point>
-<name>Culmatsch 2262 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TUJ2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TUJ2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.74022353775476,46.6470316389603,2211</coordinates></Point>
-<name>Nual 2211 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TUJ3<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TUJ3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.02146814490337,46.7810665940868,2191</coordinates></Point>
-<name>Val Miez 2191 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TUM2<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TUM2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.20524161894874,46.6744111864099,2064</coordinates></Point>
-<name>Alp Calasa 2064 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> VLS2<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_VLS2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.51079173061992,46.5340428305659,2450</coordinates></Point>
-<name>Cavanna 2450 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> BED2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BED2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.52191397426825,46.4911591474422,2101</coordinates></Point>
-<name>Cassinello 2101 m</name>
+<Point><coordinates>8.52191397426825,46.4911591474422,2101.0</coordinates></Point>
+<name>Cassinello</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> BED3<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BED3_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BED3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>8.47161827485566,46.3338036117952,2299</coordinates></Point>
-<name>Hendar Furggu 2299 m</name>
+<Point><coordinates>8.49641806239065,46.5256308336697,2305.0</coordinates></Point>
+<name>Sabbioni</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
-<strong>Code:</strong> BOG2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BOG2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Code:</strong> BED4<br/>
+<strong>Begin of measuring:</strong> 2021<br/>
+<strong>Years of measuring:</strong> 1<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BED4_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>8.71747285104361,46.4657252498404,2216</coordinates></Point>
-<name>Fontane 2216 m</name>
+<Point><coordinates>7.97417522583145,46.3948467332503,2554.0</coordinates></Point>
+<name>Belalp</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
-<strong>Code:</strong> CAM2<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_CAM2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.86906065003388,46.5428661476668,2057</coordinates></Point>
-<name>Preda 2057 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> DTR2<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_DTR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.85317748393146,46.3382370852333,2100</coordinates></Point>
-<name>Efra 2100 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FRA2<br/>
-<strong>Begin of measuring:</strong> 2004<br/>
+<strong>Code:</strong> BEL2<br/>
+<strong>Begin of measuring:</strong> 2008<br/>
 <strong>Years of measuring:</strong> 14<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FRA2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BEL2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>8.62044668278117,46.4364219444333,2390</coordinates></Point>
-<name>Alpe di Röd 2390 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FUS2<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FUS2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.16029697837526,46.4140110783964,2384</coordinates></Point>
-<name>Pian Grand 2384 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MES2<br/>
-<strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 16<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MES2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.8686359368166,46.4729909524805,2077</coordinates></Point>
-<name>Bassa di Nara 2077 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> NAR2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_NAR2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.98082391524944,46.4674557974036,2450</coordinates></Point>
-<name>Piano del Simano 2450 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SIM2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SIM2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.61379040935815,46.5490388066801,2268</coordinates></Point>
-<name>Vallascia 2268 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> VAL2<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_VAL2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>10.0292016403358,46.4205719262779,2447</coordinates></Point>
-<name>Motta Bianca 2447 m</name>
+<Point><coordinates>10.0292016403358,46.4205719262779,2447.0</coordinates></Point>
+<name>Motta Bianca</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> BER2<br/>
 <strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BER2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BER2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.91589022789612,46.4409154614942,2625</coordinates></Point>
-<name>Puoz Bass 2625 m</name>
+<Point><coordinates>9.91589022789612,46.4409154614942,2625.0</coordinates></Point>
+<name>Puoz Bass</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> BER3<br/>
 <strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BER3_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BER3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.83709063278609,46.5395643240313,2512</coordinates></Point>
-<name>Valetta 2512 m</name>
+<Point><coordinates>9.83709063278609,46.5395643240313,2512.0</coordinates></Point>
+<name>Valetta</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> BEV2<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BEV2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BEV2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.89813986691668,46.6212846649979,2727</coordinates></Point>
-<name>Porta d'Es-cha 2727 m</name>
+<Point><coordinates>8.20899098024125,46.3482272918453,2354.0</coordinates></Point>
+<name>Schapleralpa</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> BIN4<br/>
+<strong>Begin of measuring:</strong> 2021<br/>
+<strong>Years of measuring:</strong> 1<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BIN4_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.47161827485566,46.3338036117952,2299.0</coordinates></Point>
+<name>Hendar Furggu</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> BOG2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BOG2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.4909817864885,46.3062222008148,2179.0</coordinates></Point>
+<name>Pizzo Bombögn</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> BOG3<br/>
+<strong>Begin of measuring:</strong> 2007<br/>
+<strong>Years of measuring:</strong> 15<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BOG3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.10930225320016,46.2905311776728,2517.0</coordinates></Point>
+<name>Bortelsee</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> BOR2<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BOR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.23720695672538,45.9847926612286,2687.0</coordinates></Point>
+<name>Pointe de Toules</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> BOV2<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BOV2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.71747285104361,46.4657252498404,2216.0</coordinates></Point>
+<name>Fontane</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> CAM2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_CAM2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.70888375663218,46.4875759428353,2257.0</coordinates></Point>
+<name>Solco</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> CAM3<br/>
+<strong>Begin of measuring:</strong> 2014<br/>
+<strong>Years of measuring:</strong> 8<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_CAM3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.16398672484049,46.3769626836762,2218.0</coordinates></Point>
+<name>Pierres Fendues</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> CHA2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_CHA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.18345537900562,46.8468720110651,2325.0</coordinates></Point>
+<name>La Fuorcla</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> CMA2<br/>
+<strong>Begin of measuring:</strong> 1993<br/>
+<strong>Years of measuring:</strong> 29<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_CMA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.27420875750933,46.2897395710704,2229.0</coordinates></Point>
+<name>Etang de Trente Pas</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> CON2<br/>
+<strong>Begin of measuring:</strong> 2002<br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_CON2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.03133684658798,47.1163157888767,1455.0</coordinates></Point>
+<name>Col du Chasseral</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> CSL2<br/>
+<strong>Begin of measuring:</strong> 2017<br/>
+<strong>Years of measuring:</strong> 6<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_CSL2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.81941136139983,46.6988889844443,2558.0</coordinates></Point>
+<name>Bärentälli</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> DAV2<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_DAV2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.77399051394934,46.788833109079,2455.0</coordinates></Point>
+<name>Hanengretji</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> DAV3<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_DAV3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.79001837830465,46.7916179250376,2315.0</coordinates></Point>
+<name>Grüeniberg</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> DAV5<br/>
+<strong>Begin of measuring:</strong> 2002<br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_DAV5_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.24103843165486,46.3154048282415,2569.0</coordinates></Point>
+<name>Tsanfleuron</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> DIA2<br/>
+<strong>Begin of measuring:</strong> 1992<br/>
+<strong>Years of measuring:</strong> 30<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_DIA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.86906065003388,46.5428661476668,2057.0</coordinates></Point>
+<name>Preda</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> DTR2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_DTR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.09171550686959,46.4168110012547,2500.0</coordinates></Point>
+<name>Flesch</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> EGH2<br/>
+<strong>Begin of measuring:</strong> 1993<br/>
+<strong>Years of measuring:</strong> 29<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_EGH2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.71469450872067,46.5914252255484,2726.0</coordinates></Point>
+<name>Tschitta</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ELA2<br/>
+<strong>Begin of measuring:</strong> 2008<br/>
+<strong>Years of measuring:</strong> 14<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ELA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.1365009733191,46.9356092059481,2058.0</coordinates></Point>
+<name>Chüebodensee</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ELM2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ELM2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.64164177726311,46.5296028687784,2143.0</coordinates></Point>
+<name>Elsige</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ELS2<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ELS2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.18944809362826,46.9927821639064,2162.0</coordinates></Point>
+<name>Fitteren</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ENG2<br/>
+<strong>Begin of measuring:</strong> 2019<br/>
+<strong>Years of measuring:</strong> 3<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ENG2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.49524946923817,46.5204134882195,1971.0</coordinates></Point>
+<name>Färmel</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FAE2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FAE2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.06440341518719,46.668777117286,2111.0</coordinates></Point>
+<name>Schmidigen-Bidmeren</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FIR2<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FIR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.67388342097644,46.4714650599305,2155.0</coordinates></Point>
+<name>Fisi</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FIS2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FIS2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.42162188493364,46.577653020934,2435.0</coordinates></Point>
+<name>Furkapass</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FKA2<br/>
+<strong>Begin of measuring:</strong> 2012<br/>
+<strong>Years of measuring:</strong> 10<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FKA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.94644506119759,46.7527121108172,2394.0</coordinates></Point>
+<name>Flüelapass</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FLU2<br/>
+<strong>Begin of measuring:</strong> 2003<br/>
+<strong>Years of measuring:</strong> 19<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FLU2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>6.96410423112248,46.1007599043094,2252.0</coordinates></Point>
+<name>L'Ecreuleuse</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FNH2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FNH2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.06723451055423,45.9717556343658,2800.0</coordinates></Point>
+<name>Glacier de Saleina</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FOU2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FOU2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.85317748393146,46.3382370852333,2100.0</coordinates></Point>
+<name>Efra</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FRA2<br/>
+<strong>Begin of measuring:</strong> 2004<br/>
+<strong>Years of measuring:</strong> 18<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FRA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.08966127518766,46.1946845291407,2602.0</coordinates></Point>
+<name>Grand Cor</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FUL2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FUL2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.62044668278117,46.4364219444333,2390.0</coordinates></Point>
+<name>Alpe di Röd</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FUS2<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FUS2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.39748839560539,46.7441893350388,2063.0</coordinates></Point>
+<name>Gschletteregg</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GAD2<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GAD2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.76060627328351,46.4292610534168,2710.0</coordinates></Point>
+<name>Gandegg</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GAN2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GAN2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.0375826326554,46.9966291841572,1632.0</coordinates></Point>
+<name>Guppen</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GLA2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GLA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.2324942228761,46.4204566775896,2439.0</coordinates></Point>
+<name>Bodmerchumma</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GOM2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GOM2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.22855060231519,46.4891422520867,2427.0</coordinates></Point>
+<name>Treichbode</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GOM3<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GOM3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.78359911385216,45.9871921623904,2953.0</coordinates></Point>
+<name>Gornergratsee</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GOR2<br/>
+<strong>Begin of measuring:</strong> 1993<br/>
+<strong>Years of measuring:</strong> 29<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GOR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.63177229409293,46.6732654968559,2325.0</coordinates></Point>
+<name>Rientallücke</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GOS2<br/>
+<strong>Begin of measuring:</strong> 2021<br/>
+<strong>Years of measuring:</strong> 1<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GOS2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.60696699173737,46.6564200447447,2209.0</coordinates></Point>
+<name>Gütsch</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GOS3<br/>
+<strong>Begin of measuring:</strong> 2021<br/>
+<strong>Years of measuring:</strong> 1<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GOS3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>6.7835500643735,46.3460623818907,1984.0</coordinates></Point>
+<name>Loz</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GRA2<br/>
+<strong>Begin of measuring:</strong> 2005<br/>
+<strong>Years of measuring:</strong> 17<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GRA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.28969169579199,46.6793100028691,2115.0</coordinates></Point>
+<name>Homad</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GUT2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GUT2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.20433545466491,46.5443794251159,2147.0</coordinates></Point>
+<name>Alp Piänetsch</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> HTR2<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_HTR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.34852699798837,46.5365502480265,2200.0</coordinates></Point>
+<name>Unter Surettasee</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> HTR3<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_HTR3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>6.82779720727212,46.1913560346611,2022.0</coordinates></Point>
+<name>Les Collines</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ILI2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ILI2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.2745416987543,46.633048888548,1707.0</coordinates></Point>
+<name>Fochsen</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> JAU2<br/>
+<strong>Begin of measuring:</strong> 2004<br/>
+<strong>Years of measuring:</strong> 18<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_JAU2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.69231151006273,46.4784972280234,2426.0</coordinates></Point>
+<name>Vairana</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> JUL2<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_JUL2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.89813986691668,46.6212846649979,2727.0</coordinates></Point>
+<name>Porta d'Es-cha</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> KES2<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_KES2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_KES2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.74458031776757,46.4513578780098,2730</coordinates></Point>
-<name>Tscheppa 2730 m</name>
+<Point><coordinates>9.8738591619793,46.9091149998652,2147.0</coordinates></Point>
+<name>Madrisa</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> KLO2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_KLO2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.93167229569342,46.8412712603804,2299.0</coordinates></Point>
+<name>Gatschiefer</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> KLO3<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_KLO3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.99635699154761,47.0541466254844,1930.0</coordinates></Point>
+<name>Schijen</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> KLT2<br/>
+<strong>Begin of measuring:</strong> 2020<br/>
+<strong>Years of measuring:</strong> 2<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_KLT2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.97083335209586,47.0307026781331,1258.0</coordinates></Point>
+<name>Ruoggis, Unter Stafel</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> KLT3<br/>
+<strong>Begin of measuring:</strong> 2017<br/>
+<strong>Years of measuring:</strong> 6<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_KLT3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.74458031776757,46.4513578780098,2730.0</coordinates></Point>
+<name>Tscheppa</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> LAG2<br/>
 <strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LAG2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LAG2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.69777285373163,46.4245273383925,2300</coordinates></Point>
-<name>Materdell 2300 m</name>
+<Point><coordinates>9.69777285373163,46.4245273383925,2300.0</coordinates></Point>
+<name>Materdell</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> LAG3<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LAG3_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Begin of measuring:</strong> 2009<br/>
+<strong>Years of measuring:</strong> 13<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LAG3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>10.2890519645708,46.6317066163864,2359</coordinates></Point>
-<name>Murtaröl 2359 m</name>
+<Point><coordinates>7.37986767040874,46.4260294507536,1970.0</coordinates></Point>
+<name>Trüttlisbergpass</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> LAU2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LAU2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.94374276253735,46.5827913072073,2150.0</coordinates></Point>
+<name>Russisprung</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> LHO2<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LHO2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.783521662662,46.6041535172299,2555.0</coordinates></Point>
+<name>Lai Verd</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> LUK2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LUK2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.9435421405803,46.6186492331629,2162.0</coordinates></Point>
+<name>Itramen</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MAE2<br/>
+<strong>Begin of measuring:</strong> 1994<br/>
+<strong>Years of measuring:</strong> 29<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MAE2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.55101455836442,46.7437681321397,2220.0</coordinates></Point>
+<name>Laucheren</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MEI2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MEI2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.16029697837526,46.4140110783964,2384.0</coordinates></Point>
+<name>Pian Grand</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MES2<br/>
+<strong>Begin of measuring:</strong> 2002<br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MES2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.61177054092798,47.0884686893631,1974.0</coordinates></Point>
+<name>Bärgtälli</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MLB2<br/>
+<strong>Begin of measuring:</strong> 2008<br/>
+<strong>Years of measuring:</strong> 14<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MLB2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.91759159576764,46.4087263504025,1884.0</coordinates></Point>
+<name>Predanass</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MTR2<br/>
+<strong>Begin of measuring:</strong> 1992<br/>
+<strong>Years of measuring:</strong> 30<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MTR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.92520374817358,46.3330680727049,2205.0</coordinates></Point>
+<name>Chiematte</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MUN2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MUN2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.74562138828972,46.9382177373277,2083.0</coordinates></Point>
+<name>Rupperslaui</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MUO2<br/>
+<strong>Begin of measuring:</strong> 2006<br/>
+<strong>Years of measuring:</strong> 16<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MUO2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.01748400125733,46.8587584939241,2481.0</coordinates></Point>
+<name>Mutten</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MUT2<br/>
+<strong>Begin of measuring:</strong> 2008<br/>
+<strong>Years of measuring:</strong> 14<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MUT2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.8686359368166,46.4729909524805,2077.0</coordinates></Point>
+<name>Bassa di Nara</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> NAR2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_NAR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.2553213936194,46.8150383026398,2350.0</coordinates></Point>
+<name>Schlivèra</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> NAS2<br/>
+<strong>Begin of measuring:</strong> 1992<br/>
+<strong>Years of measuring:</strong> 30<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_NAS2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.3352968725788,46.1431841440701,2203.0</coordinates></Point>
+<name>Combatzeline</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> NEN3<br/>
+<strong>Begin of measuring:</strong> 2010<br/>
+<strong>Years of measuring:</strong> 12<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_NEN3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.21438585164637,46.4217735133775,2097.0</coordinates></Point>
+<name>Obere Meiel</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> OBM2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_OBM2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.31595593868373,46.5452218766451,2432.0</coordinates></Point>
+<name>Jostsee</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> OBW2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_OBW2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.35447840887315,46.5078627806443,2194.0</coordinates></Point>
+<name>Mällige</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> OBW3<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_OBW3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.2890519645708,46.6317066163864,2359.0</coordinates></Point>
+<name>Murtaröl</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> OFE2<br/>
 <strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 16<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_OFE2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_OFE2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>10.338340429264,46.9563804668955,2512</coordinates></Point>
-<name>Ravaischer Salaas 2512 m</name>
+<Point><coordinates>8.95854987856756,46.918082016133,1824.0</coordinates></Point>
+<name>Ortstock Matt</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ORT2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ORT2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.56163683225869,46.5397021022525,2017.0</coordinates></Point>
+<name>Ottere</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> OTT2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_OTT2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.80484494583298,46.8517249839739,2290.0</coordinates></Point>
+<name>Kreuzweg</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> PAR2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_PAR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.53738768920731,46.5800763351247,2429.0</coordinates></Point>
+<name>Colms da Parsonz</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> PMA2<br/>
+<strong>Begin of measuring:</strong> 1993<br/>
+<strong>Years of measuring:</strong> 29<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_PMA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.86245523673698,46.626351811613,2196.0</coordinates></Point>
+<name>Ils Plauns</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> PUZ2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_PUZ2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.62678887877818,46.68557084918,2400.0</coordinates></Point>
+<name>Rienzenstock</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> RNZ2<br/>
+<strong>Begin of measuring:</strong> 2008<br/>
+<strong>Years of measuring:</strong> 14<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_RNZ2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.9939413533756,46.7743194074202,1875.0</coordinates></Point>
+<name>Rotschalp</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ROA2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ROA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.60438596843145,46.7331165395744,2495.0</coordinates></Point>
+<name>Plang Bi</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ROT3<br/>
+<strong>Begin of measuring:</strong> 2018<br/>
+<strong>Years of measuring:</strong> 4<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ROT3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.87935311747338,46.1718358878471,2480.0</coordinates></Point>
+<name>Seetal</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SAA2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SAA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.90553096637996,46.1244673621239,2680.0</coordinates></Point>
+<name>Gibidum</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SAA4<br/>
+<strong>Begin of measuring:</strong> 2009<br/>
+<strong>Years of measuring:</strong> 13<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SAA4_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.98138596179335,46.1274838073656,2952.0</coordinates></Point>
+<name>Mälliga</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SAA5<br/>
+<strong>Begin of measuring:</strong> 2017<br/>
+<strong>Years of measuring:</strong> 5<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SAA5_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.71734318116799,46.8129550456096,2032.0</coordinates></Point>
+<name>Seewli</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SCA2<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SCA2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.77953979715574,46.8915385299693,2338.0</coordinates></Point>
+<name>Alpler Tor</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SCA3<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SCA3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.10343838444861,46.7793752474716,1777.0</coordinates></Point>
+<name>Schönbüel</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SCB2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SCB2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.83473262249093,46.576916451432,2332.0</coordinates></Point>
+<name>Türliboden</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SCH2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SCH2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.8124495943938,46.748825793211,1852.0</coordinates></Point>
+<name>Schibe</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SHE2<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SHE2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.98082391524944,46.4674557974036,2450.0</coordinates></Point>
+<name>Piano del Simano</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SIM2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SIM2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.84826503817483,46.8127674751176,1563.0</coordinates></Point>
+<name>Davos Stilli (SLF)</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SLF2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SLF2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.338340429264,46.9563804668955,2512.0</coordinates></Point>
+<name>Ravaischer Salaas</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> SMN2<br/>
 <strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SMN2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SMN2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>10.4428468878887,46.9317670954854,2729</coordinates></Point>
-<name>Alpetta 2729 m</name>
+<Point><coordinates>8.11762397970502,46.2294440918677,2620.0</coordinates></Point>
+<name>Ze Seewe</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SPN2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SPN2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.0451752956639,46.1780125568757,2424.0</coordinates></Point>
+<name>Wenghorn</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SPN3<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SPN3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.51964915737677,46.6820490432178,1791.0</coordinates></Point>
+<name>Vorderstocken</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> STH2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_STH2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.75055897669412,46.1678115804215,2914.0</coordinates></Point>
+<name>Oberer Stelligletscher</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> STN2<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_STN2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.39092523015202,46.9683647584304,2468.0</coordinates></Point>
+<name>Wildsee</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TAM2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TAM2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.45816706665769,46.8909845077528,2166.0</coordinates></Point>
+<name>Schaftäli</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TAM3<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TAM3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.40948249417522,46.7860098508656,2149.0</coordinates></Point>
+<name>Titlisboden</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TIT2<br/>
+<strong>Begin of measuring:</strong> 1993<br/>
+<strong>Years of measuring:</strong> 29<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TIT2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.58557232606275,46.3709519169687,2459.0</coordinates></Point>
+<name>Trubelboden</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TRU2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TRU2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.72375109940852,46.6838803108833,2262.0</coordinates></Point>
+<name>Culmatsch</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TUJ2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TUJ2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.74022353775476,46.6470316389603,2211.0</coordinates></Point>
+<name>Nual</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TUJ3<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TUJ3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.02146814490337,46.7810665940868,2191.0</coordinates></Point>
+<name>Val Miez</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TUM2<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TUM2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.51385955864913,46.5867868627804,2169.0</coordinates></Point>
+<name>Giltnasen</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> URS2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_URS2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.61379040935815,46.5490388066801,2268.0</coordinates></Point>
+<name>Vallascia</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VAL2<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VAL2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.36750511962445,46.3215111310242,2385.0</coordinates></Point>
+<name>Donin du Jour</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VDS2<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VDS2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.4428468878887,46.9317670954854,2729.0</coordinates></Point>
+<name>Alpetta</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> VIN2<br/>
 <strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_VIN2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VIN2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>10.0188448172399,46.6977166981315,2677</coordinates></Point>
-<name>Pülschezza 2677 m</name>
+<Point><coordinates>9.20524161894874,46.6744111864099,2064.0</coordinates></Point>
+<name>Alp Calasa</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VLS2<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VLS2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.47524961478953,46.2402347145606,2040.0</coordinates></Point>
+<name>Teststation Vergeletto</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VRG2<br/>
+<strong>Begin of measuring:</strong> 2021<br/>
+<strong>Years of measuring:</strong> 1<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VRG2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.3529064651496,46.7488225021961,2914.0</coordinates></Point>
+<name>Trigl</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VSC2<br/>
+<strong>Begin of measuring:</strong> 2020<br/>
+<strong>Years of measuring:</strong> 2<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VSC2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.80928943600516,46.8296382941581,2536.0</coordinates></Point>
+<name>Versuchsfeld Weissfluhjoch</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> WFJ2<br/>
+<strong>Begin of measuring:</strong> 1992<br/>
+<strong>Years of measuring:</strong> 30<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_WFJ2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.82541674946416,47.0354583698136,1701.0</coordinates></Point>
+<name>Wanne</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> YBR2<br/>
+<strong>Begin of measuring:</strong> 2006<br/>
+<strong>Years of measuring:</strong> 16<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_YBR2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.72740552202272,46.0421776391363,2752.0</coordinates></Point>
+<name>Triftchumme</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ZER2<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ZER2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.70239110210637,45.997989855242,2408.0</coordinates></Point>
+<name>Alp Hermetje</name>
+<styleUrl>#IMIS_SNOW</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ZER4<br/>
+<strong>Begin of measuring:</strong> 2004<br/>
+<strong>Years of measuring:</strong> 18<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ZER4_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.0188448172399,46.6977166981315,2677.0</coordinates></Point>
+<name>Pülschezza</name>
 <styleUrl>#IMIS_SNOW</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ZNZ2<br/>
 <strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 16<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ZNZ2_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.03133684658798,47.1163157888767,1455</coordinates></Point>
-<name>Col du Chasseral 1455 m</name>
-<styleUrl>#IMIS_SNOW</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> CSL2<br/>
-<strong>Begin of measuring:</strong> 2018<br/>
-<strong>Years of measuring:</strong> 1<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_CSL2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ZNZ2_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>

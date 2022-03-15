@@ -5,126 +5,135 @@
 <name>IMIS Special Station</name>
 
 <Style id="IMIS_WIND">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_wind.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_wind.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Style id="IMIS_SNOW">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_snow.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_snow.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Style id="IMIS_SPECIAL">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_special.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_special.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
-<Style id="MESSFELD_MS">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
-</Style>
-
-<Style id="MESSFELD_VG">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<Style id="MESSFELD">
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Placemark>
-<Point><coordinates>7.25062295839473,46.4263555087258,2050</coordinates></Point>
-<name>Primelod 2050 m</name>
+<Point><coordinates>7.4901383025515,46.4755278753997,2355.0</coordinates></Point>
+<name>Lavey-Sattligrat</name>
 <styleUrl>#IMIS_SPECIAL</styleUrl>
 <description>
 <![CDATA[
-<strong>Code:</strong> PLD2<br/>
-<strong>Begin of measuring:</strong> 2015<br/>
-<strong>Years of measuring:</strong> 4<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_PLD2_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Code:</strong> ADE3<br/>
+<strong>Begin of measuring:</strong> 2020<br/>
+<strong>Years of measuring:</strong> 2<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ADE3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.78470275758155,46.7841947486778,2330</coordinates></Point>
-<name>Frauentobel 2330 m</name>
+<Point><coordinates>9.78470275758155,46.7841947486778,2330.0</coordinates></Point>
+<name>Frauentobel</name>
 <styleUrl>#IMIS_SPECIAL</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> DAV4<br/>
 <strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_DAV4_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_DAV4_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.79001837830465,46.7916179250376,2315</coordinates></Point>
-<name>Grüeniberg 2315 m</name>
-<styleUrl>#IMIS_SPECIAL</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> DAV5<br/>
-<strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_DAV5_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.76978842413482,46.6030348209163,2306</coordinates></Point>
-<name>Muot 2306 m</name>
+<Point><coordinates>9.76978842413482,46.6030348209163,2306.0</coordinates></Point>
+<name>Muot</name>
 <styleUrl>#IMIS_SPECIAL</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ELA3<br/>
 <strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 11<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ELA3_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 14<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ELA3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>8.4909817864885,46.3062222008148,2179</coordinates></Point>
-<name>Pizzo Bombögn 2179 m</name>
-<styleUrl>#IMIS_SPECIAL</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> BOG3<br/>
-<strong>Begin of measuring:</strong> 2007<br/>
-<strong>Years of measuring:</strong> 11<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BOG3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.70888375663218,46.4875759428353,2257</coordinates></Point>
-<name>Solco 2257 m</name>
-<styleUrl>#IMIS_SPECIAL</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> CAM3<br/>
-<strong>Begin of measuring:</strong> 2014<br/>
-<strong>Years of measuring:</strong> 4<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_CAM3_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.81811525972484,46.3519581866658,2170</coordinates></Point>
-<name>Costa 2170 m</name>
+<Point><coordinates>8.81811525972484,46.3519581866658,2170.0</coordinates></Point>
+<name>Costa</name>
 <styleUrl>#IMIS_SPECIAL</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> FRA3<br/>
 <strong>Begin of measuring:</strong> 2005<br/>
-<strong>Years of measuring:</strong> 13<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FRA3_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 17<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FRA3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>10.1123286315091,46.7843266638475,2405</coordinates></Point>
-<name>Gonda Cotschna 2405 m</name>
+<Point><coordinates>10.1123286315091,46.7843266638475,2405.0</coordinates></Point>
+<name>Gonda Cotschna</name>
 <styleUrl>#IMIS_SPECIAL</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> LAV1<br/>
 <strong>Begin of measuring:</strong> 2009<br/>
-<strong>Years of measuring:</strong> 9<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LAV1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 13<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LAV1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.94295489906423,46.5892537558818,2190.0</coordinates></Point>
+<name>Lauberhorn</name>
+<styleUrl>#IMIS_SPECIAL</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> LHO3<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LHO3_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.86142530738795,46.7315844750713,2388.0</coordinates></Point>
+<name>Lumpegna</name>
+<styleUrl>#IMIS_SPECIAL</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> LUM2<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LUM2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.25062295839473,46.4263555087258,2050.0</coordinates></Point>
+<name>Primelod</name>
+<styleUrl>#IMIS_SPECIAL</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> PLD2<br/>
+<strong>Begin of measuring:</strong> 2015<br/>
+<strong>Years of measuring:</strong> 7<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_PLD2_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.05800833057362,46.7801162174809,1700.0</coordinates></Point>
+<name>Giebelegg</name>
+<styleUrl>#IMIS_SPECIAL</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ROA3<br/>
+<strong>Begin of measuring:</strong> 2006<br/>
+<strong>Years of measuring:</strong> 16<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ROA3_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>

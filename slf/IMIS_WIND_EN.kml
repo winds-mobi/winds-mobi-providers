@@ -5,880 +5,889 @@
 <name>IMIS Wind Station</name>
 
 <Style id="IMIS_WIND">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_wind.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_wind.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Style id="IMIS_SNOW">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_snow.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_snow.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Style id="IMIS_SPECIAL">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_imis_special.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_imis_special.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
-<Style id="MESSFELD_MS">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
-</Style>
-
-<Style id="MESSFELD_VG">
-<IconStyle><Icon><href>https://www.slf.ch/avalanche/stations/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
+<Style id="MESSFELD">
+<IconStyle><Icon><href>https://stationdocu.slf.ch/icon/icon_messfeld.png</href></Icon></IconStyle><LabelStyle><scale>0</scale></LabelStyle>
 </Style>
 
 <Placemark>
-<Point><coordinates>9.80645518673278,46.8334678652867,2693</coordinates></Point>
-<name>Weissfluhjoch 2693 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> WFJ1<br/>
-<strong>Begin of measuring:</strong> 1992<br/>
-<strong>Years of measuring:</strong> 15<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_WFJ1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>6.98728191131309,46.4822481310236,1989</coordinates></Point>
-<name>Vanil des Artses 1989 m</name>
+<Point><coordinates>6.98728191131309,46.4822481310236,1989.0</coordinates></Point>
+<name>Vanil des Artses</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ALI1<br/>
 <strong>Begin of measuring:</strong> 2004<br/>
-<strong>Years of measuring:</strong> 14<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ALI1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.1524528234416,46.3828982387521,2540</coordinates></Point>
-<name>La Para 2540 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> CHA1<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_CHA1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.6396403665253,46.5346889770627,2340</coordinates></Point>
-<name>Elsighorn 2340 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ELS1<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ELS1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.4893378882038,46.4971177765274,2761</coordinates></Point>
-<name>Albristhorn 2761 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FAE1<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FAE1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.2779765475523,46.6925220939276,2528</coordinates></Point>
-<name>Bänzlauistock 2528 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GUT1<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GUT1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.26895015964382,46.6296853802227,2103</coordinates></Point>
-<name>Chörblispitz 2103 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> JAU1<br/>
-<strong>Begin of measuring:</strong> 2004<br/>
-<strong>Years of measuring:</strong> 14<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_JAU1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.3545041485816,46.4402084557772,2476</coordinates></Point>
-<name>Lauenehore 2476 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> LAU1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LAU1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.93806696830187,46.6181156526273,2341</coordinates></Point>
-<name>Männlichen 2341 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MAN1<br/>
-<strong>Begin of measuring:</strong> 2014<br/>
-<strong>Years of measuring:</strong> 4<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MAN1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.04691753286732,46.7871205654522,2348</coordinates></Point>
-<name>Brienzer Rothorn 2348 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ROA1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ROA1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.83520240496464,46.557313339395,2996</coordinates></Point>
-<name>Schilthorn 2996 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SCH1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SCH1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.53857102644892,46.6938633344748,2190</coordinates></Point>
-<name>Stockhorn 2190 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> STH1<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
 <strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_STH1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ALI1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.92754198615891,46.5513679645284,2673</coordinates></Point>
-<name>Schwarzmönch 2673 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SWM1<br/>
-<strong>Begin of measuring:</strong> 2009<br/>
-<strong>Years of measuring:</strong> 9<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SWM1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.78685389252684,46.9393502635276,2325</coordinates></Point>
-<name>Wasserbergfirst 2325 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MUO1<br/>
-<strong>Begin of measuring:</strong> 2006<br/>
-<strong>Years of measuring:</strong> 12<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MUO1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.73213218100991,46.8072559384641,3187</coordinates></Point>
-<name>Gross Windgällen 3187 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SCA1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SCA1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.63831098123928,46.6681318933371,2784</coordinates></Point>
-<name>Gross Schijen 2784 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> URS1<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_URS1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.13559277009082,47.1696910646939,1932</coordinates></Point>
-<name>Mattstock 1932 m</name>
+<Point><coordinates>9.13559277009082,47.1696910646939,1932.0</coordinates></Point>
+<name>Mattstock</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> AMD1<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_AMD1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_AMD1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.1205696528156,46.9314717084035,2447</coordinates></Point>
-<name>Mittler Blistock 2447 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ELM1<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ELM1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.99871985273746,46.998721294804,2909</coordinates></Point>
-<name>Schwander Grat 2909 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GLA1<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GLA1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.30481885657133,47.1533309547865,2306</coordinates></Point>
-<name>Hinterrugg 2306 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> HIN1<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_HIN1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.62399309160279,47.086761024427,2186</coordinates></Point>
-<name>Spitz 2186 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MLB1<br/>
-<strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 11<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MLB1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.04508027422915,46.8635746646671,3103</coordinates></Point>
-<name>Ruchi 3103 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MUT1<br/>
-<strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 10<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MUT1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.39975019966273,46.967422272041,2689</coordinates></Point>
-<name>Wildseehorn 2689 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TAM1<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TAM1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.58666500299506,46.150764803815,2895</coordinates></Point>
-<name>Corne de Sorebois 2895 m</name>
+<Point><coordinates>7.58666500299506,46.150764803815,2895.0</coordinates></Point>
+<name>Corne de Sorebois</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ANV1<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ANV1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ANV1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.43529061772836,46.0353672607068,3300</coordinates></Point>
-<name>La Cassorte 3300 m</name>
+<Point><coordinates>7.43529061772836,46.0353672607068,3300.0</coordinates></Point>
+<name>La Cassorte</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ARO1<br/>
 <strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ARO1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ARO1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>7.23988130230764,45.9945216275033,3211</coordinates></Point>
-<name>Pointe de Boveire 3211 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> BOV1<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BOV1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>6.96997146560684,46.1207190684787,2785</coordinates></Point>
-<name>Le Luisin 2785 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FNH1<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FNH1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.05600116510672,45.9915081288421,3344</coordinates></Point>
-<name>Le Portalet 3344 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FOU1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FOU1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.11303518922002,46.1786793764827,2899</coordinates></Point>
-<name>Grand Chavalard 2899 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> FUL1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_FUL1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.76625033249361,46.4396800407709,3193</coordinates></Point>
-<name>Sackhorn 3193 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GAN1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GAN1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.24204416307983,46.4214600707673,2728</coordinates></Point>
-<name>Chummehorn 2728 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GOM1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GOM1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>6.81362894204847,46.3522510020055,2210</coordinates></Point>
-<name>Jumelles 2210 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> GRA1<br/>
-<strong>Begin of measuring:</strong> 2005<br/>
-<strong>Years of measuring:</strong> 13<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_GRA1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>6.81621306151733,46.1905730383893,2276</coordinates></Point>
-<name>Pointe des Mossettes 2276 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ILI1<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ILI1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.91670107988806,46.3438273638635,2926</coordinates></Point>
-<name>Gärsthorn 2926 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MUN1<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MUN1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.35402322228693,46.1431280366951,2713</coordinates></Point>
-<name>Creppon Blanc 2713 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> NEN1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_NEN1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.30841591015275,46.5498498820865,2733</coordinates></Point>
-<name>Sidelhorn 2733 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> OBW1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_OBW1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.86127362645955,46.16634570535,3245</coordinates></Point>
-<name>Platthorn 3245 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SAA1<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SAA1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.08137915250061,46.2182760909452,2980</coordinates></Point>
-<name>Chesselhorn 2980 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SPN1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SPN1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.58062921665003,46.384091944115,3103</coordinates></Point>
-<name>Schwarzhorn 3103 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TRU1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TRU1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.35227534259684,46.3051913955037,2696</coordinates></Point>
-<name>Crêta Besse 2696 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> VDS1<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_VDS1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>7.73632945277717,46.0536598855597,3345</coordinates></Point>
-<name>Platthorn 3345 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ZER1<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ZER1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.81431079424266,46.6885109021154,2890</coordinates></Point>
-<name>Chrachenhorn 2890 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> DAV1<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 20<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_DAV1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.7082350273714,46.5815290788968,3110</coordinates></Point>
-<name>Piz Salteras 3110 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> ELA1<br/>
-<strong>Begin of measuring:</strong> 2008<br/>
-<strong>Years of measuring:</strong> 11<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ELA1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.15414491564513,46.5333520418542,3040</coordinates></Point>
-<name>Chilchalphorn 3040 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> HTR1<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_HTR1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.70289360886638,46.4823364545327,2838</coordinates></Point>
-<name>Piz Bardella 2838 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> JUL1<br/>
-<strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_JUL1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.86849174124433,46.9208116020914,2542</coordinates></Point>
-<name>Sant Jaggem 2542 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> KLO1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_KLO1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.78654774142464,46.6119091265484,3040</coordinates></Point>
-<name>Piz Gannaretsch 3040 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> LUK1<br/>
-<strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LUK1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.85681123523648,46.6232733332173,2425</coordinates></Point>
-<name>La Muota 2425 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> PUZ1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_PUZ1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.69449082314106,46.6837297295712,3028</coordinates></Point>
-<name>Crispalt 3028 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TUJ1<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TUJ1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.99226931540726,46.7849766612729,3041</coordinates></Point>
-<name>Piz Tumpiv 3041 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> TUM1<br/>
-<strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 16<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_TUM1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.12506727176482,46.6228011036926,3121</coordinates></Point>
-<name>Piz Aul 3121 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> VLS1<br/>
-<strong>Begin of measuring:</strong> 2001<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_VLS1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.51946634003913,46.5388908586431,2963</coordinates></Point>
-<name>Lucendro 2963 m</name>
+<Point><coordinates>8.51946634003913,46.5388908586431,2963.0</coordinates></Point>
+<name>Lucendro</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> BED1<br/>
 <strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BED1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BED1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>8.46004596695622,46.3282678814293,2688</coordinates></Point>
-<name>Martschenspitz 2688 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> BOG1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BOG1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.70038183905683,46.4826955637609,2668</coordinates></Point>
-<name>Tremorgio 2668 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> CAM1<br/>
-<strong>Begin of measuring:</strong> 1999<br/>
-<strong>Years of measuring:</strong> 19<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_CAM1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.86609455953855,46.5480678215007,2388</coordinates></Point>
-<name>Costa 2388 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> DTR1<br/>
-<strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_DTR1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>9.15569757316482,46.4174820410651,2688</coordinates></Point>
-<name>Piz Pian Grand 2688 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> MES1<br/>
-<strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 16<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_MES1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.8669175444441,46.465104158291,2299</coordinates></Point>
-<name>Motto Crostel 2299 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> NAR1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_NAR1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.97194670132556,46.4625105610168,2579</coordinates></Point>
-<name>Cima del Simano 2579 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> SIM1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_SIM1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>8.61084816054718,46.5492581371918,2450</coordinates></Point>
-<name>Löita 2450 m</name>
-<styleUrl>#IMIS_WIND</styleUrl>
-<description>
-<![CDATA[
-<strong>Code:</strong> VAL1<br/>
-<strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_VAL1_EN.pdf' target='_blank'>PDF</a><br/>
-]]>
-</description>
-</Placemark>
-<Placemark>
-<Point><coordinates>10.0236439187181,46.4314815373066,2956</coordinates></Point>
-<name>Lagalb 2956 m</name>
+<Point><coordinates>10.0236439187181,46.4314815373066,2956.0</coordinates></Point>
+<name>Lagalb</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> BER1<br/>
 <strong>Begin of measuring:</strong> 2000<br/>
-<strong>Years of measuring:</strong> 18<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BER1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BER1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.85353433690934,46.5488549508349,2490</coordinates></Point>
-<name>Cho d'Valetta 2490 m</name>
+<Point><coordinates>9.85353433690934,46.5488549508349,2490.0</coordinates></Point>
+<name>Cho d'Valetta</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> BEV1<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_BEV1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BEV1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.90066530851272,46.6282591476262,3152</coordinates></Point>
-<name>Piz Val Müra 3152 m</name>
+<Point><coordinates>8.46004596695622,46.3282678814293,2688.0</coordinates></Point>
+<name>Martschenspitz</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> BOG1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BOG1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.23988130230764,45.9945216275033,3211.0</coordinates></Point>
+<name>Pointe de Boveire</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> BOV1<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_BOV1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.70038183905683,46.4826955637609,2668.0</coordinates></Point>
+<name>Tremorgio</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> CAM1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_CAM1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.1524528234416,46.3828982387521,2540.0</coordinates></Point>
+<name>La Para</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> CHA1<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_CHA1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.81431079424266,46.6885109021154,2890.0</coordinates></Point>
+<name>Chrachenhorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> DAV1<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_DAV1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.86609455953855,46.5480678215007,2388.0</coordinates></Point>
+<name>Costa</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> DTR1<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_DTR1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.7082350273714,46.5815290788968,3110.0</coordinates></Point>
+<name>Piz Salteras</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ELA1<br/>
+<strong>Begin of measuring:</strong> 2008<br/>
+<strong>Years of measuring:</strong> 14<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ELA1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.1205696528156,46.9314717084035,2447.0</coordinates></Point>
+<name>Mittler Blistock</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ELM1<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ELM1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.6396403665253,46.5346889770627,2340.0</coordinates></Point>
+<name>Elsighorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ELS1<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ELS1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.20158344722413,46.9931270994485,2510.0</coordinates></Point>
+<name>Gulderstock</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ENG1<br/>
+<strong>Begin of measuring:</strong> 2019<br/>
+<strong>Years of measuring:</strong> 3<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ENG1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.4893378882038,46.4971177765274,2761.0</coordinates></Point>
+<name>Albristhorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FAE1<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FAE1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>6.96997146560684,46.1207190684787,2785.0</coordinates></Point>
+<name>Le Luisin</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FNH1<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FNH1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.05600116510672,45.9915081288421,3344.0</coordinates></Point>
+<name>Le Portalet</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FOU1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FOU1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.11303518922002,46.1786793764827,2899.0</coordinates></Point>
+<name>Grand Chavalard</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> FUL1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_FUL1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.76625033249361,46.4396800407709,3193.0</coordinates></Point>
+<name>Sackhorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GAN1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GAN1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.99871985273746,46.998721294804,2909.0</coordinates></Point>
+<name>Schwander Grat</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GLA1<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GLA1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.24204416307983,46.4214600707673,2728.0</coordinates></Point>
+<name>Chummehorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GOM1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GOM1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>6.81362894204847,46.3522510020055,2210.0</coordinates></Point>
+<name>Jumelles</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GRA1<br/>
+<strong>Begin of measuring:</strong> 2005<br/>
+<strong>Years of measuring:</strong> 17<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GRA1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.2779765475523,46.6925220939276,2528.0</coordinates></Point>
+<name>Bänzlauistock</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> GUT1<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_GUT1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.30481885657133,47.1533309547865,2306.0</coordinates></Point>
+<name>Hinterrugg</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> HIN1<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_HIN1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.15414491564513,46.5333520418542,3040.0</coordinates></Point>
+<name>Chilchalphorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> HTR1<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_HTR1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>6.81621306151733,46.1905730383893,2276.0</coordinates></Point>
+<name>Pointe des Mossettes</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ILI1<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ILI1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.26895015964382,46.6296853802227,2103.0</coordinates></Point>
+<name>Chörblispitz</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> JAU1<br/>
+<strong>Begin of measuring:</strong> 2004<br/>
+<strong>Years of measuring:</strong> 18<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_JAU1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.70289360886638,46.4823364545327,2838.0</coordinates></Point>
+<name>Piz Bardella</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> JUL1<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_JUL1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.90066530851272,46.6282591476262,3152.0</coordinates></Point>
+<name>Piz Val Müra</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> KES1<br/>
 <strong>Begin of measuring:</strong> 1997<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_KES1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_KES1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.73308291838635,46.4488911896383,3085</coordinates></Point>
-<name>Lagrev 3085 m</name>
+<Point><coordinates>9.86849174124433,46.9208116020914,2542.0</coordinates></Point>
+<name>Sant Jaggem</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> KLO1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_KLO1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.73308291838635,46.4488911896383,3085.0</coordinates></Point>
+<name>Lagrev</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> LAG1<br/>
 <strong>Begin of measuring:</strong> 1996<br/>
-<strong>Years of measuring:</strong> 22<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_LAG1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LAG1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>10.3061272842238,46.6050561960785,2949</coordinates></Point>
-<name>Piz Dora 2949 m</name>
+<Point><coordinates>7.3545041485816,46.4402084557772,2476.0</coordinates></Point>
+<name>Lauenehore</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> LAU1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LAU1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.78654774142464,46.6119091265484,3040.0</coordinates></Point>
+<name>Piz Gannaretsch</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> LUK1<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_LUK1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.93806696830187,46.6181156526273,2341.0</coordinates></Point>
+<name>Männlichen</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MAN1<br/>
+<strong>Begin of measuring:</strong> 2014<br/>
+<strong>Years of measuring:</strong> 8<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MAN1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.15569757316482,46.4174820410651,2688.0</coordinates></Point>
+<name>Piz Pian Grand</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MES1<br/>
+<strong>Begin of measuring:</strong> 2002<br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MES1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.62399309160279,47.086761024427,2186.0</coordinates></Point>
+<name>Spitz</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MLB1<br/>
+<strong>Begin of measuring:</strong> 2008<br/>
+<strong>Years of measuring:</strong> 14<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MLB1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.91670107988806,46.3438273638635,2926.0</coordinates></Point>
+<name>Gärsthorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MUN1<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MUN1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.78685389252684,46.9393502635276,2325.0</coordinates></Point>
+<name>Wasserbergfirst</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MUO1<br/>
+<strong>Begin of measuring:</strong> 2006<br/>
+<strong>Years of measuring:</strong> 16<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MUO1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.04508027422915,46.8635746646671,3103.0</coordinates></Point>
+<name>Ruchi</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> MUT1<br/>
+<strong>Begin of measuring:</strong> 2008<br/>
+<strong>Years of measuring:</strong> 14<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_MUT1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.8669175444441,46.465104158291,2299.0</coordinates></Point>
+<name>Motto Crostel</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> NAR1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_NAR1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.35402322228693,46.1431280366951,2713.0</coordinates></Point>
+<name>Creppon Blanc</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> NEN1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_NEN1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.30841591015275,46.5498498820865,2733.0</coordinates></Point>
+<name>Sidelhorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> OBW1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_OBW1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.3061272842238,46.6050561960785,2949.0</coordinates></Point>
+<name>Piz Dora</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> OFE1<br/>
 <strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_OFE1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_OFE1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>10.4493162140907,46.9287885890187,2975</coordinates></Point>
-<name>Piz Alpetta 2975 m</name>
+<Point><coordinates>8.85681123523648,46.6232733332173,2425.0</coordinates></Point>
+<name>La Muota</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> PUZ1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_PUZ1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.04691753286732,46.7871205654522,2348.0</coordinates></Point>
+<name>Brienzer Rothorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ROA1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ROA1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.86127362645955,46.16634570535,3245.0</coordinates></Point>
+<name>Platthorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SAA1<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SAA1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.73213218100991,46.8072559384641,3187.0</coordinates></Point>
+<name>Gross Windgällen</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SCA1<br/>
+<strong>Begin of measuring:</strong> 1999<br/>
+<strong>Years of measuring:</strong> 23<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SCA1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.83520240496464,46.557313339395,2996.0</coordinates></Point>
+<name>Schilthorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SCH1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SCH1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.97194670132556,46.4625105610168,2579.0</coordinates></Point>
+<name>Cima del Simano</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SIM1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SIM1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.08137915250061,46.2182760909452,2980.0</coordinates></Point>
+<name>Chesselhorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SPN1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SPN1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.53857102644892,46.6938633344748,2190.0</coordinates></Point>
+<name>Stockhorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> STH1<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_STH1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.92754198615891,46.5513679645284,2673.0</coordinates></Point>
+<name>Schwarzmönch</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> SWM1<br/>
+<strong>Begin of measuring:</strong> 2009<br/>
+<strong>Years of measuring:</strong> 13<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_SWM1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.39975019966273,46.967422272041,2689.0</coordinates></Point>
+<name>Wildseehorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TAM1<br/>
+<strong>Begin of measuring:</strong> 2000<br/>
+<strong>Years of measuring:</strong> 22<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TAM1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.57057953627223,46.3834473266057,3088.0</coordinates></Point>
+<name>Schwarzhorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TRU1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TRU1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.69449082314106,46.6837297295712,3028.0</coordinates></Point>
+<name>Crispalt</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TUJ1<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TUJ1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.99226931540726,46.7849766612729,3041.0</coordinates></Point>
+<name>Piz Tumpiv</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> TUM1<br/>
+<strong>Begin of measuring:</strong> 2002<br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_TUM1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.63831098123928,46.6681318933371,2784.0</coordinates></Point>
+<name>Gross Schijen</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> URS1<br/>
+<strong>Begin of measuring:</strong> 1997<br/>
+<strong>Years of measuring:</strong> 25<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_URS1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>8.61084816054718,46.5492581371918,2450.0</coordinates></Point>
+<name>Löita</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VAL1<br/>
+<strong>Begin of measuring:</strong> 1996<br/>
+<strong>Years of measuring:</strong> 26<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VAL1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.35227534259684,46.3051913955037,2696.0</coordinates></Point>
+<name>Crêta Besse</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VDS1<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VDS1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.4493162140907,46.9287885890187,2975.0</coordinates></Point>
+<name>Piz Alpetta</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> VIN1<br/>
 <strong>Begin of measuring:</strong> 1998<br/>
-<strong>Years of measuring:</strong> 21<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_VIN1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VIN1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>
 <Placemark>
-<Point><coordinates>9.99762280668124,46.7042524531953,3133</coordinates></Point>
-<name>Sarsura Pitschen 3133 m</name>
+<Point><coordinates>9.12506727176482,46.6228011036926,3121.0</coordinates></Point>
+<name>Piz Aul</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VLS1<br/>
+<strong>Begin of measuring:</strong> 2001<br/>
+<strong>Years of measuring:</strong> 21<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VLS1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>10.3391327802527,46.7532603273595,3092.0</coordinates></Point>
+<name>Piz San Jon Dadaint</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> VSC1<br/>
+<strong>Begin of measuring:</strong> 2020<br/>
+<strong>Years of measuring:</strong> 2<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_VSC1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>7.73632945277717,46.0536598855597,3345.0</coordinates></Point>
+<name>Platthorn</name>
+<styleUrl>#IMIS_WIND</styleUrl>
+<description>
+<![CDATA[
+<strong>Code:</strong> ZER1<br/>
+<strong>Begin of measuring:</strong> 1998<br/>
+<strong>Years of measuring:</strong> 24<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ZER1_EN.pdf' target='_blank'>PDF</a><br/>
+]]>
+</description>
+</Placemark>
+<Placemark>
+<Point><coordinates>9.99762280668124,46.7042524531953,3133.0</coordinates></Point>
+<name>Sarsura Pitschen</name>
 <styleUrl>#IMIS_WIND</styleUrl>
 <description>
 <![CDATA[
 <strong>Code:</strong> ZNZ1<br/>
 <strong>Begin of measuring:</strong> 2002<br/>
-<strong>Years of measuring:</strong> 17<br/>
-<strong>Details:</strong> <a href='https://www.slf.ch/avalanche/stations/IMIS_ZNZ1_EN.pdf' target='_blank'>PDF</a><br/>
+<strong>Years of measuring:</strong> 20<br/>
+<strong>Details:</strong> <a href='https://stationdocu.slf.ch/pdf/IMIS_ZNZ1_EN.pdf' target='_blank'>PDF</a><br/>
 ]]>
 </description>
 </Placemark>

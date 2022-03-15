@@ -53,13 +53,13 @@ class Slf(Provider):
         ns = {"gis": "http://www.opengis.net/kml/2.2"}
 
         for placemark in tree.getroot().findall(".//gis:Placemark", namespaces=ns):
-            (id,) = self.description_pattern.search(placemark.find("gis:description", namespaces=ns).text).groups()
-            name, _ = self.name_pattern.search(placemark.find("gis:name", namespaces=ns).text).groups()
+            (id_,) = self.description_pattern.search(placemark.find("gis:description", namespaces=ns).text).groups()
+            name = placemark.find("gis:name", namespaces=ns).text
             lon, lat, altitude = placemark.find("gis:Point/gis:coordinates", namespaces=ns).text.split(",")
 
-            slf_metadata[id] = {
+            slf_metadata[id_] = {
                 "name": name,
-                "altitude": int(altitude),
+                "altitude": float(altitude),
                 "lat": float(lat),
                 "lon": float(lon),
             }
@@ -69,8 +69,11 @@ class Slf(Provider):
             self.log.info("Processing SLF data...")
 
             slf_metadata = {}
+            # https://stationdocu.slf.ch/kml/IMIS_WIND_EN.kml
             self.add_metadata_from_kml("../slf/IMIS_WIND_EN.kml", slf_metadata)
+            # https://stationdocu.slf.ch/kml/IMIS_SNOW_EN.kml
             self.add_metadata_from_kml("../slf/IMIS_SNOW_EN.kml", slf_metadata)
+            # https://stationdocu.slf.ch/kml/IMIS_SPECIAL_EN.kml
             self.add_metadata_from_kml("../slf/IMIS_SPECIAL_EN.kml", slf_metadata)
 
             session = requests.Session()
@@ -85,6 +88,7 @@ class Slf(Provider):
                 station_id = None
                 try:
                     slf_id = slf_station["id"]
+                    station_id = f"{self.provider_code}-{slf_id}"
                     result = session.get(
                         f"https://odb.slf.ch/odb/api/v1/measurement?id={slf_id}",
                         timeout=(self.connect_timeout, self.read_timeout),
