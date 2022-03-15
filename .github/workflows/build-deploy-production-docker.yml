@@ -6,7 +6,9 @@ on:
       - 'v*.*.*'
 
 jobs:
-  docker:
+  build-deploy-production-docker:
+    name: Build and deploy
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,3 +39,7 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+
+      - name: Update Watchtower containers
+        run: |
+          curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_HTTP_API_TOKEN }}" https://watchtower.winds.mobi/v1/update
