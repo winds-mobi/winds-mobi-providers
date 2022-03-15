@@ -23,7 +23,15 @@ Google Cloud API results are cached with redis.
 
 See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master/settings.py)
 
-#### macOS 11
+### Run the project with docker compose
+
+Create a `.env` file from `.env.template` and fill the missing secrets.
+
+- `docker compose --profile=application up`
+
+### Run the project locally
+
+#### Install macOS dependencies
 
 - `brew install openssl`
 - `export LDFLAGS=-L/usr/local/opt/openssl/lib`
@@ -37,18 +45,10 @@ See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master
 - `brew install openblas proj`
 - `export SYSTEM_VERSION_COMPAT=1`
 
-### Python environment
+#### Python environment
 
 - `poetry install`
 - `poetry shell`
-
-### Run the project with docker compose
-
-Create a `.env` file from `.env.template` and fill the missing secrets.
-
-- `docker compose up`
-
-### Run the project locally
 
 Create a `.env.localhost` file from `.env.localhost.template` and fill the missing secrets.
 
@@ -56,7 +56,7 @@ Create a `.env.localhost` file from `.env.localhost.template` and fill the missi
 
 - `dotenv -f .env.localhost run python run_providers.py`
 
-#### Run a provider
+#### Run only a provider
 
 - `PYTHONPATH=. dotenv -f .env.localhost run python providers/ffvl.py`
 

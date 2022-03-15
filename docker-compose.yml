@@ -8,6 +8,11 @@ services:
     volumes:
       - ./volumes/mongodb:/data/db
 
+  redis:
+    image: redis:6.2.6
+    ports:
+      - "6379:6379"
+
   providers:
     build:
       context: .
