@@ -15,7 +15,7 @@ from winds_mobi_provider import user_agents
 class Zermatt(Provider):
     provider_code = "zermatt"
     provider_name = "zermatt.net"
-    provider_url = "http://www.zermatt.net/info/wetter-all.html"
+    provider_url = "https://www.zermatt.net/info/wetter-all.html"
 
     pylon_pattern = re.compile(r"(Stütze( |\xa0)|(St.( |\xa0)))(?P<pylon>\d+)")
     wind_pattern = re.compile(r"(?P<wind>[0-9]{1,3}) km/h")
