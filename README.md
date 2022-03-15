@@ -60,7 +60,15 @@ Create a `.env.localhost` file from `.env.localhost.template` and fill the missi
 
 - `PYTHONPATH=. dotenv -f .env.localhost run python providers/ffvl.py`
 
-### Add a new provider to winds.mobi
+### Contributing
+
+#### Checking the code style
+
+Format your code: `poetry run black .`
+
+Run the linter: `poetry run flake8 .`
+
+#### Add a new provider to winds.mobi
 
 You know a good weather station that would be useful for many paraglider pilots or kitesurfers? 
 

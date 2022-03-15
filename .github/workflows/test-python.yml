@@ -26,11 +26,10 @@ jobs:
           pip install poetry
           poetry install
 
-      - name: Check python code format
-        run: poetry run black --check .
-
-      - name: Run python linter
-        run: poetry run flake8 .
+      - name: Run python linters
+        run: |
+          poetry run black --check .
+          poetry run flake8 .
 
       - name: Run python tests
         run: poetry run pytest
