@@ -57,7 +57,7 @@ class Windspots(Provider):
                                 f"Unable to parse measure date: '{windspots_measure['@lastUpdate']}"
                             )
 
-                        wind_direction_last = windspots_measure["stationData"]["serie"]["points"][0]
+                        wind_direction_last = windspots_measure["windChart"]["serie"]["points"][0]
                         wind_direction_key = int(wind_direction_last["date"]) // 1000
                         if arrow.get(key).minute != arrow.get(wind_direction_key).minute:
                             key_time = arrow.get(key).to("local").format("YY-MM-DD HH:mm:ssZZ")
