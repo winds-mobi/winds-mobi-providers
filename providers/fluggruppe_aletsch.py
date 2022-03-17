@@ -5,7 +5,7 @@ import requests
 from dateutil import tz
 from lxml import etree as ET
 
-from winds_mobi_provider import Provider, StationStatus, ProviderException
+from winds_mobi_provider import Provider, ProviderException, StationStatus
 
 oberwallis_tz = tz.gettz("Europe/Zurich")
 
@@ -115,6 +115,56 @@ class FluggruppeAletsch(Provider):
                 self.log.exception(f"Error while processing station '{fga_id}': {e}")
         self.log.info("...Done Type2 via Meteo Oberwallis!")
 
+    lw_url = "http://www.lorawista.ch/data/{}.xml"
+
+    lw_stations = [
+        ["bitsch", "bitsch"],
+    ]
+
+    def process_data_lw(self):
+        self.log.info("Processing LoRaWiSta Data...")
+        for fga_id, fga_path in self.lw_stations:
+            try:
+                response = requests.get(self.lw_url.format(fga_path), timeout=(self.connect_timeout, self.read_timeout))
+                parser = LorawistaParser(response.text)
+
+                station = self.save_station(
+                    fga_id,
+                    parser.name(),
+                    parser.name(),
+                    parser.latitude(),
+                    parser.longitude(),
+                    StationStatus.GREEN,
+                    altitude=parser.elevation(),
+                )
+
+                measures_collection = self.measures_collection(station["_id"])
+                key = parser.key()
+                if not self.has_measure(measures_collection, key):
+                    try:
+                        measure = self.create_measure(
+                            station,
+                            key,
+                            parser.direction(),
+                            parser.speed(),
+                            parser.speed_max(),
+                            temperature=parser.temperature(),
+                            humidity=parser.humidity(),
+                        )
+
+                        self.insert_new_measures(measures_collection, station, [measure])
+                    except ProviderException as e:
+                        self.log.warning(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
+                    except Exception as e:
+                        self.log.exception(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
+
+            except ProviderException as e:
+                self.log.warning(f"Error while processing station '{fga_id}': {e}")
+            except Exception as e:
+                self.log.exception(f"Error while processing station '{fga_id}': {e}")
+
+        self.log.info("...Done Lorawista")
+
 
 class FgaStationParser:
     def __init__(self, response):
@@ -200,6 +250,42 @@ class FgaStationParserType2:
         return element.attrib.get("value")
 
 
+class LorawistaParser:
+    def __init__(self, response):
+        self._lw_station = ET.fromstring(response.encode("utf-8"))
+
+    def name(self):
+        return self._lw_station.findtext("stationname")
+
+    def longitude(self):
+        return self._lw_station.findtext("stationlongitude")
+
+    def latitude(self):
+        return self._lw_station.findtext("stationlatitude")
+
+    def elevation(self):
+        return self._lw_station.findtext("elevation")
+
+    def key(self):
+        time = self._lw_station.findtext("timestamp")
+        return arrow.get(time, "YYYY-MM-DTH:mm:ss").replace(tzinfo=oberwallis_tz).int_timestamp
+
+    def direction(self):
+        return self._lw_station.findtext("winddir")
+
+    def speed(self):
+        return self._lw_station.findtext("windspeed")
+
+    def speed_max(self):
+        return self._lw_station.findtext("windmax")
+
+    def temperature(self):
+        return self._lw_station.findtext("celsius")
+
+    def humidity(self):
+        return self._lw_station.findtext("humid")
+
+
 dd_pattern = re.compile(r"(\d*)°.([\d\.]*)'.([ONWS]+)")
 
 
@@ -220,6 +306,7 @@ def fluggruppe_aletsch():
     aletsch_provider = FluggruppeAletsch()
     aletsch_provider.process_data()
     aletsch_provider.process_data2()
+    aletsch_provider.process_data_lw()
 
 
 if __name__ == "__main__":
