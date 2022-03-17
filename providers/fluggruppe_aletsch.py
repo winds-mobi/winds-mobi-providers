@@ -1,5 +1,3 @@
-
-from curses import echo
 import re
 
 import arrow
@@ -7,7 +5,7 @@ import requests
 from dateutil import tz
 from lxml import etree as ET
 
-from winds_mobi_provider import Provider, StationStatus, ProviderException
+from winds_mobi_provider import Provider, ProviderException, StationStatus
 
 oberwallis_tz = tz.gettz("Europe/Zurich")
 
@@ -122,13 +120,14 @@ class FluggruppeAletsch(Provider):
     lw_stations = [
         ["bitsch", "bitsch"],
     ]
+
     def process_data_lw(self):
         self.log.info("Processing LoRaWiSta Data...")
         for fga_id, fga_path in self.lw_stations:
             try:
                 response = requests.get(self.lw_url.format(fga_path), timeout=(self.connect_timeout, self.read_timeout))
                 parser = LorawistaParser(response.text)
-                
+
                 station = self.save_station(
                     fga_id,
                     parser.name(),
@@ -136,7 +135,7 @@ class FluggruppeAletsch(Provider):
                     parser.latitude(),
                     parser.longitude(),
                     StationStatus.GREEN,
-                    altitude=parser.elevation()
+                    altitude=parser.elevation(),
                 )
 
                 measures_collection = self.measures_collection(station["_id"])
@@ -165,7 +164,6 @@ class FluggruppeAletsch(Provider):
                 self.log.exception(f"Error while processing station '{fga_id}': {e}")
 
         self.log.info("...Done Lorawista")
-
 
 
 class FgaStationParser:
@@ -251,6 +249,7 @@ class FgaStationParserType2:
             return None
         return element.attrib.get("value")
 
+
 class LorawistaParser:
     def __init__(self, response):
         self._lw_station = ET.fromstring(response.encode("utf-8"))
@@ -285,6 +284,7 @@ class LorawistaParser:
 
     def humidity(self):
         return self._lw_station.findtext("humid")
+
 
 dd_pattern = re.compile(r"(\d*)°.([\d\.]*)'.([ONWS]+)")
 
