@@ -129,7 +129,7 @@ class Provider:
 
     def __to_rain(self, value):
         if isinstance(value, ureg.Quantity):
-            return to_float(value.to(ureg.liter / (ureg.meter ** 2)).magnitude, 1)
+            return to_float(value.to(ureg.liter / (ureg.meter**2)).magnitude, 1)
         else:
             return to_float(value, 1)
 
