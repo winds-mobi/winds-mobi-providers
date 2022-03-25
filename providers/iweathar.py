@@ -80,7 +80,7 @@ class IWeathar(Provider):
 
                             rain_attr = item.xpath("RAINFALL_MM")
                             if rain_attr and rain_attr[0].text:
-                                rain = Q_(rain_attr[0].text, ureg.liter / (ureg.meter ** 2))
+                                rain = Q_(rain_attr[0].text, ureg.liter / (ureg.meter**2))
                             else:
                                 rain = None
 

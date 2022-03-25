@@ -8,167 +8,32 @@ from lxml import etree as ET
 from winds_mobi_provider import Provider, ProviderException, StationStatus
 
 oberwallis_tz = tz.gettz("Europe/Zurich")
+dd_pattern = re.compile(r"(\d*)°.([\d.]*)'.([ONWS]+)")
 
 
-class FluggruppeAletsch(Provider):
-    provider_code = "aletsch"
-    provider_name = "fluggruppe-aletsch.ch"
-    provider_url = "https://fluggruppe-aletsch.ch"
-
-    url = "https://meteo-oberwallis.ch/wetter/{}/daten.xml"
-
-    stations = [
-        ["ried-brig", "ried-brig/XML"],
-        ["blitzingu", "blitzingu/XML"],
-        ["bellwald", "bellwald/XML"],
-        ["fieschertal", "fiesch/XML"],
-        ["chaeserstatt", "chaeserstatt/XML"],
-        ["jeizinen", "jeizinen/XML"],
-        ["grimsel", "grimselpass/XML"],
-    ]
-
-    def process_data(self):
-        self.log.info("Processing Fluggruppe Aletsch Data...")
-        for fga_id, fga_path in self.stations:
-            try:
-                response = requests.get(self.url.format(fga_path), timeout=(self.connect_timeout, self.read_timeout))
-                parser = FgaStationParser(response.text)
-
-                station = self.save_station(
-                    fga_id,
-                    parser.name(),
-                    parser.name(),
-                    parser.latitude(),
-                    parser.longitude(),
-                    StationStatus.GREEN,
-                    altitude=parser.elevation(),
-                )
-
-                measures_collection = self.measures_collection(station["_id"])
-                key = parser.key()
-                if not self.has_measure(measures_collection, key):
-                    try:
-                        measure = self.create_measure(
-                            station,
-                            key,
-                            parser.direction(),
-                            parser.speed(),
-                            parser.speed_max(),
-                            rain=parser.rain(),
-                            temperature=parser.temperature(),
-                            humidity=parser.humidity(),
-                        )
-
-                        self.insert_new_measures(measures_collection, station, [measure])
-                    except ProviderException as e:
-                        self.log.warning(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
-                    except Exception as e:
-                        self.log.exception(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
-
-            except ProviderException as e:
-                self.log.warning(f"Error while processing station '{fga_id}': {e}")
-            except Exception as e:
-                self.log.exception(f"Error while processing station '{fga_id}': {e}")
-
-        self.log.info("...Done Type1 via Meteo Oberwallis!")
-
-    stations_type_2 = [
-        ["rothorli", "rothorli", "Visperterminen Rothorn", "7.938", "46.2497"],
-        ["klaena", "klaena", "Rosswald Klaena", "8.0632", "46.3135"],
-    ]
-
-    def process_data2(self):
-        self.log.info("Processing Fluggruppe Aletsch Data Type 2...")
-        for fga_id, fga_path, fga_desc, fga_long, fga_lat in self.stations_type_2:
-            try:
-                response = requests.get(self.url.format(fga_path), timeout=(self.connect_timeout, self.read_timeout))
-                parser = FgaStationParserType2(response.text)
-
-                station = self.save_station(
-                    fga_id, fga_desc, fga_desc, fga_lat, fga_long, StationStatus.GREEN, altitude=parser.elevation()
-                )
-
-                measures_collection = self.measures_collection(station["_id"])
-                key = parser.key()
-                if not self.has_measure(measures_collection, key):
-                    try:
-                        measure = self.create_measure(
-                            station,
-                            key,
-                            parser.direction(),
-                            parser.speed(),
-                            parser.speed_max(),
-                            rain=parser.rain(),
-                            temperature=parser.temperature(),
-                            humidity=parser.humidity(),
-                        )
-
-                        self.insert_new_measures(measures_collection, station, [measure])
-                    except ProviderException as e:
-                        self.log.warning(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
-                    except Exception as e:
-                        self.log.exception(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
-
-            except ProviderException as e:
-                self.log.warning(f"Error while processing station '{fga_id}': {e}")
-            except Exception as e:
-                self.log.exception(f"Error while processing station '{fga_id}': {e}")
-        self.log.info("...Done Type2 via Meteo Oberwallis!")
-
-    lw_url = "http://www.lorawista.ch/data/{}.xml"
-
-    lw_stations = [
-        ["bitsch", "bitsch"],
-    ]
-
-    def process_data_lw(self):
-        self.log.info("Processing LoRaWiSta Data...")
-        for fga_id, fga_path in self.lw_stations:
-            try:
-                response = requests.get(self.lw_url.format(fga_path), timeout=(self.connect_timeout, self.read_timeout))
-                parser = LorawistaParser(response.text)
-
-                station = self.save_station(
-                    fga_id,
-                    parser.name(),
-                    parser.name(),
-                    parser.latitude(),
-                    parser.longitude(),
-                    StationStatus.GREEN,
-                    altitude=parser.elevation(),
-                )
-
-                measures_collection = self.measures_collection(station["_id"])
-                key = parser.key()
-                if not self.has_measure(measures_collection, key):
-                    try:
-                        measure = self.create_measure(
-                            station,
-                            key,
-                            parser.direction(),
-                            parser.speed(),
-                            parser.speed_max(),
-                            temperature=parser.temperature(),
-                            humidity=parser.humidity(),
-                        )
-
-                        self.insert_new_measures(measures_collection, station, [measure])
-                    except ProviderException as e:
-                        self.log.warning(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
-                    except Exception as e:
-                        self.log.exception(f"Error while processing measure '{key}' for station '{fga_id}': {e}")
-
-            except ProviderException as e:
-                self.log.warning(f"Error while processing station '{fga_id}': {e}")
-            except Exception as e:
-                self.log.exception(f"Error while processing station '{fga_id}': {e}")
-
-        self.log.info("...Done Lorawista")
+def dms2dd(degrees, minutes, seconds, direction):
+    dd = float(degrees) + float(minutes) / 60 + float(seconds) / (60 * 60)
+    if direction == "W" or direction == "S":
+        dd *= -1
+    return dd
 
 
-class FgaStationParser:
-    def __init__(self, response):
-        self._fga_station = ET.fromstring(response.encode("utf-8")).find("./station")
+def parse_dms(dms):
+    parts = dd_pattern.match(dms).groups()
+    lat = dms2dd(parts[0], parts[1], 0, parts[2])
+    return lat
+
+
+class FgaType1StationParser:
+    url_pattern = "https://meteo-oberwallis.ch/wetter/{}/daten.xml"
+
+    def __init__(self, path):
+        self.url = self.url_pattern.format(path)
+        self._station = None
+
+    def parse(self, connect_timeout, read_timeout):
+        response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
+        self._station = ET.fromstring(response.content).find("./station")
 
     def name(self):
         return self._get_value("./station/station")
@@ -208,15 +73,34 @@ class FgaStationParser:
         return self._get_value("./humidity/humidity")
 
     def _get_value(self, path):
-        element = self._fga_station.find(path)
+        element = self._station.find(path)
         if element is None:
             return None
         return element.attrib.get("value")
 
 
-class FgaStationParserType2:
-    def __init__(self, response):
-        self._fga_station = ET.fromstring(response.encode("utf-8")).find("./station")
+class FgaType2StationParser:
+    url_pattern = "https://meteo-oberwallis.ch/wetter/{}/daten.xml"
+
+    def __init__(self, path, name, lon, lat):
+        self.url = self.url_pattern.format(path)
+        self.station_name = name
+        self.lon = lon
+        self.lat = lat
+        self._station = None
+
+    def parse(self, connect_timeout, read_timeout):
+        response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
+        self._station = ET.fromstring(response.content).find("./station")
+
+    def name(self):
+        return self.station_name
+
+    def longitude(self):
+        return self.lon
+
+    def latitude(self):
+        return self.lat
 
     def elevation(self):
         return self._get_value("./elevation/elevation")
@@ -244,69 +128,124 @@ class FgaStationParserType2:
         return self._get_value("./humidity/humidity")
 
     def _get_value(self, path):
-        element = self._fga_station.find(path)
+        element = self._station.find(path)
         if element is None:
             return None
         return element.attrib.get("value")
 
 
 class LorawistaParser:
-    def __init__(self, response):
-        self._lw_station = ET.fromstring(response.encode("utf-8"))
+    url_pattern = "http://www.lorawista.ch/data/{}.xml"  # This URL is protected by an IPs whitelisting
+
+    def __init__(self, path):
+        self.url = self.url_pattern.format(path)
+        self._station = None
+
+    def parse(self, connect_timeout, read_timeout):
+        response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
+        self._station = ET.fromstring(response.content)
 
     def name(self):
-        return self._lw_station.findtext("stationname")
+        return self._station.findtext("stationname")
 
     def longitude(self):
-        return self._lw_station.findtext("stationlongitude")
+        return self._station.findtext("stationlongitude")
 
     def latitude(self):
-        return self._lw_station.findtext("stationlatitude")
+        return self._station.findtext("stationlatitude")
 
     def elevation(self):
-        return self._lw_station.findtext("elevation")
+        return self._station.findtext("elevation")
 
     def key(self):
-        time = self._lw_station.findtext("timestamp")
-        return arrow.get(time, "YYYY-MM-DTH:mm:ss").replace(tzinfo=oberwallis_tz).int_timestamp
+        time = self._station.findtext("timestamp")
+        return arrow.get(time, "YYYY-MM-DTH:mm:ss.SZ").int_timestamp
 
     def direction(self):
-        return self._lw_station.findtext("winddir")
+        return self._station.findtext("winddir")
 
     def speed(self):
-        return self._lw_station.findtext("windspeed")
+        return self._station.findtext("windspeed")
 
     def speed_max(self):
-        return self._lw_station.findtext("windmax")
+        return self._station.findtext("windmax")
+
+    def rain(self):
+        return None
 
     def temperature(self):
-        return self._lw_station.findtext("celsius")
+        return self._station.findtext("celsius")
 
     def humidity(self):
-        return self._lw_station.findtext("humid")
+        return self._station.findtext("humid")
 
 
-dd_pattern = re.compile(r"(\d*)°.([\d\.]*)'.([ONWS]+)")
+class FluggruppeAletsch(Provider):
+    provider_code = "aletsch"
+    provider_name = "fluggruppe-aletsch.ch"
+    provider_url = "https://fluggruppe-aletsch.ch"
 
+    stations = [
+        ("ried-brig", FgaType1StationParser("ried-brig/XML")),
+        ("blitzingu", FgaType1StationParser("blitzingu/XML")),
+        ("bellwald", FgaType1StationParser("bellwald/XML")),
+        ("fieschertal", FgaType1StationParser("fiesch/XML")),
+        ("chaeserstatt", FgaType1StationParser("chaeserstatt/XML")),
+        ("jeizinen", FgaType1StationParser("jeizinen/XML")),
+        ("grimsel", FgaType1StationParser("grimselpass/XML")),
+        ("rothorli", FgaType2StationParser("rothorli", "Visperterminen Rothorn", "7.938", "46.2497")),
+        ("klaena", FgaType2StationParser("klaena", "Rosswald Klaena", "8.0632", "46.3135")),
+        ("bitsch", LorawistaParser("bitsch")),
+    ]
 
-def dms2dd(degrees, minutes, seconds, direction):
-    dd = float(degrees) + float(minutes) / 60 + float(seconds) / (60 * 60)
-    if direction == "W" or direction == "S":
-        dd *= -1
-    return dd
+    def process_data(self):
+        self.log.info("Processing Fluggruppe Aletsch data...")
+        for station_id, parser in self.stations:
+            try:
+                parser.parse(self.connect_timeout, self.read_timeout)
 
+                station = self.save_station(
+                    station_id,
+                    parser.name(),
+                    parser.name(),
+                    parser.latitude(),
+                    parser.longitude(),
+                    StationStatus.GREEN,
+                    altitude=parser.elevation(),
+                )
 
-def parse_dms(dms):
-    parts = dd_pattern.match(dms).groups()
-    lat = dms2dd(parts[0], parts[1], 0, parts[2])
-    return lat
+                measures_collection = self.measures_collection(station["_id"])
+                key = parser.key()
+                if not self.has_measure(measures_collection, key):
+                    try:
+                        measure = self.create_measure(
+                            station,
+                            key,
+                            parser.direction(),
+                            parser.speed(),
+                            parser.speed_max(),
+                            rain=parser.rain(),
+                            temperature=parser.temperature(),
+                            humidity=parser.humidity(),
+                        )
+
+                        self.insert_new_measures(measures_collection, station, [measure])
+                    except ProviderException as e:
+                        self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                    except Exception as e:
+                        self.log.exception(f"Error while processing measure '{key}' for station '{station_id}': {e}")
+
+            except ProviderException as e:
+                self.log.warning(f"Error while processing station '{station_id}': {e}")
+            except Exception as e:
+                self.log.exception(f"Error while processing station '{station_id}': {e}")
+
+        self.log.info("Done !")
 
 
 def fluggruppe_aletsch():
     aletsch_provider = FluggruppeAletsch()
     aletsch_provider.process_data()
-    aletsch_provider.process_data2()
-    aletsch_provider.process_data_lw()
 
 
 if __name__ == "__main__":
