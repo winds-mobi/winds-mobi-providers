@@ -3,7 +3,7 @@ import re
 import arrow
 import requests
 from dateutil import tz
-from lxml import etree as ET
+from lxml import etree
 
 from winds_mobi_provider import Provider, ProviderException, StationStatus
 
@@ -33,7 +33,7 @@ class FgaType1StationParser:
 
     def parse(self, connect_timeout, read_timeout):
         response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
-        self._station = ET.fromstring(response.content).find("./station")
+        self._station = etree.fromstring(response.content).find("./station")
 
     def name(self):
         return self._get_value("./station/station")
@@ -91,7 +91,7 @@ class FgaType2StationParser:
 
     def parse(self, connect_timeout, read_timeout):
         response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
-        self._station = ET.fromstring(response.content).find("./station")
+        self._station = etree.fromstring(response.content).find("./station")
 
     def name(self):
         return self.station_name
@@ -143,7 +143,7 @@ class LorawistaParser:
 
     def parse(self, connect_timeout, read_timeout):
         response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
-        self._station = ET.fromstring(response.content)
+        self._station = etree.fromstring(response.content)
 
     def name(self):
         return self._station.findtext("stationname")
@@ -174,7 +174,7 @@ class LorawistaParser:
         return None
 
     def temperature(self):
-        return self._station.findtext("celsius")
+        return self._station.findtext("celcius")
 
     def humidity(self):
         return self._station.findtext("humid")
