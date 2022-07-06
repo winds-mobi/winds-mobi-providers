@@ -155,12 +155,17 @@ class Windline(Provider):
                     except ValueError:
                         pass
 
+                    latitude = self.get_property_value(mysql_cursor, station_no, self.latitude_property_id)
+                    longitude = self.get_property_value(mysql_cursor, station_no, self.longitude_property_id)
+                    if not (latitude and longitude):
+                        raise ProviderException(f"No geo location for {windline_id}")
+
                     station = self.save_station(
                         windline_id,
                         short_name,
                         name,
-                        wgs84.parse_dms(self.get_property_value(mysql_cursor, station_no, self.latitude_property_id)),
-                        wgs84.parse_dms(self.get_property_value(mysql_cursor, station_no, self.longitude_property_id)),
+                        wgs84.parse_dms(latitude),
+                        wgs84.parse_dms(longitude),
                         self.get_status(status),
                         altitude=self.get_property_value(mysql_cursor, station_no, self.altitude_property_id),
                     )
