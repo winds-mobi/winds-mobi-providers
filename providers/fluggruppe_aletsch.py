@@ -54,7 +54,7 @@ class FgaType1StationParser:
         return arrow.get(time, "D.MM.YYYY H:mm:ss").replace(tzinfo=oberwallis_tz).int_timestamp
 
     def direction(self):
-        direction = self._get_value("./wind/direction_grad")
+        direction = self._get_value("./wind/direction_grad") or self._get_value("./wind/direction_wind")
         return direction.replace("°", "")
 
     def speed(self):
