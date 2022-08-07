@@ -5,11 +5,10 @@ import psycopg2
 import requests
 from dateutil import tz
 from lxml import html
-from psycopg2.extras import RealDictCursor
+from psycopg2.extras import DictCursor
 
 from settings import ADMIN_DB_URL
-from winds_mobi_provider import Provider, ProviderException, StationStatus
-from winds_mobi_provider import user_agents
+from winds_mobi_provider import Provider, ProviderException, StationStatus, user_agents
 
 
 class Zermatt(Provider):
@@ -44,7 +43,7 @@ class Zermatt(Provider):
         cursor = None
         try:
             connection = psycopg2.connect(self.admin_db_url)
-            cursor = connection.cursor(cursor_factory=RealDictCursor)
+            cursor = connection.cursor(cursor_factory=DictCursor)
             cursor.execute("select * from winds_mobi_zermatt_station")
             return cursor.fetchall()
         finally:
@@ -100,9 +99,7 @@ class Zermatt(Provider):
 
                             try:
                                 # Fetch metadata from admin
-                                zermatt_station = list(filter(lambda d: str(d["id"]) == zermatt_id, stations_metadata))[
-                                    0
-                                ]
+                                zermatt_station = next(filter(lambda s: str(s["id"]) == zermatt_id, stations_metadata))
                             except Exception:
                                 continue
 
