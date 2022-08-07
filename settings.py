@@ -27,3 +27,6 @@ IWEATHAR_KEY = os.environ.get("IWEATHAR_KEY")
 # BornToFly
 BORN_TO_FLY_VENDOR_ID = os.environ.get("BORN_TO_FLY_VENDOR_ID")
 BORN_TO_FLY_DEVICE_ID = os.environ.get("BORN_TO_FLY_DEVICE_ID")
+
+# Windy
+WINDY_API_KEY = os.environ.get("WINDY_API_KEY")

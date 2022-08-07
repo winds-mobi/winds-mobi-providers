@@ -13,24 +13,27 @@ Python scripts that get the weather data from different providers and save it in
 This project use Google Cloud APIs to compute any missing station details (altitude, name, timezone, ...).
 Google Cloud API results are cached with redis.
 
-### Requirements
+### Dependencies
 
 - python 3.9 and poetry 
 - mongodb 4.4
 - redis
 - Google Cloud API key
 
-See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/master/settings.py)
+See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/main/settings.py)
 
-### Run the project with docker compose
+### Run the project with docker compose (simple way)
 
-Create a `.env` file from `.env.template` and fill the missing secrets.
+Create a `.env` file from `.env.template`:
 
-- `docker compose --profile=application up`
+- fill GOOGLE_API_KEY with you own [Google Cloud API key](https://cloud.google.com/docs/authentication/api-keys#creating_an_api_key)
+- optionally fill the missing secrets for each provider
 
-### Run the project locally
+- `docker compose --profile=application up --build`
 
-#### Install macOS dependencies
+### Run the project locally on macOS
+
+#### Install dependencies
 
 - `brew install openssl`
 - `export LDFLAGS=-L/usr/local/opt/openssl/lib`
@@ -50,6 +53,12 @@ Create a `.env` file from `.env.template` and fill the missing secrets.
 - `poetry shell`
 
 Create a `.env.localhost` file from `.env.localhost.template` and fill the missing secrets.
+
+#### Start external services with docker compose
+
+Create a `.env` file from `.env.template`.
+
+- `docker compose up`
 
 #### Run the scheduler
 
@@ -121,4 +130,4 @@ class MyProvider(Provider):
 Licensing
 ---------
 
-Please see the file called [LICENSE.txt](https://github.com/winds-mobi/winds-mobi-providers/blob/master/LICENSE.txt)
+Please see the file called [LICENSE.txt](https://github.com/winds-mobi/winds-mobi-providers/blob/main/LICENSE.txt)

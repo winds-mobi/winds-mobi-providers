@@ -9,7 +9,7 @@ services:
       - ./volumes/mongodb:/data/db
 
   redis:
-    image: redis:6.2.6
+    image: redis:7.0.4
     ports:
       - "8012:6379"
 
@@ -21,6 +21,7 @@ services:
     environment:
       MONGODB_URL: ${MONGODB_URL}
       REDIS_URL: ${REDIS_URL}
+      ADMIN_DB_URL: ${ADMIN_DB_URL}
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}
       WINDLINE_SQL_URL: ${WINDLINE_SQL_URL}
       CHECKWX_API_KEY: ${CHECKWX_API_KEY}
@@ -28,7 +29,13 @@ services:
       IWEATHAR_KEY: ${IWEATHAR_KEY}
       BORN_TO_FLY_VENDOR_ID: ${BORN_TO_FLY_VENDOR_ID}
       BORN_TO_FLY_DEVICE_ID: ${BORN_TO_FLY_DEVICE_ID}
+      WINDY_API_KEY: ${WINDY_API_KEY}
+    networks:
+      - default
+      - winds-mobi-admin
 
 networks:
   default:
     name: winds-mobi-providers
+  winds-mobi-admin:
+    external: true
