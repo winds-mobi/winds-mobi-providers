@@ -1,4 +1,4 @@
-from typing import List
+from datetime import datetime, timedelta
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -33,7 +33,11 @@ def run_providers():
         executor="admin",
     )
 
-    providers_jobs = [
+    # start_date must be in the future when the scheduler starts
+    start_date = datetime.now().astimezone() + timedelta(seconds=10)
+
+    for provider_job in [
+        # Alphabetical order
         ("providers.borntofly:borntofly", 5),
         ("providers.ffvl:ffvl", 5),
         ("providers.fluggruppe_aletsch:fluggruppe_aletsch", 5),
@@ -51,31 +55,17 @@ def run_providers():
         ("providers.windy:windy", 5),
         ("providers.yvbeach:yvbeach", 5),
         ("providers.zermatt:zermatt", 5),
-    ]
-
-    def schedule_jobs(jobs: List) -> int:
-        job_index = 0
-        if jobs:
-            for minute in range(0, 5):
-                for second in range(0, 60, 15):
-                    func = jobs[job_index][0]
-                    interval = jobs[job_index][1]
-                    scheduler.add_job(
-                        func,
-                        trigger="cron",
-                        minute=f"{minute}-59/{interval}",
-                        second=second,
-                        executor="providers",
-                    )
-                    job_index += 1
-                    if job_index > len(jobs) - 1:
-                        return job_index - 1
-        return job_index - 1
-
-    last_job_index = schedule_jobs(providers_jobs)
-    if last_job_index != len(providers_jobs) - 1:
-        raise RuntimeError("Some jobs are not scheduled")
-
+    ]:
+        func = provider_job[0]
+        interval = provider_job[1]
+        scheduler.add_job(
+            func,
+            trigger="interval",
+            start_date=start_date,
+            minutes=interval,
+            jitter=5 * 60,  # randomize start_date during 5 minutes period
+            executor="providers",
+        )
     scheduler.start()
 
 
