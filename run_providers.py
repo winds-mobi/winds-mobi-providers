@@ -48,9 +48,9 @@ def run_providers():
         ("providers.thunerwetter:thunerwetter", 5),
         ("providers.windline:windline", 5),
         ("providers.windspots:windspots", 5),
+        ("providers.windy:windy", 5),
         ("providers.yvbeach:yvbeach", 5),
         ("providers.zermatt:zermatt", 5),
-        ("providers.windy:windy", 5),
     ]
 
     def schedule_jobs(jobs: List) -> int:

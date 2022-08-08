@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 
 import numpy as np
-from pymongo import MongoClient
+from pymongo import MongoClient, UpdateMany, UpdateOne
 from scipy.spatial import KDTree
 from sklearn.cluster import AgglomerativeClustering
 
@@ -22,7 +22,7 @@ def save_clusters(nb_clusters):
     all_stations = list(
         mongo_db.stations.find({"status": {"$ne": "hidden"}, "last._id": {"$gt": now - 30 * 24 * 3600}})
     )
-    range_clusters = np.geomspace(20, len(all_stations), num=nb_clusters, dtype=np.int)
+    range_clusters = np.geomspace(20, len(all_stations), num=nb_clusters, dtype=int)
 
     ids = np.array([station["_id"] for station in all_stations])
 
@@ -32,9 +32,7 @@ def save_clusters(nb_clusters):
     X = X.T
 
     try:
-        mongo_bulk = mongo_db.stations.initialize_ordered_bulk_op()
-        mongo_bulk.find({}).update({"$set": {"clusters": []}})
-
+        bulk_operations = [UpdateMany({}, {"$set": {"clusters": []}})]
         for n_clusters in reversed(range_clusters):
 
             model = AgglomerativeClustering(linkage="ward", connectivity=None, n_clusters=n_clusters)
@@ -65,9 +63,9 @@ def save_clusters(nb_clusters):
                 else:
                     index = indexes[0]
                 log.info(f"{n_clusters}: {ids[cluster_assign]} -> {ids[index]}")
-                mongo_bulk.find({"_id": ids[index]}).update({"$addToSet": {"clusters": int(n_clusters)}})
+                bulk_operations = [UpdateOne({"_id": ids[index]}, {"$addToSet": {"clusters": int(n_clusters)}})]
 
-        mongo_bulk.execute()
+        mongo_db.stations.bulk_write(bulk_operations)
         log.info(f"Done, created {nb_clusters} clusters")
     except Exception as e:
         log.exception(f"Error while creating clusters: {e}")

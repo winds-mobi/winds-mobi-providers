@@ -27,7 +27,7 @@ def delete_stations(days: int, provider: Optional[str]):
             f"Deleting {station['_id']} ['{station['short']}'], last seen at {seen.format('YYYY-MM-DD HH:mm:ssZZ')}"
         )
         mongo_db[station["_id"]].drop()
-        mongo_db.stations.remove({"_id": station["_id"]})
+        mongo_db.stations.delete_one({"_id": station["_id"]})
         nb += 1
     log.info(f"Done, deleted {nb} stations")
 

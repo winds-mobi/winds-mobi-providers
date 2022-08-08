@@ -59,7 +59,7 @@ class Provider:
                 ("name", ASCENDING),
             ]
         )
-        self.collection_names = self.mongo_db.collection_names()
+        self.collection_names = self.mongo_db.list_collection_names()
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
         self.log = logging.getLogger(self.provider_code)
@@ -416,7 +416,7 @@ class Provider:
         station = self.__create_station(
             provider_id, short_name, name, lat, lon, altitude, is_peak, status.value, tz, urls, fixes
         )
-        self.stations_collection().update({"_id": station_id}, {"$set": station}, upsert=True)
+        self.stations_collection().update_one({"_id": station_id}, {"$set": station}, upsert=True)
         station["_id"] = station_id
         return station
 
@@ -474,16 +474,16 @@ class Provider:
         return measure
 
     def has_measure(self, measure_collection, key):
-        return measure_collection.find({"_id": key}).count() > 0
+        return measure_collection.count_documents({"_id": key}) > 0
 
     def __add_last_measure(self, measure_collection, station_id):
         last_measure = measure_collection.find_one({"$query": {}, "$orderby": {"_id": -1}})
         if last_measure:
-            self.stations_collection().update({"_id": station_id}, {"$set": {"last": last_measure}})
+            self.stations_collection().update_one({"_id": station_id}, {"$set": {"last": last_measure}})
 
     def insert_new_measures(self, measure_collection, station, new_measures):
         if len(new_measures) > 0:
-            measure_collection.insert(sorted(new_measures, key=lambda m: m["_id"]))
+            measure_collection.insert_many(sorted(new_measures, key=lambda m: m["_id"]))
 
             end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], gettz(station["tz"]))
             self.log.info(
