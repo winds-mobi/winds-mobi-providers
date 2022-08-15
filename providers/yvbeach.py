@@ -4,8 +4,7 @@ import arrow
 import requests
 from dateutil import tz
 
-from winds_mobi_provider import Provider, StationStatus, ProviderException
-from winds_mobi_provider import user_agents
+from winds_mobi_provider import Provider, ProviderException, StationStatus, user_agents
 
 
 class YVBeach(Provider):

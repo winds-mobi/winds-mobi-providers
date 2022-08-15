@@ -4,7 +4,7 @@ import requests
 from psycopg2.extras import DictCursor
 
 import settings
-from winds_mobi_provider import Pressure, Provider, ProviderException, Q_, StationStatus, ureg
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
 
 
 class Windy(Provider):

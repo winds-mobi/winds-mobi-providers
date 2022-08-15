@@ -7,10 +7,10 @@ from random import randint
 import arrow
 import arrow.parser
 import requests
-from metar.Metar import Metar
 
+from metar.Metar import Metar
 from settings import CHECKWX_API_KEY
-from winds_mobi_provider import Provider, ProviderException, StationStatus, ureg, Q_, UsageLimitException, Pressure
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, UsageLimitException, ureg
 
 
 class MetarNoaa(Provider):

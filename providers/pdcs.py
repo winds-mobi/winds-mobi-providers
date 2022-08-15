@@ -1,6 +1,6 @@
 import requests
 
-from winds_mobi_provider import Provider, Pressure, ProviderException, StationStatus
+from winds_mobi_provider import Pressure, Provider, ProviderException, StationStatus
 
 
 class Pdcs(Provider):
