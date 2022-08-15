@@ -33,6 +33,7 @@ tenacity = "8.0.1"
 [tool.poetry.dev-dependencies]
 black = "22.6.0"
 flake8 = "5.0.4"
+isort = "5.10.1"
 pytest = "7.1.2"
 python-dotenv = "latest"
 
@@ -45,3 +46,8 @@ line-length = 120
 force-exclude  = '''
 ^/winds_mobi_provider/uwxutils.py
 '''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+skip = ["winds_mobi_provider/uwxutils.py"]

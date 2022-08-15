@@ -1,0 +1,10 @@
+name: Build and deploy a production docker image based on main branch
+on:
+  push:
+    tags: [ v*.*.* ]
+
+jobs:
+  build-deploy-production-docker:
+    uses: winds-mobi/winds-mobi-cicd/.github/workflows/build-deploy-production-docker.yaml@main
+    secrets:
+      WATCHTOWER_HTTP_API_TOKEN: ${{ secrets.WATCHTOWER_HTTP_API_TOKEN }}

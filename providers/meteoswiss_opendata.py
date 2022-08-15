@@ -2,7 +2,7 @@ import arrow
 import requests
 from pyproj import CRS, Transformer
 
-from winds_mobi_provider import Provider, StationStatus, ProviderException, ureg, Q_, Pressure
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
 
 
 class MeteoSwiss(Provider):
