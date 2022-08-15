@@ -63,7 +63,7 @@ def save_clusters(nb_clusters):
                 else:
                     index = indexes[0]
                 log.info(f"{n_clusters}: {ids[cluster_assign]} -> {ids[index]}")
-                bulk_operations = [UpdateOne({"_id": ids[index]}, {"$addToSet": {"clusters": int(n_clusters)}})]
+                bulk_operations.append(UpdateOne({"_id": ids[index]}, {"$addToSet": {"clusters": int(n_clusters)}}))
 
         mongo_db.stations.bulk_write(bulk_operations)
         log.info(f"Done, created {nb_clusters} clusters")
