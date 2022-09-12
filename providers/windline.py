@@ -1,13 +1,13 @@
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
-import MySQLdb
 import arrow
+import MySQLdb
 from cachetools import TTLCache, cached
 from cachetools.keys import hashkey
 
 from settings import WINDLINE_SQL_URL
-from winds_mobi_provider import Provider, ProviderException, Q_, StationStatus, ureg, wgs84
+from winds_mobi_provider import Q_, Provider, ProviderException, StationStatus, ureg, wgs84
 
 
 class NoMeasure(Exception):
