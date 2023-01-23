@@ -184,6 +184,9 @@ class MetarNoaa(Provider):
                         if not self.redis.hexists(checkwx_key, "error"):
                             checkwx_data = json.loads(self.redis.hget(checkwx_key, "data"))
 
+                            if "name" not in checkwx_data:
+                                raise ProviderException("Station has no name")
+
                             station_type = checkwx_data.get("type", None)
                             if station_type:
                                 name = f'{checkwx_data["name"]} {station_type}'
