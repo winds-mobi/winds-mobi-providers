@@ -193,9 +193,9 @@ class FluggruppeAletsch(Provider):
         ("chaeserstatt", FgaType1StationParser("chaeserstatt/XML")),
         ("jeizinen", FgaType1StationParser("jeizinen/XML")),
         ("grimsel", FgaType1StationParser("grimselpass/XML")),
+        ("hohbiel", FgaType1StationParser("hohbiel/XML")),
         ("rothorli", FgaType2StationParser("rothorli", "Visperterminen Rothorn", "7.938", "46.2497")),
         ("klaena", FgaType2StationParser("klaena", "Rosswald Klaena", "8.0632", "46.3135")),
-        ("hohbiel", FgaType2StationParser("hohbiel", "Belalp Hohbiel", "7.9773", "46.3968")),
         ("bitsch", LorawistaParser("bitsch")),
     ]
 
