@@ -29,8 +29,7 @@ class Slf(Provider):
             session.headers.update(user_agents.chrome)
 
             result = session.get(
-                "https://public-meas-data.slf.ch"
-                "/public/station-data/timepoint/WIND_MEAN/current/geojson?stationTypeFilter=WIND",
+                "https://public-meas-data.slf.ch" "/public/station-data/timepoint/WIND_MEAN/current/geojson",
                 timeout=(self.connect_timeout, self.read_timeout),
             )
             slf_stations = result.json()
@@ -92,7 +91,7 @@ class Slf(Provider):
                             new_measures.append(measure)
                         except KeyError as e:
                             self.log.warning(
-                                f"Error while processing measure '{key}' for station '{station_id}': missing key '{e}'"
+                                f"Error while processing measure '{key}' for station '{station_id}': missing key {e}"
                             )
                         except ProviderException as e:
                             self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
