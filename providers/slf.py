@@ -1,9 +1,7 @@
 import collections
-import re
-from os import path
 
+import arrow
 import requests
-from lxml import etree
 
 from winds_mobi_provider import Provider, ProviderException, StationStatus, user_agents
 
@@ -16,133 +14,92 @@ class Slf(Provider):
     provider_url = "https://www.slf.ch"
 
     provider_urls = {
-        "default": "https://www.slf.ch/en/avalanche-bulletin-and-snow-situation/measured-values.html#windtab",
-        "en": "https://www.slf.ch/en/avalanche-bulletin-and-snow-situation/measured-values.html#windtab",
-        "de": "https://www.slf.ch/de/lawinenbulletin-und-schneesituation/messwerte.html#windtab",
-        "fr": "https://www.slf.ch/fr/bulletin-davalanches-et-situation-nivologique/valeurs-mesurees.html#windtab",
-        "it": "https://www.slf.ch/it/bollettino-valanghe-e-situazione-nivologica/valori-di-misura.html#windtab",
+        "default": "https://whiterisk.ch/en/snow/station/{network}/{id}",
+        "en": "https://whiterisk.ch/en/snow/station/{network}/{id}",
+        "de": "https://whiterisk.ch/de/snow/station/{network}/{id}",
+        "fr": "https://whiterisk.ch/fr/snow/station/{network}/{id}",
+        "it": "https://whiterisk.ch/it/snow/station/{network}/{id}",
     }
-
-    description_pattern = re.compile(r"<strong>Code:</strong> ([A-Z,0-9]{4})<br/>", re.MULTILINE)
-    name_pattern = re.compile(r"(.*?) ([0-9]{2,4}) m")
-
-    def parse_data(self, line) -> Measure:
-        values = line.split(";")
-        return Measure(
-            key=values[0],
-            wind_direction=values[7],
-            wind_average=values[5],
-            wind_maximum=values[6],
-            temperature=values[3],
-        )
-
-    def filter_wrong_measures(self, data_list):
-        if not data_list:
-            return []
-        measures = []
-        for data in data_list:
-            measure = self.parse_data(data)
-            if measure.key and measure.wind_direction and measure.wind_average and measure.wind_maximum:
-                measures.append(measure)
-        return measures
-
-    def add_metadata_from_kml(self, kml_path, slf_metadata):
-        with open(path.join(path.dirname(__file__), kml_path)) as kml_file:
-            tree = etree.parse(kml_file)
-        ns = {"gis": "http://www.opengis.net/kml/2.2"}
-
-        for placemark in tree.getroot().findall(".//gis:Placemark", namespaces=ns):
-            (id_,) = self.description_pattern.search(placemark.find("gis:description", namespaces=ns).text).groups()
-            name = placemark.find("gis:name", namespaces=ns).text
-            lon, lat, altitude = placemark.find("gis:Point/gis:coordinates", namespaces=ns).text.split(",")
-
-            slf_metadata[id_] = {
-                "name": name,
-                "altitude": float(altitude),
-                "lat": float(lat),
-                "lon": float(lon),
-            }
 
     def process_data(self):
         try:
             self.log.info("Processing SLF data...")
 
-            slf_metadata = {}
-            # https://stationdocu.slf.ch/kml/IMIS_WIND_EN.kml
-            self.add_metadata_from_kml("../slf/IMIS_WIND_EN.kml", slf_metadata)
-            # https://stationdocu.slf.ch/kml/IMIS_SNOW_EN.kml
-            self.add_metadata_from_kml("../slf/IMIS_SNOW_EN.kml", slf_metadata)
-            # https://stationdocu.slf.ch/kml/IMIS_SPECIAL_EN.kml
-            self.add_metadata_from_kml("../slf/IMIS_SPECIAL_EN.kml", slf_metadata)
-
             session = requests.Session()
             session.headers.update(user_agents.chrome)
 
             result = session.get(
-                "https://odb.slf.ch/odb/api/v1/stations", timeout=(self.connect_timeout, self.read_timeout)
+                "https://public-meas-data.slf.ch"
+                "/public/station-data/timepoint/WIND_MEAN/current/geojson?stationTypeFilter=WIND",
+                timeout=(self.connect_timeout, self.read_timeout),
             )
             slf_stations = result.json()
 
-            for slf_station in slf_stations:
+            for slf_station in slf_stations["features"]:
                 station_id = None
                 try:
-                    slf_id = slf_station["id"]
+                    slf_id = slf_station["properties"]["code"]
+                    slf_network = slf_station["properties"]["network"]
+                    if slf_network == "SMN":
+                        self.log.warning(
+                            f"Ignore station '{slf_id}' part of the SMN network (SwissMetNet from MeteoSwiss)"
+                        )
                     station_id = f"{self.provider_code}-{slf_id}"
-                    result = session.get(
-                        f"https://odb.slf.ch/odb/api/v1/measurement?id={slf_id}",
-                        timeout=(self.connect_timeout, self.read_timeout),
-                    )
-                    data = result.json()
-                    measures = self.filter_wrong_measures(data)
-                    if not measures:
-                        continue
-
-                    name, altitude = self.name_pattern.search(slf_station["name"]).groups()
-                    metadata_name, lat, lon = None, None, None
-                    if slf_id in slf_metadata:
-                        metadata_name = slf_metadata[slf_id]["name"]
-                        lat = slf_metadata[slf_id]["lat"]
-                        lon = slf_metadata[slf_id]["lon"]
-                        status = StationStatus.GREEN
-                    else:
-                        self.log.warning(f"No metadata found for station {slf_id}/{name}")
-                        status = StationStatus.ORANGE
 
                     station = self.save_station(
                         slf_id,
-                        metadata_name or name,
-                        metadata_name,
-                        lat,
-                        lon,
-                        status,
-                        altitude=altitude,
-                        url=self.provider_urls,
+                        slf_station["properties"]["label"],
+                        slf_station["properties"]["label"],
+                        slf_station["geometry"]["coordinates"][1],
+                        slf_station["geometry"]["coordinates"][0],
+                        StationStatus.GREEN,
+                        altitude=slf_station["properties"]["elevation"],
+                        url={
+                            lang: url.format(network=slf_network, id=slf_id) for lang, url in self.provider_urls.items()
+                        },
                     )
                     station_id = station["_id"]
 
+                    result = session.get(
+                        f"https://public-meas-data.slf.ch"
+                        f"/public/station-data/timeseries/current/{slf_network}/{slf_id}",
+                        timeout=(self.connect_timeout, self.read_timeout),
+                    )
+                    slf_measure = result.json()
+
                     measures_collection = self.measures_collection(station_id)
                     new_measures = []
-                    for slf_measure in measures:
-                        key = int(slf_measure.key)
-                        if not self.has_measure(measures_collection, key):
-                            try:
-                                measure = self.create_measure(
-                                    station,
-                                    key,
-                                    slf_measure.wind_direction,
-                                    slf_measure.wind_average,
-                                    slf_measure.wind_maximum,
-                                    temperature=slf_measure.temperature,
-                                )
-                                new_measures.append(measure)
-                            except ProviderException as e:
-                                self.log.warning(
-                                    f"Error while processing measure '{key}' for station '{station_id}': {e}"
-                                )
-                            except Exception as e:
-                                self.log.exception(
-                                    f"Error while processing measure '{key}' for station '{station_id}': {e}"
-                                )
+                    try:
+                        timestamp = (
+                            slf_station["properties"]["timestamp"] or slf_measure["windDirectionMean"]["timestamp"]
+                        )
+                    except KeyError:
+                        timestamp = None
+                    if not timestamp:
+                        continue
+
+                    key = arrow.get(timestamp).int_timestamp
+                    if not self.has_measure(measures_collection, key):
+                        try:
+                            measure = self.create_measure(
+                                station,
+                                key,
+                                slf_measure["windDirectionMean"]["value"],
+                                slf_measure["windVelocityMean"]["value"],
+                                slf_measure["windVelocityMax"]["value"],
+                                temperature=slf_measure.get("temperatureAir", {}).get("value"),
+                            )
+                            new_measures.append(measure)
+                        except KeyError as e:
+                            self.log.warning(
+                                f"Error while processing measure '{key}' for station '{station_id}': missing key '{e}'"
+                            )
+                        except ProviderException as e:
+                            self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                        except Exception as e:
+                            self.log.exception(
+                                f"Error while processing measure '{key}' for station '{station_id}': {e}"
+                            )
 
                     self.insert_new_measures(measures_collection, station, new_measures)
 
