@@ -1,6 +1,8 @@
+import os
 from datetime import datetime, timedelta
 
 from apscheduler.schedulers.blocking import BlockingScheduler
+from pydantic import parse_obj_as
 
 
 def run_providers():
@@ -57,15 +59,17 @@ def run_providers():
         ("providers.zermatt:zermatt", 5),
     ]:
         func = provider_job[0]
-        interval = provider_job[1]
-        scheduler.add_job(
-            func,
-            trigger="interval",
-            start_date=start_date,
-            minutes=interval,
-            jitter=5 * 60,  # randomize start_date during 5 minutes period
-            executor="providers",
-        )
+        func_name = func.split(":")[1]
+        if not parse_obj_as(bool, os.environ.get(f"DISABLE_PROVIDER_{func_name.upper()}", False)):
+            interval = provider_job[1]
+            scheduler.add_job(
+                func,
+                trigger="interval",
+                start_date=start_date,
+                minutes=interval,
+                jitter=5 * 60,  # randomize start_date during 5 minutes period
+                executor="providers",
+            )
     scheduler.start()
 
 
