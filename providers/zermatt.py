@@ -70,91 +70,97 @@ class Zermatt(Provider):
                 session.get(self.provider_url, timeout=(self.connect_timeout, self.read_timeout)).text
             )
 
-            # Groups
             groups = wind_tree.xpath("//table[@class='w-all']")
 
             for group in groups:
-                stations = group.xpath("tbody/tr")
+                table_rows = group.xpath("tbody/tr")
                 i = 0
-                while i < len(stations):
-                    is_station = stations[i].xpath("td[@class='station']")
-                    if len(is_station) == 1:
-                        has_data = "kein" not in stations[i + 1].xpath("td")[0].text.lower()
-                        try:
-                            id_main = self.cleanup_id(stations[i].xpath("td")[0].text)
-                            id_subs = []
-                            sub_path = stations[i].xpath("td/span")
-                            if len(sub_path) > 0:
-                                sub_texts = sub_path[0].text.replace("(", "").replace(")", "").split(",")
-                                for sub_text in sub_texts:
-                                    sub_text = sub_text.strip()
-                                    match = self.pylon_pattern.search(sub_text)
-                                    if match:
-                                        id_subs.append(match["pylon"])
-                                    else:
-                                        id_subs.append(sub_text)
-
-                            id_sub = "-".join(id_subs)
-                            zermatt_id = self.cleanup_id(f"{id_main}-{id_sub}" if id_sub else id_main)
-
-                            try:
-                                # Fetch metadata from admin
-                                zermatt_station = next(filter(lambda s: str(s["id"]) == zermatt_id, stations_metadata))
-                            except Exception:
-                                continue
-
-                            station = self.save_station(
-                                zermatt_id,
-                                zermatt_station["name"],
-                                zermatt_station["short_name"],
-                                zermatt_station["latitude"],
-                                zermatt_station["longitude"],
-                                StationStatus.GREEN if has_data else StationStatus.RED,
-                                altitude=zermatt_station["altitude"] if "altitude" in zermatt_station else None,
-                                url=self.provider_url,
-                            )
-                            station_id = station["_id"]
-
-                            if has_data:
-                                key_text = stations[i + 1].xpath("td[@class='c5']")[0].text
-                                key = (
-                                    arrow.get(key_text.strip(), "DD.MM.YYYY H:mm")
-                                    .replace(tzinfo=self.default_tz)
-                                    .int_timestamp
-                                )
-
-                                measures_collection = self.measures_collection(station_id)
-                                if not self.has_measure(measures_collection, key):
-                                    wind_dir_text = stations[i + 1].xpath("td[@class='c4']")[0].text
-                                    wind_dir = self.wind_directions[wind_dir_text.strip()]
-
-                                    wind_avg_text = stations[i + 1].xpath("td[@class='c3']")[0].text
-                                    wind_avg = self.wind_pattern.match(wind_avg_text.strip())["wind"]
-
-                                    # zermatt.net is providing wind_max for the last 3 hours. Using wind_avg instead.
-                                    # wind_max_text = stations[i+2].xpath("td[@class='c3']")[0].text
-                                    # wind_max = self.wind_pattern.match(wind_max_text.strip())['wind']
-
-                                    temp_text = stations[i + 1].xpath("td[@class='c2']")[0].text
-                                    temp = self.temp_pattern.match(temp_text.strip())["temp"] if temp_text else None
-
-                                    measure = self.create_measure(
-                                        station, key, wind_dir, wind_avg, wind_avg, temperature=temp
-                                    )
-                                    self.insert_new_measures(measures_collection, station, [measure])
-                            else:
-                                self.log.warning(f"No data for station '{station_id}'")
-                        except ProviderException as e:
-                            self.log.warning(f"Error while processing station '{station_id}': {e}")
-                        except Exception as e:
-                            self.log.exception(f"Error while processing station '{station_id}': {e}")
-                        finally:
-                            if has_data:
-                                i += 4
-                            else:
-                                i += 2
+                while i < len(table_rows):
+                    next_cell = table_rows[i + 1].xpath("td")
+                    if next_cell[0].attrib["class"] == "c1":
+                        has_data = True
+                        next_row = 4
+                    elif next_cell[0].attrib["class"] == "c5":
+                        has_data = False
+                        next_row = 2
+                    elif next_cell[0].attrib["class"] == "station":
+                        has_data = False
+                        next_row = 1
                     else:
-                        raise ProviderException("Invalid html table order")
+                        raise ProviderException("Unexpected table rows")
+
+                    try:
+                        id_main = self.cleanup_id(table_rows[i].xpath("td")[0].text)
+                        id_subs = []
+                        sub_path = table_rows[i].xpath("td/span")
+                        if len(sub_path) > 0:
+                            sub_texts = sub_path[0].text.replace("(", "").replace(")", "").split(",")
+                            for sub_text in sub_texts:
+                                sub_text = sub_text.strip()
+                                match = self.pylon_pattern.search(sub_text)
+                                if match:
+                                    id_subs.append(match["pylon"])
+                                else:
+                                    id_subs.append(sub_text)
+
+                        id_sub = "-".join(id_subs)
+                        zermatt_id = self.cleanup_id(f"{id_main}-{id_sub}" if id_sub else id_main)
+
+                        try:
+                            # Fetch metadata from admin
+                            zermatt_station = next(filter(lambda s: str(s["id"]) == zermatt_id, stations_metadata))
+                        except Exception:
+                            continue
+
+                        station = self.save_station(
+                            zermatt_id,
+                            zermatt_station["name"],
+                            zermatt_station["short_name"],
+                            zermatt_station["latitude"],
+                            zermatt_station["longitude"],
+                            StationStatus.GREEN if has_data else StationStatus.RED,
+                            altitude=zermatt_station["altitude"] if "altitude" in zermatt_station else None,
+                            url=self.provider_url,
+                        )
+                        station_id = station["_id"]
+
+                        if has_data:
+                            key_text = table_rows[i + 1].xpath("td[@class='c5']")[0].text
+                            key = (
+                                arrow.get(key_text.strip(), "DD.MM.YYYY H:mm")
+                                .replace(tzinfo=self.default_tz)
+                                .int_timestamp
+                            )
+
+                            measures_collection = self.measures_collection(station_id)
+                            if not self.has_measure(measures_collection, key):
+                                # class="wCurr"
+                                wind_dir_text = table_rows[i + 1].xpath("td[@class='c4']")[0].text
+                                wind_dir = self.wind_directions[wind_dir_text.strip()]
+
+                                # class="wAvr"
+                                wind_avg_text = table_rows[i + 3].xpath("td[@class='c3']")[0].text
+                                wind_avg = self.wind_pattern.match(wind_avg_text.strip())["wind"]
+
+                                # class="wMax"
+                                wind_max_text = table_rows[i + 2].xpath("td[@class='c3']")[0].text
+                                wind_max = self.wind_pattern.match(wind_max_text.strip())["wind"]
+
+                                temp_text = table_rows[i + 1].xpath("td[@class='c2']")[0].text
+                                temp = self.temp_pattern.match(temp_text.strip())["temp"] if temp_text else None
+
+                                measure = self.create_measure(
+                                    station, key, wind_dir, wind_avg, wind_max, temperature=temp
+                                )
+                                self.insert_new_measures(measures_collection, station, [measure])
+                        else:
+                            self.log.warning(f"No data for station '{station_id}'")
+                    except ProviderException as e:
+                        self.log.warning(f"Error while processing station '{station_id}': {e}")
+                    except Exception as e:
+                        self.log.exception(f"Error while processing station '{station_id}': {e}")
+                    finally:
+                        i += next_row
 
         except Exception as e:
             self.log.exception(f"Error while processing Zermatt: {e}")
