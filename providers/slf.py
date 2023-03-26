@@ -29,7 +29,7 @@ class Slf(Provider):
             session.headers.update(user_agents.chrome)
 
             result = session.get(
-                "https://public-meas-data.slf.ch" "/public/station-data/timepoint/WIND_MEAN/current/geojson",
+                "https://public-meas-data.slf.ch/public/station-data/timepoint/WIND_MEAN/current/geojson",
                 timeout=(self.connect_timeout, self.read_timeout),
             )
             slf_stations = result.json()
@@ -60,45 +60,52 @@ class Slf(Provider):
                     station_id = station["_id"]
 
                     result = session.get(
-                        f"https://public-meas-data.slf.ch"
-                        f"/public/station-data/timeseries/current/{slf_network}/{slf_id}",
+                        "https://public-meas-data.slf.ch"
+                        f"/public/station-data/timeseries/week/current/{slf_network}/{slf_id}",
                         timeout=(self.connect_timeout, self.read_timeout),
                     )
-                    slf_measure = result.json()
+                    slf_measures = result.json()
 
                     measures_collection = self.measures_collection(station_id)
                     new_measures = []
-                    try:
-                        timestamp = (
-                            slf_station["properties"]["timestamp"] or slf_measure["windDirectionMean"]["timestamp"]
-                        )
-                    except KeyError:
-                        timestamp = None
-                    if not timestamp:
-                        continue
 
-                    key = arrow.get(timestamp).int_timestamp
-                    if not self.has_measure(measures_collection, key):
+                    # At this time, SLF provides data every 30 minutes but the weekly list is updated only every hour.
+                    # Using 6 last values to support 10 minutes rate if needed.
+                    for index, slf_measure_dir in enumerate(slf_measures["windDirectionMean"][:6]):
                         try:
-                            measure = self.create_measure(
-                                station,
-                                key,
-                                slf_measure["windDirectionMean"]["value"],
-                                slf_measure["windVelocityMean"]["value"],
-                                slf_measure["windVelocityMax"]["value"],
-                                temperature=slf_measure.get("temperatureAir", {}).get("value"),
-                            )
-                            new_measures.append(measure)
-                        except KeyError as e:
-                            self.log.warning(
-                                f"Error while processing measure '{key}' for station '{station_id}': missing key {e}"
-                            )
-                        except ProviderException as e:
-                            self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
-                        except Exception as e:
-                            self.log.exception(
-                                f"Error while processing measure '{key}' for station '{station_id}': {e}"
-                            )
+                            timestamp = slf_measure_dir["timestamp"]
+                        except KeyError:
+                            timestamp = None
+                        if not timestamp:
+                            continue
+
+                        key = arrow.get(timestamp).int_timestamp
+                        if not self.has_measure(measures_collection, key):
+                            try:
+                                measure = self.create_measure(
+                                    station,
+                                    key,
+                                    slf_measure_dir["value"],
+                                    slf_measures["windVelocityMean"][index]["value"],
+                                    slf_measures["windVelocityMax"][index]["value"],
+                                    temperature=slf_measures["temperatureAir"][index]["value"]
+                                    if "temperatureAir" in slf_measures
+                                    else None,
+                                )
+                                new_measures.append(measure)
+                            except KeyError as e:
+                                self.log.warning(
+                                    f"Error while processing measure '{key}' for station '{station_id}': "
+                                    f"missing key {e}"
+                                )
+                            except ProviderException as e:
+                                self.log.warning(
+                                    f"Error while processing measure '{key}' for station '{station_id}': {e}"
+                                )
+                            except Exception as e:
+                                self.log.exception(
+                                    f"Error while processing measure '{key}' for station '{station_id}': {e}"
+                                )
 
                     self.insert_new_measures(measures_collection, station, new_measures)
 
