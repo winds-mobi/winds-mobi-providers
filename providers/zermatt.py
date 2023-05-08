@@ -136,14 +136,20 @@ class Zermatt(Provider):
                             if not self.has_measure(measures_collection, key):
                                 # class="wCurr"
                                 wind_dir_text = table_rows[i + 1].xpath("td[@class='c4']")[0].text
+                                if wind_dir_text == "-":
+                                    raise ProviderException("No wind direction")
                                 wind_dir = self.wind_directions[wind_dir_text.strip()]
 
                                 # class="wAvr"
                                 wind_avg_text = table_rows[i + 3].xpath("td[@class='c3']")[0].text
+                                if wind_avg_text == "-":
+                                    raise ProviderException("No wind average")
                                 wind_avg = self.wind_pattern.match(wind_avg_text.strip())["wind"]
 
                                 # class="wMax"
                                 wind_max_text = table_rows[i + 2].xpath("td[@class='c3']")[0].text
+                                if wind_max_text == "-":
+                                    raise ProviderException("No wind max")
                                 wind_max = self.wind_pattern.match(wind_max_text.strip())["wind"]
 
                                 temp_text = table_rows[i + 1].xpath("td[@class='c2']")[0].text
