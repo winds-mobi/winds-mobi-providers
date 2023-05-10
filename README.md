@@ -31,7 +31,7 @@ Create a `.env` file from `.env.template` which will be read by docker compose:
 
 Then start the external services and the providers scheduler:
 
-- `docker compose --profile=application up --build`
+- `docker compose --profile=scheduler up --build`
 
 Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-admin#run-the-project-with-docker-compose-simple-way) running to get stations metadata.
 
@@ -89,7 +89,7 @@ You know a good weather station that would be useful for many paraglider pilots 
 Awesome! Fork this repository and create a pull request with your new provider code. It's easy, look at the following
 example:
 
-my_provider.py
+providers/my_provider.py
 ```
 import arrow
 import requests
@@ -132,6 +132,25 @@ class MyProvider(Provider):
                 self.insert_new_measures(measures_collection, station, [new_measure])
         self.log.info("...Done !")
 ```
+
+##### And test it
+
+Start the external services:
+
+- `docker compose up --build`
+
+Build a Docker image containing your new provider `providers/my_provider.py`:
+
+- `docker build --tag=winds.mobi/my_provider .`
+
+Then run your provider inside a container with:
+
+- `docker run -it --rm --entrypoint python winds.mobi/my_provider providers/my_provider.py`
+
+To avoid building a new image on every change, you can mount your local source to the container directory `/opt/project` 
+with a Docker volume:
+
+- `docker run -it --rm --volume $(pwd):/opt/project --entrypoint python winds.mobi/my_provider providers/my_provider.py`
 
 Licensing
 ---------

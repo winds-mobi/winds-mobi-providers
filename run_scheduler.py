@@ -5,7 +5,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from pydantic import parse_obj_as
 
 
-def run_providers():
+def run_scheduler():
     scheduler = BlockingScheduler()
     scheduler.configure(
         executors={
@@ -74,4 +74,4 @@ def run_providers():
 
 
 if __name__ == "__main__":
-    run_providers()
+    run_scheduler()

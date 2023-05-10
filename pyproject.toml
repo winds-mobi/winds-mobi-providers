@@ -4,9 +4,6 @@ description = "Python scripts that get the weather data from different providers
 version = "0.0.0"
 authors = ["winds.mobi"]
 license = "	AGPL-3.0-only"
-packages = [
-    { include = "winds_mobi_provider" },
-]
 
 [tool.poetry.dependencies]
 python = "3.10.*"
