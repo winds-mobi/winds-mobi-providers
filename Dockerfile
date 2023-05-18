@@ -1,27 +1,26 @@
-FROM python:3.10.6-slim-bullseye AS base
+FROM python:3.10.11-slim-bullseye AS base
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-RUN apt update; \
-    apt --yes --no-install-recommends install libpq5 libmariadb3
+RUN apt-get update; \
+    apt-get --yes --no-install-recommends install libpq5 libmariadb3
 
-FROM base AS python
+FROM base AS python-dependencies
 
-RUN apt update; \
-    apt --yes --no-install-recommends install build-essential libpq-dev libmariadb-dev curl
-RUN curl -sSL https://install.python-poetry.org | python - --version 1.3.2
+RUN apt-get update; \
+    apt-get --yes --no-install-recommends install build-essential libpq-dev libmariadb-dev curl
+RUN curl -sSL https://install.python-poetry.org | python - --version 1.4.2
 
-COPY . .
-RUN POETRY_VIRTUALENVS_IN_PROJECT=true /root/.local/bin/poetry install --no-dev
+COPY pyproject.toml poetry.lock ./
+RUN POETRY_VIRTUALENVS_IN_PROJECT=true /root/.local/bin/poetry install --only=main
 
 FROM base AS runtime
 
-ENV PATH="/.venv/bin:$PATH"
+COPY --from=python-dependencies /.venv /.venv
+ENV PATH=/.venv/bin:$PATH
 
-COPY . .
+COPY . /opt/project/
+WORKDIR /opt/project/
 
-FROM runtime AS production
-
-COPY --from=python /.venv /.venv
-ENTRYPOINT ["python", "run_providers.py"]
+ENTRYPOINT ["python", "run_scheduler.py"]

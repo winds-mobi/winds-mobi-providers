@@ -17,7 +17,7 @@ services:
     build:
       context: .
     profiles:
-      - application
+      - scheduler
     environment:
       MONGODB_URL: ${MONGODB_URL}
       REDIS_URL: ${REDIS_URL}
