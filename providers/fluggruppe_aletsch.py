@@ -189,7 +189,7 @@ class FluggruppeAletsch(Provider):
         ("ried-brig", FgaType1StationParser("ried-brig/XML")),
         ("blitzingu", FgaType1StationParser("blitzingu/XML")),
         ("bellwald", FgaType1StationParser("fleschen/XML")),
-        ("fieschertal", FgaType1StationParser("fiesch/XML")),
+        ("fieschertal", FgaType1StationParser("fieschertal/XML")),
         ("chaeserstatt", FgaType1StationParser("chaeserstatt/XML")),
         ("jeizinen", FgaType1StationParser("jeizinen/XML")),
         ("grimsel", FgaType1StationParser("grimselpass/XML")),
