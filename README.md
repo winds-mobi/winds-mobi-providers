@@ -72,7 +72,7 @@ Then start the external services:
 
 #### Run only a provider
 
-- `PYTHONPATH=. dotenv -f .env.localhost run python providers/ffvl.py`
+- `dotenv -f .env.localhost run python providers/ffvl.py`
 
 ### Contributing
 
@@ -103,41 +103,65 @@ class MyProvider(Provider):
 
     def process_data(self):
         self.log.info("Processing MyProvider data...")
-        data = requests.get(
-            "https://api.my-provider.com/stations.json", timeout=(self.connect_timeout, self.read_timeout)
-        )
-        for data_dict in data.json():
-            station = self.save_station(
-                provider_id=data_dict["id"],
-                short_name=data_dict["name"],
+        # data = requests.get(
+        #     "https://api.my-provider.com/stations.json", timeout=(self.connect_timeout, self.read_timeout)
+        # ).json()
+        data = [{
+            "id": "station-1",
+            "name": "Station 1",
+            "latitude": 46.713,
+            "longitude": 6.503,
+            "status": "ok",
+            "measures": [{
+                "time": arrow.now().format("YYYY-MM-DD HH:mm:ssZZ"),
+                "windDirection": 180,
+                "windAverage": 10.5,
+                "windMaximum": 20.1,
+                "temperature": 25.7,
+                "pressure": 1013,
+            }]
+        }]
+        for station in data:
+            winds_station = self.save_station(
+                provider_id=station["id"],
+                short_name=station["name"],
                 name=None,  # Lets winds.mobi provide the full name with the help of Google Geocoding API
-                latitude=data_dict["latitude"],
-                longitude=data_dict["longitude"],
-                status=StationStatus.GREEN if data_dict["status"] == "ok" else StationStatus.RED,
+                latitude=station["latitude"],
+                longitude=station["longitude"],
+                status=StationStatus.GREEN if station["status"] == "ok" else StationStatus.RED,
+                url=f"https://my-provider.com/stations/{station['id']}",
             )
 
-            measure_key = arrow.get(data_dict["lastMeasure"]["time"], "YYYY-MM-DD HH:mm:ssZZ").int_timestamp
-            measures_collection = self.measures_collection(station["_id"])
+            measure_key = arrow.get(station["measures"][0]["time"], "YYYY-MM-DD HH:mm:ssZZ").int_timestamp
+            measures_collection = self.measures_collection(winds_station["_id"])
 
             if not self.has_measure(measures_collection, measure_key):
                 new_measure = self.create_measure(
-                    for_station=station,
+                    for_station=winds_station,
                     _id=measure_key,
-                    wind_direction=data_dict["lastMeasure"]["windDirection"],
-                    wind_average=Q_(data_dict["lastMeasure"]["windAverage"], ureg.meter / ureg.second),
-                    wind_maximum=Q_(data_dict["lastMeasure"]["windMaximum"], ureg.meter / ureg.second),
-                    temperature=Q_(data_dict["lastMeasure"]["temp"], ureg.degC),
-                    pressure=Pressure(qnh=Q_(data_dict["lastMeasure"]["pressure"], ureg.hPa)),
+                    wind_direction=station["measures"][0]["windDirection"],
+                    wind_average=Q_(station["measures"][0]["windAverage"], ureg.meter / ureg.second),
+                    wind_maximum=Q_(station["measures"][0]["windMaximum"], ureg.meter / ureg.second),
+                    temperature=Q_(station["measures"][0]["temperature"], ureg.degC),
+                    pressure=Pressure(station["measures"][0]["pressure"], qnh=None, qff=None),
                 )
-                self.insert_new_measures(measures_collection, station, [new_measure])
+                self.insert_new_measures(measures_collection, winds_station, [new_measure])
         self.log.info("...Done !")
+
+
+def my_provider():
+    MyProvider().process_data()
+
+
+if __name__ == "__main__":
+    my_provider()
 ```
 
 ##### And test it
 
 Start the external services:
 
-- `docker compose up --build`
+- `docker compose up`
 
 Build a Docker image containing your new provider `providers/my_provider.py`:
 
@@ -145,12 +169,12 @@ Build a Docker image containing your new provider `providers/my_provider.py`:
 
 Then run your provider inside a container with:
 
-- `docker run -it --rm --entrypoint python winds.mobi/my_provider providers/my_provider.py`
+- `docker run -it --rm --env-file=.env --network=winds-mobi-providers --entrypoint=python winds.mobi/my_provider -m providers.my_provider`
 
 To avoid building a new image on every change, you can mount your local source to the container directory `/opt/project` 
 with a Docker volume:
 
-- `docker run -it --rm --volume $(pwd):/opt/project --entrypoint python winds.mobi/my_provider providers/my_provider.py`
+- `docker run -it --rm --env-file=.env --network=winds-mobi-providers --volume=$(pwd):/opt/project --entrypoint=python winds.mobi/my_provider -m providers.my_provider`
 
 Licensing
 ---------
