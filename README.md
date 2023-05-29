@@ -94,7 +94,7 @@ providers/my_provider.py
 import arrow
 import requests
 
-from winds_mobi_provider import Provider, StationStatus, ureg, Q_, Pressure
+from winds_mobi_provider import Provider, ProviderException, StationStatus, ureg, Q_, Pressure
 
 
 class MyProvider(Provider):
@@ -103,49 +103,64 @@ class MyProvider(Provider):
 
     def process_data(self):
         self.log.info("Processing MyProvider data...")
-        # data = requests.get(
-        #     "https://api.my-provider.com/stations.json", timeout=(self.connect_timeout, self.read_timeout)
-        # ).json()
-        data = [{
-            "id": "station-1",
-            "name": "Station 1",
-            "latitude": 46.713,
-            "longitude": 6.503,
-            "status": "ok",
-            "measures": [{
-                "time": arrow.now().format("YYYY-MM-DD HH:mm:ssZZ"),
-                "windDirection": 180,
-                "windAverage": 10.5,
-                "windMaximum": 20.1,
-                "temperature": 25.7,
-                "pressure": 1013,
-            }]
-        }]
-        for station in data:
-            winds_station = self.save_station(
-                provider_id=station["id"],
-                short_name=station["name"],
-                name=None,  # Lets winds.mobi provide the full name with the help of Google Geocoding API
-                latitude=station["latitude"],
-                longitude=station["longitude"],
-                status=StationStatus.GREEN if station["status"] == "ok" else StationStatus.RED,
-                url=f"https://my-provider.com/stations/{station['id']}",
-            )
+        try:
+            # data = requests.get(
+            #     "https://api.my-provider.com/stations.json", timeout=(self.connect_timeout, self.read_timeout)
+            # ).json()
+            data = [
+                {
+                    "id": "station-1",
+                    "name": "Station 1",
+                    "latitude": 46.713,
+                    "longitude": 6.503,
+                    "status": "ok",
+                    "measures": [
+                        {
+                            "time": arrow.now().format("YYYY-MM-DD HH:mm:ssZZ"),
+                            "windDirection": 180,
+                            "windAverage": 10.5,
+                            "windMaximum": 20.1,
+                            "temperature": 25.7,
+                            "pressure": 1013,
+                        }
+                    ],
+                }
+            ]
+            for station in data:
+                try:
+                    winds_station = self.save_station(
+                        provider_id=station["id"],
+                        short_name=station["name"],
+                        name=None,  # Lets winds.mobi provide the full name with the help of Google Geocoding API
+                        latitude=station["latitude"],
+                        longitude=station["longitude"],
+                        status=StationStatus.GREEN if station["status"] == "ok" else StationStatus.RED,
+                        url=f"https://my-provider.com/stations/{station['id']}",
+                    )
 
-            measure_key = arrow.get(station["measures"][0]["time"], "YYYY-MM-DD HH:mm:ssZZ").int_timestamp
-            measures_collection = self.measures_collection(winds_station["_id"])
+                    measure_key = arrow.get(station["measures"][0]["time"], "YYYY-MM-DD HH:mm:ssZZ").int_timestamp
+                    measures_collection = self.measures_collection(winds_station["_id"])
 
-            if not self.has_measure(measures_collection, measure_key):
-                new_measure = self.create_measure(
-                    for_station=winds_station,
-                    _id=measure_key,
-                    wind_direction=station["measures"][0]["windDirection"],
-                    wind_average=Q_(station["measures"][0]["windAverage"], ureg.meter / ureg.second),
-                    wind_maximum=Q_(station["measures"][0]["windMaximum"], ureg.meter / ureg.second),
-                    temperature=Q_(station["measures"][0]["temperature"], ureg.degC),
-                    pressure=Pressure(station["measures"][0]["pressure"], qnh=None, qff=None),
-                )
-                self.insert_new_measures(measures_collection, winds_station, [new_measure])
+                    if not self.has_measure(measures_collection, measure_key):
+                        new_measure = self.create_measure(
+                            for_station=winds_station,
+                            _id=measure_key,
+                            wind_direction=station["measures"][0]["windDirection"],
+                            wind_average=Q_(station["measures"][0]["windAverage"], ureg.meter / ureg.second),
+                            wind_maximum=Q_(station["measures"][0]["windMaximum"], ureg.meter / ureg.second),
+                            temperature=Q_(station["measures"][0]["temperature"], ureg.degC),
+                            pressure=Pressure(station["measures"][0]["pressure"], qnh=None, qff=None),
+                        )
+                        self.insert_new_measures(measures_collection, winds_station, [new_measure])
+
+                except ProviderException as e:
+                    self.log.warning(f"Error while processing station '{station['id']}': {e}")
+                except Exception as e:
+                    self.log.exception(f"Error while processing station '{station['id']}': {e}")
+
+        except Exception as e:
+            self.log.exception(f"Error while processing MyProvider: {e}")
+
         self.log.info("...Done !")
 
 
