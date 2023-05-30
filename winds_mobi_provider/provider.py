@@ -432,7 +432,6 @@ class Provider:
         pressure: Pressure = None,
         rain=None,
     ):
-
         if all((wind_direction is None, wind_average is None, wind_maximum is None)):
             raise ProviderException("All mandatory values are null!")
 
