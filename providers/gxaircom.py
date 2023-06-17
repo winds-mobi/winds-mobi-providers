@@ -12,7 +12,7 @@ class GxAircom(Provider):
         self.log.info("Processing GxAircom data...")
         try:
             data = requests.get(
-                "http://www.mgenet.at/gxaircom/stations.php", timeout=(self.connect_timeout, self.read_timeout)
+                "http://www.gxaircom.net/gxaircom/stations.php", timeout=(self.connect_timeout, self.read_timeout)
             ).json()
             for station in data:
                 try:
@@ -25,7 +25,7 @@ class GxAircom(Provider):
                         longitude=station["lon"],
                         status=StationStatus.GREEN if station["online"] == "1" else StationStatus.RED,
                         altitude=station["alt"],
-                        url="http://www.mgenet.at/gxaircom/stationstable.php",
+                        url="http://www.gxaircom.net/gxaircom/stationstable.php",
                     )
                     measure_key = arrow.get(station["DT"], "YYYY-MM-DD HH:mm:ss").int_timestamp
                     measures_collection = self.measures_collection(winds_station["_id"])
