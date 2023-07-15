@@ -43,6 +43,7 @@ def run_scheduler():
         ("providers.borntofly:borntofly", 5),
         ("providers.ffvl:ffvl", 5),
         ("providers.fluggruppe_aletsch:fluggruppe_aletsch", 5),
+        ("providers.gxaircom:gxaircom", 5),
         ("providers.holfuy:holfuy", 5),
         ("providers.iweathar:iweathar", 5),
         ("providers.metar_noaa:metar_noaa", 10),
