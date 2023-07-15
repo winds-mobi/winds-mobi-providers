@@ -1,7 +1,7 @@
 import arrow
 import requests
 
-from winds_mobi_provider import Provider, StationStatus, ureg, Q_, Pressure
+from winds_mobi_provider import Q_, Pressure, Provider, StationStatus, ureg
 
 
 class Gxaircom(Provider):
