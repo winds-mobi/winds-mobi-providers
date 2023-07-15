@@ -34,6 +34,7 @@ def save_clusters(nb_clusters):
     try:
         bulk_operations = [UpdateMany({}, {"$set": {"clusters": []}})]
         for n_clusters in reversed(range_clusters):
+
             model = AgglomerativeClustering(linkage="ward", connectivity=None, n_clusters=n_clusters)
             labels = model.fit_predict(X)
 

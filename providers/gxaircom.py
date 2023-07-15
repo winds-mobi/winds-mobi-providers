@@ -4,12 +4,13 @@ import requests
 from winds_mobi_provider import Provider, StationStatus, ureg, Q_, Pressure
 
 
-class GxAircom(Provider):
+class Gxaircom(Provider):
     provider_code = "gxaircom"
-    provider_name = "gxaircom.com"
+    provider_name = "gxaircom.net"
+    provider_url = "http://www.gxaircom.net/gxaircom/stationstable.php"
 
     def process_data(self):
-        self.log.info("Processing GxAircom data...")
+        self.log.info("Processing Gxaircom data...")
         try:
             data = requests.get(
                 "http://www.gxaircom.net/gxaircom/stations.php", timeout=(self.connect_timeout, self.read_timeout)
@@ -25,7 +26,6 @@ class GxAircom(Provider):
                         longitude=station["lon"],
                         status=StationStatus.GREEN if station["online"] == "1" else StationStatus.RED,
                         altitude=station["alt"],
-                        url="http://www.gxaircom.net/gxaircom/stationstable.php",
                     )
                     measure_key = arrow.get(station["DT"], "YYYY-MM-DD HH:mm:ss").int_timestamp
                     measures_collection = self.measures_collection(winds_station["_id"])
@@ -53,7 +53,7 @@ class GxAircom(Provider):
 
 
 def gxaircom():
-    GxAircom().process_data()
+    Gxaircom().process_data()
 
 
 if __name__ == "__main__":
