@@ -1,44 +1,44 @@
-winds.mobi - real-time weather observations
-===========================================
-
-[![Follow us on https://www.facebook.com/WindsMobi/](https://img.shields.io/badge/facebook-follow_us-blue)](https://www.facebook.com/WindsMobi/)
-
-[winds.mobi](http://winds.mobi): Paraglider pilot, kitesurfer, check real-time weather conditions of your favorite spots
-on your smartphone, your tablet or your computer.
-
 winds-mobi-providers
---------------------
+====================
 
 Python scripts that get the weather data from different providers and save it in a common format into mongodb. 
 This project use Google Cloud APIs to compute any missing station details (altitude, name, timezone, ...).
 Google Cloud API results are cached with redis.
 
+## Run the project with docker compose (simple way)
 ### Dependencies
-
-- python 3.10 and [poetry](https://python-poetry.org) 
-- mongodb 4.4
-- redis
+- [docker](https://docs.docker.com/get-docker/)
 - Google Cloud API key
+- Providers secrets (optional)
 
-See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/main/settings.py)
-
-### Run the project with docker compose (simple way)
-
-Create a `.env` file from `.env.template` which will be read by docker compose:
-
+Create an `.env` file from `.env.template` read by docker compose:
 - fill GOOGLE_API_KEY with you own [Google Cloud API key](https://cloud.google.com/docs/authentication/api-keys#creating_an_api_key)
-- optionally fill the missing secrets for each provider
+- optionally fill the missing secrets for each provider you want to test
 
-Then start the external services and the providers scheduler:
+### Start the databases
+- `docker compose -f compose.services.yaml up`
 
-- `docker compose --profile=scheduler up --build`
+### Run the providers
+- `docker compose up`
+
+Or, run only a specific provider:
+- `PROVIDER=ffvl docker compose up`
 
 Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-admin#run-the-project-with-docker-compose-simple-way) running to get stations metadata.
 
-### Run the project locally on macOS
+## Run the project locally on macOS
+### Dependencies
+- [homebrew](https://brew.sh)
+- python 3.10
+- [poetry](https://python-poetry.org)
+- Google Cloud API key
+- Providers secrets (optional)
 
-#### Install dependencies
+Create an `.env.localhost` file from `.env.localhost.template` read by `dotenv` for our local commands:
+- fill GOOGLE_API_KEY with you own [Google Cloud API key](https://cloud.google.com/docs/authentication/api-keys#creating_an_api_key)
+- optionally fill the missing secrets for each provider you want to test
 
+Install libraries with homebrew:
 - `brew install openssl`
 - `export LDFLAGS=-L/usr/local/opt/openssl/lib`
 
@@ -48,41 +48,31 @@ Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-
 - `brew install mysql-client`
 - `export PATH=/usr/local/opt/mysql-client/bin:$PATH`
 
-#### Python environment
-
+### Python virtual environment
 - `poetry install`
 - `poetry shell`
 
-Create a `.env.localhost` file from `.env.localhost.template` which will be read by `dotenv` for our local commands:
+### Start the databases
+You must already have the `.env` file created in the [previous section](#run-the-project-with-docker-compose-simple-way)
+- `docker compose -f compose.services.yaml up`
 
-- fill GOOGLE_API_KEY with you own [Google Cloud API key](https://cloud.google.com/docs/authentication/api-keys#creating_an_api_key)
-- optionally fill the missing secrets for each provider
-
-#### External services with docker compose
-
-Create a `.env` file from `.env.template` which will be read by docker compose.
-
-Then start the external services:
-
-- `docker compose up`
-
-#### Run the scheduler
-
+### Run the providers
 - `dotenv -f .env.localhost run python run_providers.py`
 
-#### Run only a provider
-
+Or, run only a specific provider:
 - `dotenv -f .env.localhost run python providers/ffvl.py`
 
-### Contributing
+## Contributing
+### Checking the code style
 
-#### Checking the code style
+Format your code:
+- `poetry run black .`
 
-Format your code: `poetry run black .`
+Run the linters:
+- `poetry run flake8 .`
+- `poetry run isort .`
 
-Run the linter: `poetry run flake8 .`
-
-#### Add a new provider to winds.mobi
+### Add a new provider to winds.mobi
 
 You know a good weather station that would be useful for many paraglider pilots or kitesurfers? 
 
@@ -172,26 +162,5 @@ if __name__ == "__main__":
     my_provider()
 ```
 
-##### And test it
-
-Start the external services:
-
-- `docker compose up`
-
-Build a Docker image containing your new provider `providers/my_provider.py`:
-
-- `docker build --tag=winds.mobi/my_provider .`
-
-Then run your provider inside a container with:
-
-- `docker run -it --rm --env-file=.env --network=winds-mobi-providers --entrypoint=python winds.mobi/my_provider -m providers.my_provider`
-
-To avoid building a new image on every change, you can mount your local source to the container directory `/opt/project` 
-with a Docker volume:
-
-- `docker run -it --rm --env-file=.env --network=winds-mobi-providers --volume=$(pwd):/opt/project --entrypoint=python winds.mobi/my_provider -m providers.my_provider`
-
-Licensing
----------
-
+## Licensing
 Please see the file called [LICENSE.txt](https://github.com/winds-mobi/winds-mobi-providers/blob/main/LICENSE.txt)

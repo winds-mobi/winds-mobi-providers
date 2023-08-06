@@ -22,5 +22,4 @@ ENV PATH=/.venv/bin:$PATH
 
 COPY . /opt/project/
 WORKDIR /opt/project/
-
-ENTRYPOINT ["python", "run_scheduler.py"]
+CMD ["./docker-cmd.sh"]

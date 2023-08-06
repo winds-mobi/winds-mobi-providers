@@ -1,5 +1,10 @@
+.DS_STORE
 .git
-dist
+.idea
+__pycache__
+.flake8
 .pytest_cache
+dist
 volumes
 .env*
+compose*.yaml
