@@ -10,7 +10,7 @@ FROM base AS python-dependencies
 
 RUN apt-get update; \
     apt-get --yes --no-install-recommends install build-essential libpq-dev libmariadb-dev curl
-RUN curl -sSL https://install.python-poetry.org | python - --version 1.4.2
+RUN curl -sSL https://install.python-poetry.org | python - --version 1.5.1
 
 COPY pyproject.toml poetry.lock ./
 RUN POETRY_VIRTUALENVS_IN_PROJECT=true /root/.local/bin/poetry install --only=main

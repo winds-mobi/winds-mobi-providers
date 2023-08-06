@@ -12,6 +12,9 @@ Google Cloud API results are cached with redis.
 - Providers secrets (optional)
 
 Create an `.env` file from `.env.template` read by docker compose:
+- `cp .env.template .env`
+
+In `.env`:
 - fill GOOGLE_API_KEY with you own [Google Cloud API key](https://cloud.google.com/docs/authentication/api-keys#creating_an_api_key)
 - optionally fill the missing secrets for each provider you want to test
 
@@ -35,13 +38,13 @@ Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-
 - Providers secrets (optional)
 
 Create an `.env.localhost` file from `.env.localhost.template` read by `dotenv` for our local commands:
+- `cp .env.localhost.template .env.localhost`
+
+In `env.localhost`:
 - fill GOOGLE_API_KEY with you own [Google Cloud API key](https://cloud.google.com/docs/authentication/api-keys#creating_an_api_key)
 - optionally fill the missing secrets for each provider you want to test
 
 Install libraries with homebrew:
-- `brew install openssl`
-- `export LDFLAGS=-L/usr/local/opt/openssl/lib`
-
 - `brew install libpq`
 - `export PATH=/usr/local/opt/libpq/bin:$PATH`
 
@@ -53,27 +56,27 @@ Install libraries with homebrew:
 - `poetry shell`
 
 ### Start the databases
-You must already have the `.env` file created in the [previous section](#run-the-project-with-docker-compose-simple-way)
+You must already have the `.env` file created in the [previous section](#run-the-project-with-docker-compose-simple-way).
 - `docker compose -f compose.services.yaml up`
 
 ### Run the providers
-- `dotenv -f .env.localhost run python run_providers.py`
+- `dotenv -f .env.localhost run python run_scheduler.py`
 
 Or, run only a specific provider:
-- `dotenv -f .env.localhost run python providers/ffvl.py`
+- `dotenv -f .env.localhost run python -m providers.ffvl`
+
+Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-admin#run-the-project-with-docker-compose-simple-way) running to get stations metadata.
+
+### Checking the code style
+Format python code:
+- `black .`
+
+Run the linter tools:
+- `flake8 .`
+- `isort .`
 
 ## Contributing
-### Checking the code style
-
-Format your code:
-- `poetry run black .`
-
-Run the linters:
-- `poetry run flake8 .`
-- `poetry run isort .`
-
 ### Add a new provider to winds.mobi
-
 You know a good weather station that would be useful for many paraglider pilots or kitesurfers? 
 
 Awesome! Fork this repository and create a pull request with your new provider code. It's easy, look at the following
