@@ -21,17 +21,27 @@ def run_scheduler():
 
     # Admin jobs
     scheduler.add_job(
-        "admin_stations:delete_stations",
+        "admin_jobs.delete_stations:delete_stations",
         args=(60, ""),
         trigger="cron",
         hour="3",
+        minute="0",
         executor="admin",
     )
     scheduler.add_job(
-        "admin_clusters:save_clusters",
+        "admin_jobs.save_clusters:save_clusters",
+        args=(50,),
+        trigger="cron",
+        hour="3",
+        minute="30",
+        executor="admin",
+    )
+    scheduler.add_job(
+        "admin_jobs.find_duplicates:find_duplicates",
         args=(50,),
         trigger="cron",
         hour="4",
+        minute="0",
         executor="admin",
     )
 

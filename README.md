@@ -20,7 +20,7 @@ Google Cloud API results are cached with redis.
 - redis
 - Google Cloud API key
 
-See [settings.py](https://github.com/winds-mobi/winds-mobi-providers/blob/main/settings.py)
+See [settings.py](settings.py)
 
 ### Run the project with docker compose (simple way)
 
