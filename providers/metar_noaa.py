@@ -7,16 +7,16 @@ from random import randint
 import arrow
 import arrow.parser
 import requests
-
 from metar.Metar import Metar
+
 from settings import CHECKWX_API_KEY
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, UsageLimitException, ureg
 
 
 class MetarNoaa(Provider):
     provider_code = "metar"
-    provider_name = "noaa.gov/metar"
-    provider_url = "http://aviationweather.cp.ncep.noaa.gov/metar/"
+    provider_name = "aviationweather.gov/metar"
+    provider_url = "https://www.aviationweather.gov/metar"
 
     def __init__(self):
         super().__init__()
@@ -69,7 +69,7 @@ class MetarNoaa(Provider):
             try:
                 self.log.info("Processing Metar data...")
 
-                with open(os.path.join(os.path.dirname(__file__), "../metar/stations.json")) as in_file:
+                with open(os.path.join(os.path.dirname(__file__), "metar/stations.json")) as in_file:
                     icao = json.load(in_file)
 
                 now = arrow.utcnow()

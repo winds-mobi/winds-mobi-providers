@@ -30,4 +30,4 @@ with open("stations.json", "w") as out_file:
 
             if icao:
                 stations[icao] = {"name": station, "lat": lat, "lon": lon, "altitude": altitude, "country": country}
-    json.dump(stations, out_file)
+    json.dump(stations, out_file, indent=2)
