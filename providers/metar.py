@@ -7,15 +7,15 @@ from random import randint
 import arrow
 import arrow.parser
 import requests
-from metar.Metar import Metar
+from metar.Metar import Metar as MetarParser
 
 from settings import CHECKWX_API_KEY
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, UsageLimitException, ureg
 
 
-class MetarNoaa(Provider):
+class Metar(Provider):
     provider_code = "metar"
-    provider_name = "aviationweather.gov/metar"
+    provider_name = "aviationweather.gov"
     provider_url = "https://www.aviationweather.gov/metar"
 
     def __init__(self):
@@ -97,7 +97,7 @@ class MetarNoaa(Provider):
                                 # Catch also ValueError because https://github.com/crsmithdev/arrow/issues/535
                             except (arrow.parser.ParserError, ValueError):
                                 try:
-                                    metar = Metar(data, strict=False)
+                                    metar = MetarParser(data, strict=False)
                                     # wind_dir could be NONE if 'dir' is 'VRB'
                                     if metar.wind_speed:
                                         if metar.station_id not in stations:
@@ -277,9 +277,9 @@ class MetarNoaa(Provider):
         self.log.info("Done !")
 
 
-def metar_noaa():
-    MetarNoaa().process_data()
+def metar():
+    Metar().process_data()
 
 
 if __name__ == "__main__":
-    metar_noaa()
+    metar()

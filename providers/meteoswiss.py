@@ -8,14 +8,18 @@ from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, Stati
 class MeteoSwiss(Provider):
     provider_code = "meteoswiss"
     provider_name = "meteoswiss.ch"
-    provider_url = "https://www.meteoswiss.admin.ch"
-
+    provider_urls_params = "#param={param}&station={id}"
     provider_urls = {
-        "default": "https://www.meteoswiss.admin.ch" "/home/measurement-values.html?param={param}&station={id}",
-        "en": "https://www.meteoswiss.admin.ch" "/home/measurement-values.html?param={param}&station={id}",
-        "de": "https://www.meteoschweiz.admin.ch" "/home/messwerte.html?param={param}&station={id}",
-        "fr": "https://www.meteosuisse.admin.ch" "/home/valeurs-mesurees.html?param={param}&station={id}",
-        "it": "https://www.meteosvizzera.admin.ch" "/home/valori-attuali.html?param={param}&station={id}",
+        "default": "https://www.meteoswiss.admin.ch/services-and-publications/applications/"
+        f"measurement-values-and-measuring-networks.html{provider_urls_params}",
+        "en": "https://www.meteoswiss.admin.ch/services-and-publications/applications/"
+        f"measurement-values-and-measuring-networks.html{provider_urls_params}",
+        "de": "https://www.meteoschweiz.admin.ch/service-und-publikationen/applikationen/"
+        f"messwerte-und-messnetze.html{provider_urls_params}",
+        "fr": "https://www.meteosuisse.admin.ch/services-et-publications/applications/"
+        f"valeurs-mesurees-et-reseaux-de-mesure.html{provider_urls_params}",
+        "it": "https://www.meteosvizzera.admin.ch/servizi-e-pubblicazioni/applicazioni/"
+        f"valori-attuali-e-reti-di-misura.html{provider_urls_params}",
     }
 
     def __init__(self):
