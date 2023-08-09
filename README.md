@@ -7,7 +7,7 @@ Google Cloud API results are cached with redis.
 
 ## Run the project with docker compose (simple way)
 ### Dependencies
-- [docker](https://docs.docker.com/get-docker/)
+- [Docker](https://docs.docker.com/get-docker/)
 - Google Cloud API key
 - Providers secrets (optional)
 
@@ -31,9 +31,9 @@ Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-
 
 ## Run the project locally on macOS
 ### Dependencies
-- [homebrew](https://brew.sh)
-- python 3.10
-- [poetry](https://python-poetry.org)
+- [Homebrew](https://brew.sh)
+- Python 3.10
+- [Poetry](https://python-poetry.org)
 - Google Cloud API key
 - Providers secrets (optional)
 
@@ -46,14 +46,17 @@ In `env.localhost`:
 
 Install libraries with homebrew:
 - `brew install libpq`
-- `export PATH=/usr/local/opt/libpq/bin:$PATH`
-
 - `brew install mysql-client`
+
+### Create virtual environment and install dependencies
+- `export PATH=/usr/local/opt/libpq/bin:$PATH`
 - `export PATH=/usr/local/opt/mysql-client/bin:$PATH`
 
-### Python virtual environment
 - `poetry install`
+
+### Activate and deactivate the virtual environment
 - `poetry shell`
+- `exit`
 
 ### Start the databases
 You must already have the `.env` file created in the [previous section](#run-the-project-with-docker-compose-simple-way).
@@ -77,9 +80,9 @@ Run the linter tools:
 
 ## Contributing
 ### Add a new provider to winds.mobi
-You know a good weather station that would be useful for many paraglider pilots or kitesurfers? 
+You know good quality weather stations that would be useful for many paraglider pilots or kitesurfers? 
 
-Awesome! Fork this repository and create a pull request with your new provider code. It's easy, look at the following
+Awesome! Fork this repository and open a pull request with your new provider code. It's easy, look at the following
 example:
 
 providers/my_provider.py
@@ -166,4 +169,4 @@ if __name__ == "__main__":
 ```
 
 ## Licensing
-Please see the file called [LICENSE.txt](https://github.com/winds-mobi/winds-mobi-providers/blob/main/LICENSE.txt)
+winds.mobi is licensed under the AGPL License, Version 3.0. See [LICENSE.txt](LICENSE.txt)
