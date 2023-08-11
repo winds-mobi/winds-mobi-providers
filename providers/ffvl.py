@@ -1,17 +1,21 @@
-import logging
+import json
 
 import arrow
 import requests
 from dateutil import tz
-from tenacity import after_log, retry, stop_after_delay, wait_random_exponential
 
+from settings import FFVL_API_KEY
 from winds_mobi_provider import Pressure, Provider, ProviderException, StationStatus
 
 
 class Ffvl(Provider):
     provider_code = "ffvl"
     provider_name = "ffvl.fr"
-    provider_url = "http://www.balisemeteo.com"
+    provider_url = "https://www.balisemeteo.com"
+
+    def __init__(self, ffvl_api_key):
+        super().__init__()
+        self.ffvl_api_key = ffvl_api_key
 
     def process_data(self):
         stations = {}
@@ -19,9 +23,12 @@ class Ffvl(Provider):
             self.log.info("Processing FFVL data...")
 
             result = requests.get(
-                "http://data.ffvl.fr/json/balises.json", timeout=(self.connect_timeout, self.read_timeout)
+                f"https://data.ffvl.fr/api/?base=balises&r=list&mode=json&key={self.ffvl_api_key}",
+                timeout=(self.connect_timeout, self.read_timeout),
             )
-            ffvl_stations = result.json()
+            # TODO: remove the BOM encoding when the FFVL will fix the forbidden json encoding on their side
+            # https://www.rfc-editor.org/rfc/rfc7159#section-8.1
+            ffvl_stations = json.loads(result.content.decode("utf-8-sig"))
 
             for ffvl_station in ffvl_stations:
                 ffvl_id = None
@@ -52,20 +59,13 @@ class Ffvl(Provider):
             self.log.exception(f"Error while processing stations: {e}")
 
         try:
-
-            @retry(
-                wait=wait_random_exponential(multiplier=2, min=2),
-                stop=stop_after_delay(60),
-                after=after_log(self.log, logging.WARNING),
+            result = requests.get(
+                f"https://data.ffvl.fr/api/?base=balises&r=releves_meteo&key={self.ffvl_api_key}",
+                timeout=(self.connect_timeout, self.read_timeout),
             )
-            def request_data():
-                # data.ffvl.fr randomly returns an empty file instead the json doc
-                result = requests.get(
-                    "http://data.ffvl.fr/json/relevesmeteo.json", timeout=(self.connect_timeout, self.read_timeout)
-                )
-                return result.json()
-
-            ffvl_measures = request_data()
+            # TODO: remove the BOM encoding when the FFVL will fix the forbidden json encoding on their side
+            # https://www.rfc-editor.org/rfc/rfc7159#section-8.1
+            ffvl_measures = json.loads(result.content.decode("utf-8-sig"))
 
             ffvl_tz = tz.gettz("Europe/Paris")
             for ffvl_measure in ffvl_measures:
@@ -107,7 +107,7 @@ class Ffvl(Provider):
 
 
 def ffvl():
-    Ffvl().process_data()
+    Ffvl(FFVL_API_KEY).process_data()
 
 
 if __name__ == "__main__":
