@@ -41,8 +41,9 @@ class Slf(Provider):
                     slf_network = slf_station["properties"]["network"]
                     if slf_network == "SMN":
                         self.log.warning(
-                            f"Ignore station '{slf_id}' part of the SMN network (SwissMetNet from MeteoSwiss)"
+                            f"Ignoring station '{slf_id}' part of the SMN network (SwissMetNet from MeteoSwiss)"
                         )
+                        continue
                     station_id = f"{self.provider_code}-{slf_id}"
 
                     station = self.save_station(
