@@ -63,6 +63,29 @@ class Metar(Provider):
 
         return 100 * (math.exp((a * td) / (b + td))) / (math.exp((a * t) / (b + t)))
 
+    def call_checkwx_api(self, path):
+        self.log.debug(f"Calling api.checkwx.com/{path}")
+        request = requests.get(
+            f"https://api.checkwx.com/{path}",
+            headers={"Accept": "application/json", "X-API-Key": self.checkwx_api_key},
+            timeout=(self.connect_timeout, self.read_timeout),
+        )
+        if request.status_code == 401:
+            raise UsageLimitException(request.json()["errors"][0]["message"])
+        elif request.status_code == 429:
+            raise UsageLimitException("api.checkwx.com rate limit exceeded")
+
+        try:
+            return request.json()["data"][0]
+        except (ValueError, KeyError):
+            checkwx_json = request.json()
+            messages = []
+            if type(checkwx_json["data"]) is list:
+                messages.extend(checkwx_json["data"])
+            else:
+                messages.append(checkwx_json["data"])
+            raise ProviderException(f'CheckWX API error: {",".join(messages)}')
+
     def process_data(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -121,37 +144,19 @@ class Metar(Provider):
                             None,
                         )
 
-                        checkwx_key = f"metar/checkwx/{metar.station_id}"
+                        checkwx_key = f"metar/checkwx2/{metar.station_id}"
                         if not self.redis.exists(checkwx_key):
                             try:
-                                self.log.info("Calling api.checkwx.com...")
-                                request = requests.get(
-                                    f"https://api.checkwx.com/station/{metar.station_id}",
-                                    headers={"Accept": "application/json", "X-API-Key": self.checkwx_api_key},
-                                    timeout=(self.connect_timeout, self.read_timeout),
-                                )
-                                if request.status_code == 401:
-                                    raise UsageLimitException(request.json()["errors"][0]["message"])
-                                elif request.status_code == 429:
-                                    raise UsageLimitException("api.checkwx.com rate limit exceeded")
-
-                                try:
-                                    checkwx_data = request.json()["data"][0]
-                                    if "icao" not in checkwx_data:
-                                        raise ProviderException("Invalid CheckWX data")
-                                except (ValueError, KeyError):
-                                    checkwx_json = request.json()
-                                    messages = []
-                                    if type(checkwx_json["data"]) is list:
-                                        messages.extend(checkwx_json["data"])
-                                    else:
-                                        messages.append(checkwx_json["data"])
-                                    raise ProviderException(f'CheckWX API error: {",".join(messages)}')
+                                checkwx_station = self.call_checkwx_api(f"station/{metar.station_id}")
+                                if "icao" not in checkwx_station:
+                                    raise ProviderException("Invalid CheckWX data")
+                                checkwx_datetime = self.call_checkwx_api(f"station/{metar.station_id}/datetime")
 
                                 self.add_redis_key(
                                     checkwx_key,
                                     {
-                                        "data": json.dumps(checkwx_data),
+                                        "station": json.dumps(checkwx_station),
+                                        "datetime": json.dumps(checkwx_datetime),
                                         "date": arrow.now().format("YYYY-MM-DD HH:mm:ssZZ"),
                                     },
                                     self.checkwx_cache_duration,
@@ -182,32 +187,33 @@ class Metar(Provider):
                                 )
 
                         if not self.redis.hexists(checkwx_key, "error"):
-                            checkwx_data = json.loads(self.redis.hget(checkwx_key, "data"))
+                            checkwx_station = json.loads(self.redis.hget(checkwx_key, "station"))
+                            checkwx_datetime = json.loads(self.redis.hget(checkwx_key, "datetime"))
 
-                            if "name" not in checkwx_data:
+                            if "name" not in checkwx_station:
                                 raise ProviderException("Station has no name")
 
-                            station_type = checkwx_data.get("type", None)
+                            station_type = checkwx_station.get("type", None)
                             if station_type:
-                                name = f'{checkwx_data["name"]} {station_type}'
+                                name = f'{checkwx_station["name"]} {station_type}'
                             else:
-                                name = checkwx_data["name"]
-                            city = checkwx_data.get("city", None)
+                                name = checkwx_station["name"]
+                            city = checkwx_station.get("city", None)
                             if city:
                                 if station_type:
                                     short_name = f"{city} {station_type}"
                                 else:
                                     short_name = city
                             else:
-                                default_name = checkwx_data["name"]
+                                default_name = checkwx_station["name"]
 
-                            lat = checkwx_data["latitude"]["decimal"]
-                            lon = checkwx_data["longitude"]["decimal"]
+                            lat = checkwx_station["latitude"]["decimal"]
+                            lon = checkwx_station["longitude"]["decimal"]
                             try:
-                                tz = checkwx_data["timezone"]["tzid"]
+                                tz = checkwx_datetime["timezone"]["tzid"]
                             except KeyError:
                                 raise ProviderException("Unable to get the timezone")
-                            elevation = checkwx_data.get("elevation", None)
+                            elevation = checkwx_station.get("elevation", None)
                             altitude = None
                             if elevation:
                                 if "meters" in elevation:
