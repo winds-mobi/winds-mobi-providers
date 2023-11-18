@@ -29,7 +29,7 @@ Or, run only a specific provider:
 
 Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-admin#run-the-project-with-docker-compose-simple-way) running to get stations metadata.
 
-## Run the project locally on macOS
+## Run the project locally
 ### Dependencies
 - [Homebrew](https://brew.sh)
 - Python 3.10
@@ -44,19 +44,19 @@ In `env.localhost`:
 - fill GOOGLE_API_KEY with you own [Google Cloud API key](https://cloud.google.com/docs/authentication/api-keys#creating_an_api_key)
 - optionally fill the missing secrets for each provider you want to test
 
+#### On macOS
 Install libraries with homebrew:
 - `brew install libpq`
 - `brew install mysql-client`
 
-### Create virtual environment and install dependencies
+### Create python virtual environment and install dependencies
+#### On macOS
 - `export PATH=/usr/local/opt/libpq/bin:$PATH`
 - `export PATH=/usr/local/opt/mysql-client/bin:$PATH`
-
 - `poetry install`
 
-### Activate and deactivate the virtual environment
+### Activate python virtual environment
 - `poetry shell`
-- `exit`
 
 ### Start the databases
 You must already have the `.env` file created in the [previous section](#run-the-project-with-docker-compose-simple-way).
