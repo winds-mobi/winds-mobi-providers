@@ -11,6 +11,7 @@ import sentry_sdk
 from dateutil.tz import gettz
 from furl import furl
 from pymongo import ASCENDING, GEOSPHERE, MongoClient
+from timezonefinder import TimezoneFinder
 
 from settings import GOOGLE_API_KEY, MONGODB_URL, REDIS_URL
 from winds_mobi_provider.logging import configure_logging
@@ -62,6 +63,7 @@ class Provider:
         self.collection_names = self.mongo_db.list_collection_names()
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
+        self.tz_finder = TimezoneFinder(in_memory=True)
         self.log = logging.getLogger(self.provider_code)
         sentry_sdk.set_tag("provider", self.provider_name)
 
@@ -254,6 +256,8 @@ class Provider:
         lon = to_float(longitude, 6)
         if lat is None or lon is None:
             raise ProviderException("Missing latitude or longitude")
+        if lat < -90 or lat > 90 or lon < -180 or lon > 180:
+            raise ProviderException(f"Invalid latitude '{lat}' or longitude '{lon}'")
 
         address_key = f"address/{lat},{lon}"
         if (not short_name or not name) and not self.redis.exists(address_key):
@@ -300,27 +304,6 @@ class Provider:
                     self.log.exception("Unable to call Google Elevation API")
                 self.add_redis_key(alt_key, {"error": repr(e)}, self.google_api_error_cache_duration)
 
-        tz_key = f"tz/{lat},{lon}"
-        if not tz and not self.redis.exists(tz_key):
-            try:
-                now = arrow.utcnow().int_timestamp
-                result = self.call_google_api(
-                    f"https://maps.googleapis.com/maps/api/timezone/json?location={lat},{lon}&timestamp={now}",
-                    "Google Time Zone API",
-                )
-
-                tz = result["timeZoneId"]
-                gettz(tz)
-                self.add_redis_key(tz_key, {"tz": tz}, self.google_api_cache_duration)
-            except TimeoutError as e:
-                raise e
-            except UsageLimitException as e:
-                self.add_redis_key(tz_key, {"error": repr(e)}, self.usage_limit_cache_duration)
-            except Exception as e:
-                if not isinstance(e, ProviderException):
-                    self.log.exception("Unable to call Google Time Zone API")
-                self.add_redis_key(tz_key, {"error": repr(e)}, self.google_api_error_cache_duration)
-
         if not short_name:
             if self.redis.hexists(address_key, "error"):
                 if default_name:
@@ -353,9 +336,10 @@ class Provider:
         is_peak = self.redis.hget(alt_key, "is_peak") == "True"
 
         if not tz:
-            if self.redis.hexists(tz_key, "error"):
-                raise ProviderException(f"Unable to determine station 'tz': {self.redis.hget(tz_key, 'error')}")
-            tz = self.redis.hget(tz_key, "tz")
+            try:
+                tz = self.tz_finder.timezone_at(lng=lon, lat=lat)
+            except Exception as e:
+                raise ProviderException("Unable to determine station 'tz'") from e
 
         if not url:
             urls = {"default": self.provider_url}
