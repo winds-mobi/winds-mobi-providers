@@ -199,7 +199,6 @@ class Windline(Provider):
                                 if key not in [measure["_id"] for measure in new_measures] and not self.has_measure(
                                     measures_collection, key
                                 ):
-
                                     wind_average = Q_(float(wind_average_row[1]), ureg.meter / ureg.second)
 
                                     measure_date = wind_average_row[0]

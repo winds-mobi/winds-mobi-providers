@@ -1,286 +1,140 @@
+import io
 import json
 import math
 import os
-import warnings
+from gzip import GzipFile
 from random import randint
 
 import arrow
 import arrow.parser
 import requests
-from metar.Metar import Metar as MetarParser
+from lxml import etree
 
-from settings import CHECKWX_API_KEY
-from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, UsageLimitException, ureg
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
+
+
+def compute_humidity(dew_point: Q_, temp: Q_):
+    if dew_point is None or temp is None:
+        return None
+
+    a = 17.625
+    b = 243.04
+    td = dew_point.to(ureg.degC).magnitude
+    t = temp.to(ureg.degC).magnitude
+
+    return 100 * (math.exp((a * td) / (b + td))) / (math.exp((a * t) / (b + t)))
+
+
+def get_attr(element, attr_name, default=...):
+    attr = element.xpath(attr_name)
+    if attr and attr[0].text:
+        return attr[0].text
+    if default is not ...:
+        return default
+    raise ProviderException(f"No '{attr_name}' attribute found")
 
 
 class Metar(Provider):
     provider_code = "metar"
     provider_name = "aviationweather.gov"
-    provider_url = "https://www.aviationweather.gov/metar"
-
-    def __init__(self):
-        super().__init__()
-        self.checkwx_api_key = CHECKWX_API_KEY
-
-    @property
-    def checkwx_cache_duration(self):
-        return (20 + randint(-2, 2)) * 24 * 3600
-
-    direction_units = {
-        "degree": ureg.degree,
-    }
-
-    speed_units = {
-        "KT": ureg.knot,
-        "MPS": ureg.meter / ureg.second,
-        "KMH": ureg.kilometer / ureg.hour,
-        "MPH": ureg.mile / ureg.hour,
-    }
-
-    temperature_units = {"F": ureg.degF, "C": ureg.degC, "K": ureg.degK}
-
-    pressure_units = {"MB": ureg.hPa, "HPA": ureg.hPa, "IN": ureg.in_Hg}
-
-    def get_quantity(self, measure, units):
-        if measure:
-            return Q_(measure._value, units[measure._units])
-
-    def get_direction(self, measure):
-        if measure:
-            return Q_(measure._degrees, self.direction_units["degree"])
-        else:
-            # For VaRiaBle direction, use a random value
-            return Q_(randint(0, 359), self.direction_units["degree"])
-
-    def compute_humidity(self, dew_point, temp):
-        if dew_point is None or temp is None:
-            return None
-
-        a = 17.625
-        b = 243.04
-        td = dew_point.to(ureg.degC).magnitude
-        t = temp.to(ureg.degC).magnitude
-
-        return 100 * (math.exp((a * td) / (b + td))) / (math.exp((a * t) / (b + t)))
-
-    def call_checkwx_api(self, path):
-        self.log.debug(f"Calling api.checkwx.com/{path}")
-        request = requests.get(
-            f"https://api.checkwx.com/{path}",
-            headers={"Accept": "application/json", "X-API-Key": self.checkwx_api_key},
-            timeout=(self.connect_timeout, self.read_timeout),
-        )
-        if request.status_code == 401:
-            raise UsageLimitException(request.json()["errors"][0]["message"])
-        elif request.status_code == 429:
-            raise UsageLimitException("api.checkwx.com rate limit exceeded")
-
-        try:
-            return request.json()["data"][0]
-        except (ValueError, KeyError):
-            checkwx_json = request.json()
-            messages = []
-            if type(checkwx_json["data"]) is list:
-                messages.extend(checkwx_json["data"])
-            else:
-                messages.append(checkwx_json["data"])
-            raise ProviderException(f'CheckWX API error: {",".join(messages)}')
+    provider_url = "https://www.aviationweather.gov"
 
     def process_data(self):
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            try:
-                self.log.info("Processing Metar data...")
+        try:
+            self.log.info("Processing Metar data...")
 
-                with open(os.path.join(os.path.dirname(__file__), "metar/stations.json")) as in_file:
-                    icao = json.load(in_file)
+            request = requests.get(
+                "https://aviationweather.gov/data/cache/stations.cache.json.gz",
+                timeout=(self.connect_timeout, self.read_timeout),
+            )
+            stations = {
+                station["icaoId"]: station
+                for station in json.loads(GzipFile(fileobj=io.BytesIO(request.content)).read().decode("utf-8"))
+            }
+            request = requests.get(
+                "https://aviationweather.gov/data/cache/metars.cache.xml.gz",
+                timeout=(self.connect_timeout, self.read_timeout),
+            )
+            metar_tree = etree.parse(GzipFile(fileobj=io.BytesIO(request.content)))
 
-                now = arrow.utcnow()
-                hour = now.hour
-                minute = now.minute
+            for metar in metar_tree.xpath("//METAR"):
+                metar_id = None
+                station_id = None
+                try:
+                    metar_id = get_attr(metar, "station_id")
+                    station = stations.get(metar_id)
 
-                if minute < 45:
-                    current_cycle = hour
-                else:
-                    current_cycle = hour + 1 % 24
+                    station = self.save_station(
+                        metar_id,
+                        station["site"],
+                        None,
+                        station["lat"],
+                        station["lon"],
+                        StationStatus.GREEN,
+                        altitude=station["elev"],
+                        url=os.path.join(self.provider_url),
+                        default_name=station["site"],
+                    )
 
-                stations = {}
-                for cycle in (current_cycle - 1, current_cycle):
-                    file = f"http://tgftp.nws.noaa.gov/data/observations/metar/cycles/{cycle:02d}Z.TXT"
-                    self.log.info(f"Processing '{file}' ...")
+                    station_id = station["_id"]
+                    key = arrow.get(get_attr(metar, "observation_time"), "YYYY-MM-DDTHH:mm:ssZ").int_timestamp
 
-                    request = requests.get(file, stream=True, timeout=(self.connect_timeout, self.read_timeout))
-                    for line in request.iter_lines():
-                        if line:
-                            data = line.decode("iso-8859-1")
-                            try:
-                                # Is this line a date with format "2017/05/12 23:55" ?
-                                arrow.get(data, "YYYY/MM/DD HH:mm")
-                                continue
-                                # Catch also ValueError because https://github.com/crsmithdev/arrow/issues/535
-                            except (arrow.parser.ParserError, ValueError):
-                                try:
-                                    metar = MetarParser(data, strict=False)
-                                    # wind_dir could be NONE if 'dir' is 'VRB'
-                                    if metar.wind_speed:
-                                        if metar.station_id not in stations:
-                                            stations[metar.station_id] = {}
-                                        key = arrow.get(metar.time).int_timestamp
-                                        stations[metar.station_id][key] = metar
-                                except Exception as e:
-                                    self.log.warning(f"Error while parsing METAR data: {e}")
-                                    continue
-
-                for metar_id in stations:
-                    metar = next(iter(stations[metar_id].values()))
-                    try:
-                        name, short_name, default_name, lat, lon, altitude, tz = (
-                            None,
-                            None,
-                            None,
-                            None,
-                            None,
-                            None,
-                            None,
-                        )
-
-                        checkwx_key = f"metar/checkwx2/{metar.station_id}"
-                        if not self.redis.exists(checkwx_key):
-                            try:
-                                checkwx_station = self.call_checkwx_api(f"station/{metar.station_id}")
-                                if "icao" not in checkwx_station:
-                                    raise ProviderException("Invalid CheckWX data")
-                                checkwx_datetime = self.call_checkwx_api(f"station/{metar.station_id}/datetime")
-
-                                self.add_redis_key(
-                                    checkwx_key,
-                                    {
-                                        "station": json.dumps(checkwx_station),
-                                        "datetime": json.dumps(checkwx_datetime),
-                                        "date": arrow.now().format("YYYY-MM-DD HH:mm:ssZZ"),
-                                    },
-                                    self.checkwx_cache_duration,
-                                )
-                            except TimeoutError as e:
-                                raise e
-                            except UsageLimitException as e:
-                                self.add_redis_key(
-                                    checkwx_key,
-                                    {
-                                        "error": repr(e),
-                                        "date": arrow.now().format("YYYY-MM-DD HH:mm:ssZZ"),
-                                    },
-                                    self.usage_limit_cache_duration,
-                                )
-                            except Exception as e:
-                                if not isinstance(e, ProviderException):
-                                    self.log.exception("Error while getting CheckWX data")
-                                else:
-                                    self.log.warning(f"Error while getting CheckWX data: {e}")
-                                self.add_redis_key(
-                                    checkwx_key,
-                                    {
-                                        "error": repr(e),
-                                        "date": arrow.now().format("YYYY-MM-DD HH:mm:ssZZ"),
-                                    },
-                                    self.checkwx_cache_duration,
-                                )
-
-                        if not self.redis.hexists(checkwx_key, "error"):
-                            checkwx_station = json.loads(self.redis.hget(checkwx_key, "station"))
-                            checkwx_datetime = json.loads(self.redis.hget(checkwx_key, "datetime"))
-
-                            if "name" not in checkwx_station:
-                                raise ProviderException("Station has no name")
-
-                            station_type = checkwx_station.get("type", None)
-                            if station_type:
-                                name = f'{checkwx_station["name"]} {station_type}'
+                    measures_collection = self.measures_collection(station_id)
+                    if not self.has_measure(measures_collection, key):
+                        try:
+                            wind_dir_attr = get_attr(metar, "wind_dir_degrees")
+                            if wind_dir_attr == "VRB":
+                                # For VaRiaBle direction, use a random value
+                                wind_dir = Q_(randint(0, 359), ureg.degree)
                             else:
-                                name = checkwx_station["name"]
-                            city = checkwx_station.get("city", None)
-                            if city:
-                                if station_type:
-                                    short_name = f"{city} {station_type}"
-                                else:
-                                    short_name = city
-                            else:
-                                default_name = checkwx_station["name"]
+                                wind_dir = Q_(int(wind_dir_attr), ureg.degree)
 
-                            lat = checkwx_station["latitude"]["decimal"]
-                            lon = checkwx_station["longitude"]["decimal"]
-                            try:
-                                tz = checkwx_datetime["timezone"]["tzid"]
-                            except KeyError:
-                                raise ProviderException("Unable to get the timezone")
-                            elevation = checkwx_station.get("elevation", None)
-                            altitude = None
-                            if elevation:
-                                if "meters" in elevation:
-                                    altitude = Q_(elevation["meters"], ureg.meters)
-                                elif "feet" in elevation:
-                                    altitude = Q_(elevation["feet"], ureg.feet)
+                            wind_avg_attr = get_attr(metar, "wind_speed_kt")
+                            wind_avg = Q_(float(wind_avg_attr), ureg.knot)
 
-                        if metar.station_id in icao:
-                            lat = lat or icao[metar.station_id]["lat"]
-                            lon = lon or icao[metar.station_id]["lon"]
-                            default_name = default_name or icao[metar.station_id]["name"]
+                            wind_max_attr = get_attr(metar, "wind_gust_kt", None)
+                            wind_max = Q_(float(wind_max_attr), ureg.knot) if wind_max_attr else wind_avg
 
-                        station = self.save_station(
-                            metar.station_id,
-                            short_name,
-                            name,
-                            lat,
-                            lon,
-                            StationStatus.GREEN,
-                            altitude=altitude,
-                            tz=tz,
-                            url=os.path.join(self.provider_url, f"site?id={metar.station_id}&db=metar"),
-                            default_name=default_name or f"{metar.station_id} Airport",
-                            lookup_name=f"{metar.station_id} Airport ICAO",
-                        )
-                        station_id = station["_id"]
+                            temp_attr = get_attr(metar, "temp_c", None)
+                            temp = Q_(float(temp_attr), ureg.degC) if temp_attr else None
 
-                        if metar.station_id not in icao:
-                            self.log.warning(
-                                f"Missing '{metar.station_id}' ICAO in database. Is it '{station['name']}'?"
+                            dewpoint_attr = get_attr(metar, "dewpoint_c", None)
+                            dewpoint = Q_(float(dewpoint_attr), ureg.degC) if dewpoint_attr else None
+
+                            pressure_sea_attr = get_attr(metar, "sea_level_pressure_mb", None)
+                            pressure_sea = Q_(float(pressure_sea_attr), ureg.hPa) if pressure_sea_attr else None
+
+                            measure = self.create_measure(
+                                station,
+                                key,
+                                wind_dir,
+                                wind_avg,
+                                wind_max,
+                                temperature=temp,
+                                humidity=compute_humidity(dewpoint, temp),
+                                pressure=Pressure(
+                                    qfe=None,
+                                    qnh=None,
+                                    qff=pressure_sea,
+                                ),
+                            )
+                            self.insert_new_measures(measures_collection, station, [measure])
+                        except ProviderException as e:
+                            self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                        except Exception as e:
+                            self.log.exception(
+                                f"Error while processing measure '{key}' for station '{station_id}': {e}"
                             )
 
-                        measures_collection = self.measures_collection(station_id)
-                        new_measures = []
-                        for key in stations[metar_id]:
-                            metar = stations[metar_id][key]
-                            if not self.has_measure(measures_collection, key):
-                                temp = self.get_quantity(metar.temp, self.temperature_units)
-                                dew_point = self.get_quantity(metar.dewpt, self.temperature_units)
-                                humidity = self.compute_humidity(dew_point, temp)
-                                measure = self.create_measure(
-                                    station,
-                                    key,
-                                    self.get_direction(metar.wind_dir),
-                                    self.get_quantity(metar.wind_speed, self.speed_units),
-                                    self.get_quantity(metar.wind_gust or metar.wind_speed, self.speed_units),
-                                    temperature=temp,
-                                    humidity=humidity,
-                                    pressure=Pressure(
-                                        qfe=None,
-                                        qnh=self.get_quantity(metar.press, self.pressure_units),
-                                        qff=self.get_quantity(metar.press_sea_level, self.pressure_units),
-                                    ),
-                                )
-                                new_measures.append(measure)
+                except ProviderException as e:
+                    self.log.warning(f"Error while processing station '{station_id or metar_id}': {e}")
+                except Exception as e:
+                    self.log.exception(f"Error while processing station '{station_id or metar_id}': {e}")
 
-                        self.insert_new_measures(measures_collection, station, new_measures)
+        except Exception as e:
+            self.log.exception(f"Error while processing Metar: {e}")
 
-                    except ProviderException as e:
-                        self.log.warning(f"Error while processing station '{metar_id}': {e}")
-                    except Exception as e:
-                        self.log.exception(f"Error while processing station '{metar_id}': {e}")
-
-            except Exception as e:
-                self.log.exception(f"Error while processing Metar: {e}")
-
-        self.log.info("Done !")
+        self.log.info("...Done!")
 
 
 def metar():
