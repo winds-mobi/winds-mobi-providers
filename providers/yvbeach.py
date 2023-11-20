@@ -38,8 +38,8 @@ class YVBeach(Provider):
                 "yvbeach",
                 "yvbeach",
                 "Yvonand plage",
-                float(46.805410),
-                float(6.714839),
+                46.805410,
+                6.714839,
                 StationStatus.GREEN,
                 url=self.provider_url,
             )

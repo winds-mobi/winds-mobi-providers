@@ -62,8 +62,8 @@ class ThunerWetter(Provider):
                 "westquartier",
                 "Thun Westquartier",
                 "Thun Westquartier",
-                float(46.7536663),
-                float(7.6211841),
+                46.7536663,
+                7.6211841,
                 StationStatus.GREEN,
                 url=self.provider_url,
             )

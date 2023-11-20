@@ -11,6 +11,7 @@ import sentry_sdk
 from dateutil.tz import gettz
 from furl import furl
 from pymongo import ASCENDING, GEOSPHERE, MongoClient
+from timezonefinder import TimezoneFinder
 
 from settings import GOOGLE_API_KEY, MONGODB_URL, REDIS_URL
 from winds_mobi_provider.logging import configure_logging
@@ -62,6 +63,7 @@ class Provider:
         self.collection_names = self.mongo_db.list_collection_names()
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
+        self.tz_finder = TimezoneFinder(in_memory=True)
         self.log = logging.getLogger(self.provider_code)
         sentry_sdk.set_tag("provider", self.provider_name)
 
@@ -139,17 +141,35 @@ class Provider:
         pipe.expire(key, cache_duration)
         pipe.execute()
 
-    def call_google_api(self, api_url, api_name):
-        url = furl(api_url)
-        url.args["key"] = self.google_api_key
-        result = requests.get(url.url, timeout=(self.connect_timeout, self.read_timeout)).json()
+    def call_google_api(self, url, api_name):
+        path = furl(url)
+        path.args["key"] = self.google_api_key
+        result = requests.get(path.url, timeout=(self.connect_timeout, self.read_timeout)).json()
         if result["status"] == "OVER_QUERY_LIMIT":
-            raise UsageLimitException(f"{api_name} OVER_QUERY_LIMIT")
+            raise UsageLimitException(f"[{api_name}] OVER_QUERY_LIMIT")
         elif result["status"] == "INVALID_REQUEST":
-            raise ProviderException(f'{api_name} INVALID_REQUEST: {result.get("error_message", "")}')
+            if "error_message" in result:
+                raise ProviderException(f"[{api_name}] INVALID_REQUEST: url='{url}', error='{result['error_message']}'")
+            else:
+                raise ProviderException(f"[{api_name}] INVALID_REQUEST: url='{url}'")
         elif result["status"] == "ZERO_RESULTS":
-            raise ProviderException(f"{api_name} ZERO_RESULTS")
+            raise ProviderException(f"[{api_name}] ZERO_RESULTS: url='{url}'")
         return result
+
+    def __parse_reverse_geocoding_results(self, results, result_types):
+        components = [
+            {"address": result["formatted_address"], "types": result["types"]} for result in results["results"]
+        ]
+        for result_type in result_types:
+            for result in results["results"]:
+                for component in result["address_components"]:
+                    if result_type in component["types"]:
+                        short_name, long_name = component["short_name"], component["long_name"]
+                        self.log.info(
+                            f"Google Reverse Geocoding API: '{result_type}' matched '{short_name}' in {components}"
+                        )
+                        return short_name, long_name
+        raise ProviderException(f"Google Reverse Geocoding API: no address match in {components}")
 
     def __compute_elevation(self, lat, lon) -> Tuple[float, bool]:
         radius = 500
@@ -180,37 +200,6 @@ class Provider:
                 is_peak = True
                 break
         return elevation, is_peak
-
-    def __get_place_geocoding_results(self, results):
-        lat, lon, address_long_name = None, None, None
-
-        for result in results["results"]:
-            if result.get("geometry", {}).get("location"):
-                lat = result["geometry"]["location"]["lat"]
-                lon = result["geometry"]["location"]["lng"]
-                for component in result["address_components"]:
-                    if "postal_code" not in component["types"]:
-                        address_long_name = component["long_name"]
-                        break
-                break
-        return lat, lon, address_long_name
-
-    def __get_place_autocomplete(self, name):
-        results = self.call_google_api(
-            f"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={name}", "Google Places API"
-        )
-        place_id = results["predictions"][0]["place_id"]
-
-        results = self.call_google_api(
-            f"https://maps.googleapis.com/maps/api/geocode/json?place_id={place_id}", "Google Geocoding API"
-        )
-        return self.__get_place_geocoding_results(results)
-
-    def __get_place_geocoding(self, name):
-        results = self.call_google_api(
-            f"https://maps.googleapis.com/maps/api/geocode/json?address={name}", "Google Geocoding API"
-        )
-        return self.__get_place_geocoding_results(results)
 
     def get_station_id(self, provider_id):
         return self.provider_code + "-" + str(provider_id)
@@ -258,33 +247,35 @@ class Provider:
         tz=None,
         url=None,
         default_name=None,
-        lookup_name=None,
     ):
         if provider_id is None:
-            raise ProviderException("'provider id' is none!")
+            raise ProviderException("Missing provider_id")
         station_id = self.get_station_id(provider_id)
+
         lat = to_float(latitude, 6)
         lon = to_float(longitude, 6)
+        if lat is None or lon is None:
+            raise ProviderException("Missing latitude or longitude")
+        if lat < -90 or lat > 90 or lon < -180 or lon > 180:
+            raise ProviderException(f"Invalid latitude '{lat}' or longitude '{lon}'")
 
         address_key = f"address/{lat},{lon}"
         if (not short_name or not name) and not self.redis.exists(address_key):
             try:
+                result_types = [
+                    "airport",
+                    "locality",
+                    "colloquial_area",
+                    "natural_feature",
+                    "point_of_interest",
+                    "neighborhood",
+                ]
                 results = self.call_google_api(
                     f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}"
-                    f"&result_type=airport|colloquial_area|locality|natural_feature|point_of_interest|neighborhood",
-                    "Google Geocoding API",
+                    f"&result_type={'|'.join(result_types)}",
+                    "Google Reverse Geocoding API",
                 )
-
-                address_short_name = None
-                address_long_name = None
-                for result in results["results"]:
-                    for component in result["address_components"]:
-                        if "postal_code" not in component["types"]:
-                            address_short_name = component["short_name"]
-                            address_long_name = component["long_name"]
-                            break
-                if not address_short_name or not address_long_name:
-                    raise ProviderException("Google Geocoding API: No valid address name found")
+                address_short_name, address_long_name = self.__parse_reverse_geocoding_results(results, result_types)
                 self.add_redis_key(
                     address_key,
                     {"short": address_short_name, "name": address_long_name},
@@ -296,39 +287,8 @@ class Provider:
                 self.add_redis_key(address_key, {"error": repr(e)}, self.usage_limit_cache_duration)
             except Exception as e:
                 if not isinstance(e, ProviderException):
-                    self.log.exception("Unable to call Google Geocoding API")
+                    self.log.exception("Unable to call Google Reverse Geocoding API")
                 self.add_redis_key(address_key, {"error": repr(e)}, self.google_api_error_cache_duration)
-
-        address = lookup_name or name or short_name
-        geolocation_key = f"geolocation/{address}"
-        if (lat is None or lon is None) or (lat == 0 and lon == 0):
-            if not self.redis.exists(geolocation_key):
-                try:
-                    lat, lon, address_long_name = self.__get_place_geocoding(address)
-                    if not lat or not lon or not address_long_name:
-                        raise ProviderException(f"Google Geocoding API: No valid geolocation found {address}")
-                    self.add_redis_key(
-                        geolocation_key,
-                        {"lat": lat, "lon": lon, "name": address_long_name},
-                        self.google_api_cache_duration,
-                    )
-                except TimeoutError as e:
-                    raise e
-                except UsageLimitException as e:
-                    self.add_redis_key(geolocation_key, {"error": repr(e)}, self.usage_limit_cache_duration)
-                except Exception as e:
-                    if not isinstance(e, ProviderException):
-                        self.log.exception("Unable to call Google Geocoding API")
-                    self.add_redis_key(geolocation_key, {"error": repr(e)}, self.google_api_error_cache_duration)
-            if self.redis.exists(geolocation_key):
-                if self.redis.hexists(geolocation_key, "error"):
-                    raise ProviderException(
-                        f'Unable to determine station geolocation: {self.redis.hget(geolocation_key, "error")}'
-                    )
-                lat = to_float(self.redis.hget(geolocation_key, "lat"), 6)
-                lon = to_float(self.redis.hget(geolocation_key, "lon"), 6)
-                if not name:
-                    name = self.redis.hget(geolocation_key, "name")
 
         alt_key = f"alt/{lat},{lon}"
         if not self.redis.exists(alt_key):
@@ -343,27 +303,6 @@ class Provider:
                 if not isinstance(e, ProviderException):
                     self.log.exception("Unable to call Google Elevation API")
                 self.add_redis_key(alt_key, {"error": repr(e)}, self.google_api_error_cache_duration)
-
-        tz_key = f"tz/{lat},{lon}"
-        if not tz and not self.redis.exists(tz_key):
-            try:
-                now = arrow.utcnow().int_timestamp
-                result = self.call_google_api(
-                    f"https://maps.googleapis.com/maps/api/timezone/json?location={lat},{lon}&timestamp={now}",
-                    "Google Time Zone API",
-                )
-
-                tz = result["timeZoneId"]
-                gettz(tz)
-                self.add_redis_key(tz_key, {"tz": tz}, self.google_api_cache_duration)
-            except TimeoutError as e:
-                raise e
-            except UsageLimitException as e:
-                self.add_redis_key(tz_key, {"error": repr(e)}, self.usage_limit_cache_duration)
-            except Exception as e:
-                if not isinstance(e, ProviderException):
-                    self.log.exception("Unable to call Google Time Zone API")
-                self.add_redis_key(tz_key, {"error": repr(e)}, self.google_api_error_cache_duration)
 
         if not short_name:
             if self.redis.hexists(address_key, "error"):
@@ -397,9 +336,10 @@ class Provider:
         is_peak = self.redis.hget(alt_key, "is_peak") == "True"
 
         if not tz:
-            if self.redis.hexists(tz_key, "error"):
-                raise ProviderException(f"Unable to determine station 'tz': {self.redis.hget(tz_key, 'error')}")
-            tz = self.redis.hget(tz_key, "tz")
+            try:
+                tz = self.tz_finder.timezone_at(lng=lon, lat=lat)
+            except Exception as e:
+                raise ProviderException("Unable to determine station 'tz'") from e
 
         if not url:
             urls = {"default": self.provider_url}
@@ -440,13 +380,12 @@ class Provider:
         pressure: Pressure = None,
         rain=None,
     ):
-
         if all((wind_direction is None, wind_average is None, wind_maximum is None)):
             raise ProviderException("All mandatory values are null!")
 
-        # Mandatory keys: 0 if not present
         measure = {
             "_id": int(round(_id)),
+            # Mandatory values: 0 if not present
             "w-dir": self.__to_wind_direction(wind_direction),
             "w-avg": self.__to_wind_speed(wind_average),
             "w-max": self.__to_wind_speed(wind_maximum),
@@ -495,7 +434,7 @@ class Provider:
 
             end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], gettz(station["tz"]))
             self.log.info(
-                "⏱ {end_date} ({end_date_local}), {short}/{name} ({id}): {nb} values inserted".format(
+                "⏱ {end_date} ({end_date_local}), '{short}'/'{name}' ({id}): {nb} values inserted".format(
                     end_date=end_date.format("YY-MM-DD HH:mm:ssZZ"),
                     end_date_local=end_date.to("local").format("YY-MM-DD HH:mm:ssZZ"),
                     short=station["short"],

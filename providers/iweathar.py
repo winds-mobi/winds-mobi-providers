@@ -31,6 +31,7 @@ class IWeathar(Provider):
             )
 
             for item in result_tree.xpath("//ITEM"):
+                iweathar_id = None
                 station_id = None
                 try:
                     iweathar_id = item.xpath("STATION_ID")[0].text
@@ -104,9 +105,9 @@ class IWeathar(Provider):
                             )
 
                 except ProviderException as e:
-                    self.log.warning(f"Error while processing station '{station_id}': {e}")
+                    self.log.warning(f"Error while processing station '{station_id or iweathar_id}': {e}")
                 except Exception as e:
-                    self.log.exception(f"Error while processing station '{station_id}': {e}")
+                    self.log.exception(f"Error while processing station '{station_id or iweathar_id}': {e}")
 
         except Exception as e:
             self.log.exception(f"Error while processing iWeathar: {e}")
