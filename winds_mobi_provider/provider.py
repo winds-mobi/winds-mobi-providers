@@ -139,20 +139,35 @@ class Provider:
         pipe.expire(key, cache_duration)
         pipe.execute()
 
-    def call_google_api(self, api_url, api_name):
-        url = furl(api_url)
-        url.args["key"] = self.google_api_key
-        result = requests.get(url.url, timeout=(self.connect_timeout, self.read_timeout)).json()
+    def call_google_api(self, url, api_name):
+        path = furl(url)
+        path.args["key"] = self.google_api_key
+        result = requests.get(path.url, timeout=(self.connect_timeout, self.read_timeout)).json()
         if result["status"] == "OVER_QUERY_LIMIT":
-            raise UsageLimitException(f"{api_name} OVER_QUERY_LIMIT")
+            raise UsageLimitException(f"[{api_name}] OVER_QUERY_LIMIT")
         elif result["status"] == "INVALID_REQUEST":
             if "error_message" in result:
-                raise ProviderException(f"{api_name} INVALID_REQUEST: {result['error_message']}")
+                raise ProviderException(f"[{api_name}] INVALID_REQUEST: url='{url}', error='{result['error_message']}'")
             else:
-                raise ProviderException(f"{api_name} INVALID_REQUEST")
+                raise ProviderException(f"[{api_name}] INVALID_REQUEST: url='{url}'")
         elif result["status"] == "ZERO_RESULTS":
-            raise ProviderException(f"{api_name} ZERO_RESULTS")
+            raise ProviderException(f"[{api_name}] ZERO_RESULTS: url='{url}'")
         return result
+
+    def __parse_reverse_geocoding_results(self, results, result_types):
+        components = [
+            {"address": result["formatted_address"], "types": result["types"]} for result in results["results"]
+        ]
+        for result_type in result_types:
+            for result in results["results"]:
+                for component in result["address_components"]:
+                    if result_type in component["types"]:
+                        short_name, long_name = component["short_name"], component["long_name"]
+                        self.log.info(
+                            f"Google Reverse Geocoding API: '{result_type}' matched '{short_name}' in {components}"
+                        )
+                        return short_name, long_name
+        raise ProviderException(f"Google Reverse Geocoding API: no address match in {components}")
 
     def __compute_elevation(self, lat, lon) -> Tuple[float, bool]:
         radius = 500
@@ -183,19 +198,6 @@ class Provider:
                 is_peak = True
                 break
         return elevation, is_peak
-
-    def __parse_reverse_geocoding_results(self, results, result_types):
-        components = [
-            {"address": result["formatted_address"], "types": result["types"]} for result in results["results"]
-        ]
-        for result_type in result_types:
-            for result in results["results"]:
-                for component in result["address_components"]:
-                    if result_type in component["types"]:
-                        short_name, long_name = component["short_name"], component["long_name"]
-                        self.log.info(f"Google Reverse Geocoding API: found '{short_name}' in {components}")
-                        return short_name, long_name
-        raise ProviderException(f"Google Reverse Geocoding API: no address match in {components}")
 
     def get_station_id(self, provider_id):
         return self.provider_code + "-" + str(provider_id)
@@ -448,7 +450,7 @@ class Provider:
 
             end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], gettz(station["tz"]))
             self.log.info(
-                "⏱ {end_date} ({end_date_local}), {short}/{name} ({id}): {nb} values inserted".format(
+                "⏱ {end_date} ({end_date_local}), '{short}'/'{name}' ({id}): {nb} values inserted".format(
                     end_date=end_date.format("YY-MM-DD HH:mm:ssZZ"),
                     end_date_local=end_date.to("local").format("YY-MM-DD HH:mm:ssZZ"),
                     short=station["short"],
