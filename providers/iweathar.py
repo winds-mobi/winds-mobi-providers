@@ -1,12 +1,17 @@
 import requests
-import urllib3
 from lxml import etree
 
 from settings import IWEATHAR_KEY
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
 
-# Disable urllib3 warning because https://iweathar.co.za has a certificates chain issue
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+def get_attr(element, attr_name, default=...):
+    attr = element.xpath(attr_name)
+    if attr and attr[0].text:
+        return attr[0].text
+    if default is not ...:
+        return default
+    raise ProviderException(f"No '{attr_name}' attribute found")
 
 
 class IWeathar(Provider):
@@ -34,75 +39,80 @@ class IWeathar(Provider):
                 iweathar_id = None
                 station_id = None
                 try:
-                    iweathar_id = item.xpath("STATION_ID")[0].text
-                    name = item.xpath("LOCATION")[0].text
-                    status = StationStatus.GREEN if item.xpath("STATUS")[0].text == "ON-LINE" else StationStatus.RED
+                    iweathar_id = get_attr(item, "STATION_ID")
+                    name = get_attr(item, "LOCATION")
+                    status_attr = get_attr(item, "STATUS")
+                    if status_attr == "ON-LINE":
+                        status = StationStatus.GREEN
+                    elif status_attr == "OFF-LINE":
+                        status = StationStatus.RED
+                    else:
+                        raise ProviderException(f"Invalid status '{status_attr}'")
+
+                    lat, lon = get_attr(item, "LAT"), get_attr(item, "LONG")
+                    if lat == "0" and lon == "0":
+                        # iWeathar has a lot of stations with lat=0 and lon=0
+                        self.log.warning(f"Station '{iweathar_id}' has invalid latitude '{lat}' and longitude '{lon}'")
+                        continue
 
                     station = self.save_station(
                         iweathar_id,
                         name,
-                        name,
-                        item.xpath("LAT")[0].text,
-                        item.xpath("LONG")[0].text,
+                        None,
+                        lat,
+                        lon,
                         status,
                         url=f"{self.provider_url}/display?s_id={iweathar_id}",
+                        default_name=name,
                     )
                     station_id = station["_id"]
 
-                    key_attr = item.xpath("UNIX_DATE_STAMP")
-                    wind_dir_attr = item.xpath("WIND_ANG")
-                    wind_avg_attr = item.xpath("WIND_AVG")
-                    wind_max_attr = item.xpath("WIND_MAX")
-                    if not (key_attr and wind_dir_attr and wind_avg_attr and wind_max_attr):
-                        self.log.warning(f"Station '{station_id}' has invalid data")
-                        continue
+                    if status == StationStatus.GREEN:
+                        key = int(get_attr(item, "UNIX_DATE_STAMP"))
+                        measures_collection = self.measures_collection(station_id)
+                        if not self.has_measure(measures_collection, key):
+                            try:
+                                wind_dir_attr = get_attr(item, "WIND_ANG")
+                                wind_dir = Q_(int(wind_dir_attr), ureg.degree)
 
-                    key = int(key_attr[0].text)
-                    measures_collection = self.measures_collection(station_id)
-                    if not self.has_measure(measures_collection, key):
-                        try:
-                            temperature_attr = item.xpath("TEMPERATURE_C")
-                            if temperature_attr and temperature_attr[0].text:
-                                temperature = Q_(temperature_attr[0].text, ureg.degC)
-                            else:
-                                temperature = None
+                                wind_avg_attr = get_attr(item, "WIND_AVG")
+                                wind_avg = Q_(float(wind_avg_attr), ureg.km / ureg.hour)
 
-                            humidity_attr = item.xpath("HUMIDITY_PERC")
-                            if humidity_attr and humidity_attr[0].text:
-                                humidity = humidity_attr[0].text
-                            else:
-                                humidity = None
+                                wind_max_attr = get_attr(item, "WIND_MAX")
+                                wind_max = Q_(float(wind_max_attr), ureg.km / ureg.hour)
 
-                            pressure_attr = item.xpath("PRESSURE_MB")
-                            if pressure_attr and pressure_attr[0].text:
-                                pressure = Pressure(qfe=pressure_attr[0].text, qnh=None, qff=None)
-                            else:
-                                pressure = None
+                                temp_attr = get_attr(item, "TEMPERATURE_C", None)
+                                temp = Q_(float(temp_attr), ureg.degC) if temp_attr else None
 
-                            rain_attr = item.xpath("RAINFALL_MM")
-                            if rain_attr and rain_attr[0].text:
-                                rain = Q_(rain_attr[0].text, ureg.liter / (ureg.meter**2))
-                            else:
-                                rain = None
+                                humidity_attr = get_attr(item, "HUMIDITY_PERC", None)
+                                humidity = float(humidity_attr) if humidity_attr else None
 
-                            measure = self.create_measure(
-                                station,
-                                key,
-                                wind_dir_attr[0].text,
-                                wind_avg_attr[0].text,
-                                wind_max_attr[0].text,
-                                temperature=temperature,
-                                humidity=humidity,
-                                pressure=pressure,
-                                rain=rain,
-                            )
-                            self.insert_new_measures(measures_collection, station, [measure])
-                        except ProviderException as e:
-                            self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
-                        except Exception as e:
-                            self.log.exception(
-                                f"Error while processing measure '{key}' for station '{station_id}': {e}"
-                            )
+                                pressure_attr = get_attr(item, "PRESSURE_MB", None)
+                                pressure = Q_(float(pressure_attr), ureg.hPa) if pressure_attr else None
+
+                                rain_attr = get_attr(item, "RAINFALL_MM", None)
+                                rain = Q_(rain_attr, ureg.liter / (ureg.meter**2)) if rain_attr else None
+
+                                measure = self.create_measure(
+                                    station,
+                                    key,
+                                    wind_dir,
+                                    wind_avg,
+                                    wind_max,
+                                    temperature=temp,
+                                    humidity=humidity,
+                                    pressure=Pressure(qfe=pressure, qnh=None, qff=None),
+                                    rain=rain,
+                                )
+                                self.insert_new_measures(measures_collection, station, [measure])
+                            except ProviderException as e:
+                                self.log.warning(
+                                    f"Error while processing measure '{key}' for station '{station_id}': {e}"
+                                )
+                            except Exception as e:
+                                self.log.exception(
+                                    f"Error while processing measure '{key}' for station '{station_id}': {e}"
+                                )
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station_id or iweathar_id}': {e}")

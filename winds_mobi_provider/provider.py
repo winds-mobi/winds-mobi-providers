@@ -1,3 +1,4 @@
+import json
 import logging
 import math
 from enum import Enum
@@ -42,11 +43,11 @@ class Provider:
 
     @property
     def google_api_error_cache_duration(self):
-        return (60 + randint(-2, 2)) * 24 * 3600
+        return (30 + randint(-5, 5)) * 24 * 3600
 
     @property
     def google_api_cache_duration(self):
-        return (120 + randint(-2, 2)) * 24 * 3600
+        return (60 + randint(-5, 5)) * 24 * 3600
 
     def __init__(self):
         self.mongo_db = MongoClient(MONGODB_URL).get_database()
@@ -156,20 +157,24 @@ class Provider:
             raise ProviderException(f"[{api_name}] ZERO_RESULTS: url='{url}'")
         return result
 
-    def __parse_reverse_geocoding_results(self, results, result_types):
-        components = [
-            {"address": result["formatted_address"], "types": result["types"]} for result in results["results"]
+    def __parse_reverse_geocoding_results(self, results):
+        lookup_types = [
+            "airport",
+            "locality",
+            "colloquial_area",
+            "natural_feature",
+            "point_of_interest",
+            "neighborhood",
+            "sublocality",
+            "administrative_area_level_3",
         ]
-        for result_type in result_types:
-            for result in results["results"]:
+        for lookup_type in lookup_types:
+            for result in results:
                 for component in result["address_components"]:
-                    if result_type in component["types"]:
+                    if lookup_type in component["types"]:
                         short_name, long_name = component["short_name"], component["long_name"]
-                        self.log.info(
-                            f"Google Reverse Geocoding API: '{result_type}' matched '{short_name}' in {components}"
-                        )
                         return short_name, long_name
-        raise ProviderException(f"Google Reverse Geocoding API: no address match in {components}")
+        return None
 
     def __compute_elevation(self, lat, lon) -> Tuple[float, bool]:
         radius = 500
@@ -259,26 +264,16 @@ class Provider:
         if lat < -90 or lat > 90 or lon < -180 or lon > 180:
             raise ProviderException(f"Invalid latitude '{lat}' or longitude '{lon}'")
 
-        address_key = f"address/{lat},{lon}"
+        address_key = f"address2/{lat},{lon}"
         if (not short_name or not name) and not self.redis.exists(address_key):
             try:
-                result_types = [
-                    "airport",
-                    "locality",
-                    "colloquial_area",
-                    "natural_feature",
-                    "point_of_interest",
-                    "neighborhood",
-                ]
-                results = self.call_google_api(
-                    f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}"
-                    f"&result_type={'|'.join(result_types)}",
+                result = self.call_google_api(
+                    f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
                     "Google Reverse Geocoding API",
                 )
-                address_short_name, address_long_name = self.__parse_reverse_geocoding_results(results, result_types)
                 self.add_redis_key(
                     address_key,
-                    {"short": address_short_name, "name": address_long_name},
+                    {"json": json.dumps(result)},
                     self.google_api_cache_duration,
                 )
             except TimeoutError as e:
@@ -304,35 +299,40 @@ class Provider:
                     self.log.exception("Unable to call Google Elevation API")
                 self.add_redis_key(alt_key, {"error": repr(e)}, self.google_api_error_cache_duration)
 
-        if not short_name:
+        if not short_name or not name:
             if self.redis.hexists(address_key, "error"):
                 if default_name:
-                    short_name = default_name
+                    short_name = short_name or default_name
+                    name = name or default_name
+                    self.log.warning(f"Unable to determine station names: {self.redis.hget(address_key, 'error')}")
                 else:
                     raise ProviderException(
-                        f"Unable to determine station 'short': {self.redis.hget(address_key, 'error')}"
+                        f"Unable to determine station names: {self.redis.hget(address_key, 'error')}"
                     )
             else:
-                short_name = self.redis.hget(address_key, "short")
+                api_result = json.loads(self.redis.hget(address_key, "json"))
+                if names := self.__parse_reverse_geocoding_results(api_result["results"]):
+                    address_short_name, address_long_name = names
+                    short_name = short_name or address_short_name
+                    name = name or address_long_name
+                else:
+                    raise ProviderException(f"Google Reverse Geocoding API: no address match for '{address_key}'")
 
-        if not name:
-            if self.redis.hexists(address_key, "error"):
-                if default_name:
-                    name = default_name
-                else:
-                    raise ProviderException(
-                        f"Unable to determine station 'name': {self.redis.hget(address_key, 'error')}"
-                    )
-            else:
-                name = self.redis.hget(address_key, "name")
+            if len(short_name) > len(name):
+                # Swap short_name and name
+                short_name, name = name, short_name
 
         if not altitude:
             if self.redis.hexists(alt_key, "error"):
-                raise ProviderException(f"Unable to determine station 'alt': {self.redis.hget(alt_key, 'error')}")
+                raise ProviderException(
+                    f"Unable to determine station 'alt': " f"{self.redis.hget(alt_key, 'error')} for '{alt_key}'"
+                )
             altitude = self.redis.hget(alt_key, "alt")
 
         if self.redis.hexists(alt_key, "error") == "error":
-            raise ProviderException(f"Unable to determine station 'peak': {self.redis.hget(alt_key, 'error')}")
+            raise ProviderException(
+                f"Unable to determine station 'peak': " f"{self.redis.hget(alt_key, 'error')} for '{alt_key}'"
+            )
         is_peak = self.redis.hget(alt_key, "is_peak") == "True"
 
         if not tz:
@@ -434,7 +434,7 @@ class Provider:
 
             end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], gettz(station["tz"]))
             self.log.info(
-                "⏱ {end_date} ({end_date_local}), '{short}'/'{name}' ({id}): {nb} values inserted".format(
+                "⏱ {end_date} ({end_date_local}) '{short}'/'{name}' ({id}): {nb} values inserted".format(
                     end_date=end_date.format("YY-MM-DD HH:mm:ssZZ"),
                     end_date_local=end_date.to("local").format("YY-MM-DD HH:mm:ssZZ"),
                     short=station["short"],
