@@ -264,7 +264,7 @@ class Provider:
         if lat < -90 or lat > 90 or lon < -180 or lon > 180:
             raise ProviderException(f"Invalid latitude '{lat}' or longitude '{lon}'")
 
-        address_key = f"address/{lat},{lon}"
+        address_key = f"address2/{lat},{lon}"
         if (not short_name or not name) and not self.redis.exists(address_key):
             try:
                 result = self.call_google_api(
