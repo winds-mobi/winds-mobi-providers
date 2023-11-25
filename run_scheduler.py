@@ -46,7 +46,7 @@ def run_scheduler():
         ("providers.gxaircom:gxaircom", 5),
         ("providers.holfuy:holfuy", 5),
         ("providers.iweathar:iweathar", 5),
-        ("providers.metar:metar", 15),
+        ("providers.metar:metar", 10),
         ("providers.meteoswiss:meteoswiss", 5),
         ("providers.pdcs:pdcs", 5),
         ("providers.pioupiou:pioupiou", 5),
