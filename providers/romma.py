@@ -1,8 +1,8 @@
 import urllib.parse
+from zoneinfo import ZoneInfo
 
 import arrow
 import requests
-from dateutil import tz
 from lxml import etree
 
 from settings import ROMMA_KEY
@@ -13,6 +13,7 @@ class Romma(Provider):
     provider_code = "romma"
     provider_name = "romma.fr"
     provider_url = "https://www.romma.fr"
+    timezone = ZoneInfo("Europe/Paris")
 
     wind_directions = {
         "N": 0,
@@ -46,8 +47,6 @@ class Romma(Provider):
         try:
             self.log.info("Processing Romma data...")
 
-            romma_tz = tz.gettz("Europe/Paris")
-
             content = requests.get(
                 f"https://www.romma.fr/releves_romma_xml.php?id={self.romma_key}",
                 timeout=(self.connect_timeout, self.read_timeout),
@@ -79,7 +78,9 @@ class Romma(Provider):
 
                     measures_collection = self.measures_collection(station_id)
                     key = (
-                        arrow.get(report.xpath("date")[0].text, "D-MM-YYYY H:mm").replace(tzinfo=romma_tz).int_timestamp
+                        arrow.get(report.xpath("date")[0].text, "D-MM-YYYY H:mm")
+                        .replace(tzinfo=self.timezone)
+                        .int_timestamp
                     )
 
                     if not self.has_measure(measures_collection, key):

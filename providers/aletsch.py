@@ -1,13 +1,13 @@
 import re
+from zoneinfo import ZoneInfo
 
 import arrow
 import requests
-from dateutil import tz
 from lxml import etree
 
 from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus
 
-oberwallis_tz = tz.gettz("Europe/Zurich")
+timezone = ZoneInfo("Europe/Zurich")
 dd_pattern = re.compile(r"(\d*)°.([\d.]*)'.([ONWS]+)")
 
 
@@ -52,7 +52,7 @@ class FgaType1StationParser:
 
     def key(self):
         time = self._get_value("./time/date_time")
-        return arrow.get(time, "D.MM.YYYY H:mm:ss").replace(tzinfo=oberwallis_tz).int_timestamp
+        return arrow.get(time, "D.MM.YYYY H:mm:ss").replace(tzinfo=timezone).int_timestamp
 
     def direction(self):
         direction = self._get_value("./wind/direction_grad") or self._get_value("./wind/direction_wind")
@@ -109,7 +109,7 @@ class FgaType2StationParser:
 
     def key(self):
         time = self._get_value("./time/date_time")
-        return arrow.get(time, "D.MM.YYYY H:mm:ss").replace(tzinfo=oberwallis_tz).int_timestamp
+        return arrow.get(time, "D.MM.YYYY H:mm:ss").replace(tzinfo=timezone).int_timestamp
 
     def direction(self):
         return self._get_value("./wind/direction_wind")

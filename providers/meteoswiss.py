@@ -1,3 +1,5 @@
+from zoneinfo import ZoneInfo
+
 import arrow
 import requests
 from pyproj import CRS, Transformer
@@ -9,6 +11,7 @@ class MeteoSwiss(Provider):
     provider_code = "meteoswiss"
     provider_name = "meteoswiss.ch"
     provider_url = "https://www.meteoswiss.admin.ch"
+    timezone = ZoneInfo("Europe/Zurich")
 
     def __init__(self):
         super().__init__()
@@ -109,7 +112,7 @@ class MeteoSwiss(Provider):
                         lon,
                         StationStatus.GREEN,
                         altitude=meteoswiss_station["properties"]["altitude"],
-                        tz="Europe/Zurich",
+                        timezone=self.timezone,
                         url={
                             "default": "https://www.meteoswiss.admin.ch/services-and-publications/applications/"
                             f"measurement-values-and-measuring-networks.html"

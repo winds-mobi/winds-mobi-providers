@@ -1,9 +1,9 @@
 import re
+from zoneinfo import ZoneInfo
 
 import arrow
 import psycopg2
 import requests
-from dateutil import tz
 from lxml import html
 from psycopg2.extras import DictCursor
 
@@ -15,12 +15,11 @@ class Zermatt(Provider):
     provider_code = "zermatt"
     provider_name = "zermatt.net"
     provider_url = "https://www.zermatt.net/info/wetter-all.html"
+    timezone = ZoneInfo("Europe/Zurich")
 
     pylon_pattern = re.compile(r"(Stütze( |\xa0)|(St.( |\xa0)))(?P<pylon>\d+)")
     wind_pattern = re.compile(r"(?P<wind>[0-9]{1,3}) km/h")
     temp_pattern = re.compile(r"(?P<temp>-?[0-9]{1,2})°")
-
-    default_tz = tz.gettz("Europe/Zurich")
 
     wind_directions = {
         "-": None,
@@ -127,7 +126,7 @@ class Zermatt(Provider):
                             key_text = table_rows[i + 1].xpath("td[@class='c5']")[0].text
                             key = (
                                 arrow.get(key_text.strip(), "DD.MM.YYYY H:mm")
-                                .replace(tzinfo=self.default_tz)
+                                .replace(tzinfo=self.timezone)
                                 .int_timestamp
                             )
 

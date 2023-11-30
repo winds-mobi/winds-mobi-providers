@@ -5,12 +5,12 @@ from collections import namedtuple
 from enum import Enum
 from random import randint
 from typing import Callable, Tuple
+from zoneinfo import ZoneInfo
 
 import arrow
 import redis
 import requests
 import sentry_sdk
-from dateutil.tz import gettz
 from furl import furl
 from pymongo import ASCENDING, GEOSPHERE, MongoClient
 from timezonefinder import TimezoneFinder
@@ -70,7 +70,7 @@ class Provider:
         self.collection_names = self.mongo_db.list_collection_names()
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
-        self.tz_finder = TimezoneFinder(in_memory=True)
+        self.timezone_finder = TimezoneFinder(in_memory=True)
         self.log = logging.getLogger(self.provider_code)
         sentry_sdk.set_tag("provider", self.provider_name)
 
@@ -237,12 +237,14 @@ class Provider:
         return self.provider_code + "-" + str(provider_id)
 
     def __create_station(
-        self, provider_id, short_name, name, latitude, longitude, altitude, is_peak, status, tz, urls, fixes
+        self, provider_id, short_name, name, latitude, longitude, altitude, is_peak, status, timezone, urls, fixes
     ):
         if fixes is None:
             fixes = {}
 
-        if any((not short_name, not name, altitude is None, latitude is None, longitude is None, not status, not tz)):
+        if any(
+            (not short_name, not name, altitude is None, latitude is None, longitude is None, not status, not timezone)
+        ):
             raise ProviderException("A mandatory value is none!")
 
         station = {
@@ -262,7 +264,7 @@ class Provider:
                 ],
             },
             "status": status,
-            "tz": tz,
+            "tz": timezone.key,
             "seen": arrow.utcnow().int_timestamp,  # deprecated
             "lastSeenAt": arrow.utcnow().datetime,
         }
@@ -276,7 +278,7 @@ class Provider:
         longitude,
         status: StationStatus,
         altitude=None,
-        tz=None,
+        timezone: ZoneInfo = None,
         url=None,
     ):
         if provider_id is None:
@@ -347,11 +349,11 @@ class Provider:
             )
         is_peak = self.redis.hget(alt_key, "is_peak") == "True"
 
-        if not tz:
+        if not timezone:
             try:
-                tz = self.tz_finder.timezone_at(lng=lon, lat=lat)
+                timezone = ZoneInfo(self.timezone_finder.timezone_at(lng=lon, lat=lat))
             except Exception as e:
-                raise ProviderException("Unable to determine station 'tz'") from e
+                raise ProviderException("Unable to determine station 'time_zone'") from e
 
         if not url:
             urls = {"default": self.provider_url}
@@ -366,7 +368,7 @@ class Provider:
 
         fixes = self.mongo_db.stations_fix.find_one(station_id)
         station = self.__create_station(
-            provider_id, short_name, name, lat, lon, altitude, is_peak, status.value, tz, urls, fixes
+            provider_id, short_name, name, lat, lon, altitude, is_peak, status.value, timezone, urls, fixes
         )
         self.stations_collection().update_one({"_id": station_id}, {"$set": station}, upsert=True)
         station["_id"] = station_id
@@ -437,7 +439,7 @@ class Provider:
         if len(new_measures) > 0:
             measure_collection.insert_many(sorted(new_measures, key=lambda m: m["_id"]))
 
-            end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], gettz(station["tz"]))
+            end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], ZoneInfo(station["tz"]))
             self.log.info(
                 "⏱ {end_date} ({end_date_local}) '{short}'/'{name}' ({id}): {nb} values inserted".format(
                     end_date=end_date.format("YY-MM-DD HH:mm:ssZZ"),

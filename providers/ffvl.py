@@ -1,8 +1,8 @@
 import json
+from zoneinfo import ZoneInfo
 
 import arrow
 import requests
-from dateutil import tz
 
 from settings import FFVL_API_KEY
 from winds_mobi_provider import Pressure, Provider, ProviderException, StationNames, StationStatus
@@ -12,6 +12,7 @@ class Ffvl(Provider):
     provider_code = "ffvl"
     provider_name = "ffvl.fr"
     provider_url = "https://www.balisemeteo.com"
+    timezone = ZoneInfo("Europe/Paris")
 
     def __init__(self, ffvl_api_key):
         super().__init__()
@@ -66,7 +67,6 @@ class Ffvl(Provider):
             # https://www.rfc-editor.org/rfc/rfc7159#section-8.1
             ffvl_measures = json.loads(result.content.decode("utf-8-sig"))
 
-            ffvl_tz = tz.gettz("Europe/Paris")
             for ffvl_measure in ffvl_measures:
                 station_id = None
                 try:
@@ -77,7 +77,11 @@ class Ffvl(Provider):
                     station = stations[station_id]
 
                     measures_collection = self.measures_collection(station_id)
-                    key = arrow.get(ffvl_measure["date"], "YYYY-MM-DD HH:mm:ss").replace(tzinfo=ffvl_tz).int_timestamp
+                    key = (
+                        arrow.get(ffvl_measure["date"], "YYYY-MM-DD HH:mm:ss")
+                        .replace(tzinfo=self.timezone)
+                        .int_timestamp
+                    )
 
                     if not self.has_measure(measures_collection, key):
                         measure = self.create_measure(

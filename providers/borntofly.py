@@ -1,21 +1,20 @@
 import csv
 import zipfile
 from io import BytesIO, TextIOWrapper
+from zoneinfo import ZoneInfo
 
 import arrow
 import requests
-from dateutil import tz
 
 from settings import BORN_TO_FLY_DEVICE_ID, BORN_TO_FLY_VENDOR_ID
 from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus, user_agents
-
-borntofly_tz = tz.gettz("Europe/Zurich")
 
 
 class BornToFly(Provider):
     provider_code = "borntofly"
     provider_name = "borntofly.ch"
     provider_url = "http://borntofly.ch"
+    timezone = ZoneInfo("Europe/Zurich")
 
     wind_directions = {
         "Norden": 0,
@@ -82,7 +81,7 @@ class BornToFly(Provider):
                     # Reversed without 1st row that contains field names
                     rows = list(reader)[:0:-1]
                     for row in rows:
-                        key = arrow.get(row["time"], "DD.MM.YYYY HH:mm:ss").replace(tzinfo=borntofly_tz).int_timestamp
+                        key = arrow.get(row["time"], "DD.MM.YYYY HH:mm:ss").replace(tzinfo=self.timezone).int_timestamp
                         if not self.has_measure(measures_collection, key):
                             try:
                                 measure = self.create_measure(

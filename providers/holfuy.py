@@ -58,7 +58,9 @@ class Holfuy(Provider):
                     new_measures = []
 
                     if holfuy_id not in holfuy_measures:
-                        raise ProviderException(f"Station '{name}' not found in 'api.holfuy.com/live/'")
+                        raise ProviderException(
+                            f"Station '{name}' not found in 'api.holfuy.com/live/': type='{holfuy_station['type']}'"
+                        )
                     holfuy_measure = holfuy_measures[holfuy_id]
                     last_measure_date = arrow.get(holfuy_measure["dateTime"])
                     key = last_measure_date.int_timestamp
