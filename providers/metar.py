@@ -82,6 +82,13 @@ class Metar(Provider):
                     measures_collection = self.measures_collection(station_id)
                     if not self.has_measure(measures_collection, key):
                         try:
+                            if (
+                                not metar.xpath("wind_dir_degrees")
+                                and not metar.xpath("wind_speed_kt")
+                                and not metar.xpath("wind_gust_kt")
+                            ):
+                                raise ProviderException("No wind data")
+
                             wind_dir_attr = get_attr(metar, "wind_dir_degrees")
                             if wind_dir_attr == "VRB":
                                 # For VaRiaBle direction, use a random value

@@ -157,8 +157,16 @@ class Provider:
             raise ProviderException(f"[{api_name}] ZERO_RESULTS: url='{url}'")
         return result
 
-    def __parse_reverse_geocoding_results(self, results):
-        lookup_types = [
+    def __parse_reverse_geocoding_results(self, address_key, short_name, name, default_name) -> Tuple[str, str]:
+        cache = self.redis.hgetall(address_key)
+        if cache.get("error"):
+            if default_name:
+                self.log.warning(f"Unable to determine station names: {cache['error']}")
+                return short_name or default_name, name or default_name
+            else:
+                raise ProviderException(f"Unable to determine station names: {cache['error']}")
+
+        address_types = [
             "airport",
             "locality",
             "colloquial_area",
@@ -168,13 +176,33 @@ class Provider:
             "sublocality",
             "administrative_area_level_3",
         ]
-        for lookup_type in lookup_types:
-            for result in results:
-                for component in result["address_components"]:
-                    if lookup_type in component["types"]:
-                        short_name, long_name = component["short_name"], component["long_name"]
-                        return short_name, long_name
-        return None
+
+        def order_by_type(address):
+            for address_type in address_types:
+                if address_type in address["types"]:
+                    try:
+                        return address_types.index(address_type)
+                    except ValueError:
+                        pass
+            return 100
+
+        addresses = json.loads(cache["json"])["results"]
+        addresses.sort(key=order_by_type)
+
+        if len(addresses) > 0:
+            for address_type in address_types:
+                # Use the first address because they are ordered by importance
+                for component in addresses[0]["address_components"]:
+                    if address_type in component["types"]:
+                        return (
+                            short_name or component["short_name"] or default_name,
+                            name or component["long_name"] or default_name,
+                        )
+        if not default_name:
+            raise ProviderException(f"Google Reverse Geocoding API: no address match for '{address_key}'")
+
+        self.log.warning(f"Google Reverse Geocoding API: no address match for '{address_key}'")
+        return short_name or default_name, name or default_name
 
     def __compute_elevation(self, lat, lon) -> Tuple[float, bool]:
         radius = 500
@@ -264,26 +292,32 @@ class Provider:
         if lat < -90 or lat > 90 or lon < -180 or lon > 180:
             raise ProviderException(f"Invalid latitude '{lat}' or longitude '{lon}'")
 
-        address_key = f"address2/{lat},{lon}"
-        if (not short_name or not name) and not self.redis.exists(address_key):
-            try:
-                result = self.call_google_api(
-                    f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
-                    "Google Reverse Geocoding API",
-                )
-                self.add_redis_key(
-                    address_key,
-                    {"json": json.dumps(result)},
-                    self.google_api_cache_duration,
-                )
-            except TimeoutError as e:
-                raise e
-            except UsageLimitException as e:
-                self.add_redis_key(address_key, {"error": repr(e)}, self.usage_limit_cache_duration)
-            except Exception as e:
-                if not isinstance(e, ProviderException):
-                    self.log.exception("Unable to call Google Reverse Geocoding API")
-                self.add_redis_key(address_key, {"error": repr(e)}, self.google_api_error_cache_duration)
+        if not short_name or not name:
+            address_key = f"address2/{lat},{lon}"
+            if not self.redis.exists(address_key):
+                try:
+                    result = self.call_google_api(
+                        f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
+                        "Google Reverse Geocoding API",
+                    )
+                    self.add_redis_key(
+                        address_key,
+                        {"json": json.dumps(result)},
+                        self.google_api_cache_duration,
+                    )
+                except TimeoutError as e:
+                    raise e
+                except UsageLimitException as e:
+                    self.add_redis_key(address_key, {"error": repr(e)}, self.usage_limit_cache_duration)
+                except Exception as e:
+                    if not isinstance(e, ProviderException):
+                        self.log.exception("Unable to call Google Reverse Geocoding API")
+                    self.add_redis_key(address_key, {"error": repr(e)}, self.google_api_error_cache_duration)
+
+            short_name, name = self.__parse_reverse_geocoding_results(address_key, short_name, name, default_name)
+            if len(short_name) > len(name):
+                # Swap short_name and name
+                short_name, name = name, short_name
 
         alt_key = f"alt/{lat},{lon}"
         if not self.redis.exists(alt_key):
@@ -298,29 +332,6 @@ class Provider:
                 if not isinstance(e, ProviderException):
                     self.log.exception("Unable to call Google Elevation API")
                 self.add_redis_key(alt_key, {"error": repr(e)}, self.google_api_error_cache_duration)
-
-        if not short_name or not name:
-            if self.redis.hexists(address_key, "error"):
-                if default_name:
-                    short_name = short_name or default_name
-                    name = name or default_name
-                    self.log.warning(f"Unable to determine station names: {self.redis.hget(address_key, 'error')}")
-                else:
-                    raise ProviderException(
-                        f"Unable to determine station names: {self.redis.hget(address_key, 'error')}"
-                    )
-            else:
-                api_result = json.loads(self.redis.hget(address_key, "json"))
-                if names := self.__parse_reverse_geocoding_results(api_result["results"]):
-                    address_short_name, address_long_name = names
-                    short_name = short_name or address_short_name
-                    name = name or address_long_name
-                else:
-                    raise ProviderException(f"Google Reverse Geocoding API: no address match for '{address_key}'")
-
-            if len(short_name) > len(name):
-                # Swap short_name and name
-                short_name, name = name, short_name
 
         if not altitude:
             if self.redis.hexists(alt_key, "error"):
