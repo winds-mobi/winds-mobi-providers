@@ -8,7 +8,7 @@ from lxml import html
 from psycopg2.extras import DictCursor
 
 from settings import ADMIN_DB_URL
-from winds_mobi_provider import Provider, ProviderException, StationStatus, user_agents
+from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus, user_agents
 
 
 class Zermatt(Provider):
@@ -114,8 +114,7 @@ class Zermatt(Provider):
 
                         station = self.save_station(
                             zermatt_id,
-                            zermatt_station["name"],
-                            zermatt_station["short_name"],
+                            StationNames(zermatt_station["short_name"], zermatt_station["name"]),
                             zermatt_station["latitude"],
                             zermatt_station["longitude"],
                             StationStatus.GREEN if has_data else StationStatus.RED,

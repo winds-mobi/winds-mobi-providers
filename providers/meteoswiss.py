@@ -2,7 +2,7 @@ import arrow
 import requests
 from pyproj import CRS, Transformer
 
-from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
 class MeteoSwiss(Provider):
@@ -110,6 +110,7 @@ class MeteoSwiss(Provider):
             for meteoswiss_station in main_wind_data:
                 try:
                     meteoswiss_id = meteoswiss_station["id"]
+                    name = meteoswiss_station["properties"]["station_name"]
                     location = meteoswiss_station["geometry"]["coordinates"]
                     urls = {
                         lang: url.format(param="messwerte-windgeschwindigkeit-kmh-10min", id=meteoswiss_id)
@@ -120,8 +121,7 @@ class MeteoSwiss(Provider):
 
                     station = self.save_station(
                         meteoswiss_id,
-                        meteoswiss_station["properties"]["station_name"],
-                        meteoswiss_station["properties"]["station_name"],
+                        StationNames(short_name=name, name=name),
                         lat,
                         lon,
                         StationStatus.GREEN,

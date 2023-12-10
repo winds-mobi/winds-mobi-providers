@@ -7,7 +7,7 @@ from cachetools import TTLCache, cached
 from cachetools.keys import hashkey
 
 from settings import WINDLINE_SQL_URL
-from winds_mobi_provider import Q_, Provider, ProviderException, StationStatus, ureg, wgs84
+from winds_mobi_provider import Q_, Provider, ProviderException, StationNames, StationStatus, ureg, wgs84
 
 
 class NoMeasure(Exception):
@@ -165,8 +165,7 @@ class Windline(Provider):
 
                     station = self.save_station(
                         windline_id,
-                        short_name,
-                        name,
+                        StationNames(short_name, name),
                         wgs84.parse_dms(latitude),
                         wgs84.parse_dms(longitude),
                         self.get_status(status),

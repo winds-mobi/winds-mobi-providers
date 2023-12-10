@@ -3,7 +3,7 @@ import arrow.parser
 import requests
 import urllib3
 
-from winds_mobi_provider import Provider, ProviderException, StationStatus
+from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus
 
 # Disable urllib3 warning because https://www.windspots.com has a certificates chain issue
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -29,8 +29,7 @@ class Windspots(Provider):
                     windspots_id = windspots_station["winId"][10:]
                     station = self.save_station(
                         windspots_id,
-                        windspots_station["shortName"],
-                        windspots_station["name"],
+                        StationNames(windspots_station["shortName"], windspots_station["name"]),
                         windspots_station["wgs84Latitude"],
                         windspots_station["wgs84Longitude"],
                         StationStatus(windspots_station["maintenanceStatus"]),

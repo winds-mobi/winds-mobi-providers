@@ -10,7 +10,7 @@ import arrow.parser
 import requests
 from lxml import etree
 
-from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
 def compute_humidity(dew_point: Q_, temp: Q_):
@@ -64,16 +64,22 @@ class Metar(Provider):
                     metar_id = get_attr(metar, "station_id")
                     station = stations.get(metar_id)
 
+                    def get_station_names(names: StationNames) -> StationNames:
+                        short_name = station["site"]
+                        name = names.name or station["site"]
+                        if len(short_name) > len(name):
+                            # Swap short_name and name
+                            short_name, name = name, short_name
+                        return StationNames(short_name, name)
+
                     station = self.save_station(
                         metar_id,
-                        station["site"],
-                        None,
+                        get_station_names,
                         station["lat"],
                         station["lon"],
                         StationStatus.GREEN,
                         altitude=station["elev"],
                         url=os.path.join(self.provider_url),
-                        default_name=station["site"],
                     )
 
                     station_id = station["_id"]

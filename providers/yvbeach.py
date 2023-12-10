@@ -4,7 +4,7 @@ import arrow
 import requests
 from dateutil import tz
 
-from winds_mobi_provider import Provider, ProviderException, StationStatus, user_agents
+from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus, user_agents
 
 
 class YVBeach(Provider):
@@ -36,8 +36,7 @@ class YVBeach(Provider):
 
             station = self.save_station(
                 "yvbeach",
-                "yvbeach",
-                "Yvonand plage",
+                StationNames(short_name="yvbeach", name="Yvonand plage"),
                 46.805410,
                 6.714839,
                 StationStatus.GREEN,

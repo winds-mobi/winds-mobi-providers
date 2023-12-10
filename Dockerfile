@@ -4,7 +4,7 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 RUN apt-get update; \
-    apt-get --yes --no-install-recommends install libpq5 libmariadb3
+    apt-get --yes --no-install-recommends install pkg-config libpq5 libmariadb3
 
 FROM base AS python-dependencies
 

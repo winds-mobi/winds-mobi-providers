@@ -2,7 +2,7 @@ import arrow
 import requests
 from arrow.parser import ParserError
 
-from winds_mobi_provider import Pressure, Provider, ProviderException, StationStatus
+from winds_mobi_provider import Pressure, Provider, ProviderException, StationNames, StationStatus
 
 
 class Pioupiou(Provider):
@@ -39,6 +39,7 @@ class Pioupiou(Provider):
             for piou_station in result.json()["data"]:
                 try:
                     piou_id = piou_station["id"]
+                    short_name = piou_station.get("meta", {}).get("name", None)
                     location = piou_station["location"]
                     latitude = location.get("latitude")
                     longitude = location.get("longitude")
@@ -54,15 +55,13 @@ class Pioupiou(Provider):
 
                     station = self.save_station(
                         piou_id,
-                        None,
-                        None,
+                        lambda names: StationNames(short_name, names.name or short_name),
                         latitude,
                         longitude,
                         self.get_status(
                             station_id, piou_station["status"]["state"], location_date, location["success"]
                         ),
                         url=f"{self.provider_url}/PP{piou_id}",
-                        default_name=piou_station.get("meta", {}).get("name", None),
                     )
                     station_id = station["_id"]
 

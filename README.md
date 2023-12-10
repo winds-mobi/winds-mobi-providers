@@ -33,7 +33,7 @@ Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-
 ### Dependencies
 - [Homebrew](https://brew.sh)
 - Python 3.10
-- [Poetry](https://python-poetry.org)
+- [Poetry 1.7.1](https://python-poetry.org)
 - Google Cloud API key
 - Providers secrets (optional)
 
@@ -51,8 +51,6 @@ Install libraries with homebrew:
 
 ### Create python virtual environment and install dependencies
 #### On macOS
-- `export PATH=/usr/local/opt/libpq/bin:$PATH`
-- `export PATH=/usr/local/opt/mysql-client/bin:$PATH`
 - `poetry install`
 
 ### Activate python virtual environment
@@ -90,7 +88,7 @@ providers/my_provider.py
 import arrow
 import requests
 
-from winds_mobi_provider import Provider, ProviderException, StationStatus, ureg, Q_, Pressure
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
 class MyProvider(Provider):
@@ -126,8 +124,10 @@ class MyProvider(Provider):
                 try:
                     winds_station = self.save_station(
                         provider_id=station["id"],
-                        short_name=station["name"],
-                        name=None,  # Lets winds.mobi provide the full name with the help of Google Geocoding API
+                        # Lets winds.mobi provide the full name (if found) with the help of Google Geocoding API
+                        names=lambda names: StationNames(
+                            short_name=station["name"], name=names.name or station["name"]
+                        ),
                         latitude=station["latitude"],
                         longitude=station["longitude"],
                         status=StationStatus.GREEN if station["status"] == "ok" else StationStatus.RED,

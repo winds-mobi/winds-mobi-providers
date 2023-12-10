@@ -7,7 +7,7 @@ import requests
 from dateutil import tz
 
 from settings import BORN_TO_FLY_DEVICE_ID, BORN_TO_FLY_VENDOR_ID
-from winds_mobi_provider import Provider, ProviderException, StationStatus, user_agents
+from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus, user_agents
 
 borntofly_tz = tz.gettz("Europe/Zurich")
 
@@ -63,8 +63,7 @@ class BornToFly(Provider):
 
             station = self.save_station(
                 "stechelberg",
-                "Stechelberg",
-                None,
+                lambda names: StationNames(short_name="Stechelberg", name=names.name or "Stechelberg"),
                 46.569360,
                 7.910003,
                 StationStatus.GREEN,

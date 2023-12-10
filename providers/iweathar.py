@@ -2,7 +2,7 @@ import requests
 from lxml import etree
 
 from settings import IWEATHAR_KEY
-from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
 def get_attr(element, attr_name, default=...):
@@ -57,13 +57,11 @@ class IWeathar(Provider):
 
                     station = self.save_station(
                         iweathar_id,
-                        name,
-                        None,
+                        lambda names: StationNames(short_name=name, name=names.name or name),
                         lat,
                         lon,
                         status,
                         url=f"{self.provider_url}/display?s_id={iweathar_id}",
-                        default_name=name,
                     )
                     station_id = station["_id"]
 

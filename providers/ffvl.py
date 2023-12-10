@@ -5,7 +5,7 @@ import requests
 from dateutil import tz
 
 from settings import FFVL_API_KEY
-from winds_mobi_provider import Pressure, Provider, ProviderException, StationStatus
+from winds_mobi_provider import Pressure, Provider, ProviderException, StationNames, StationStatus
 
 
 class Ffvl(Provider):
@@ -38,8 +38,7 @@ class Ffvl(Provider):
                         ffvl_id = ffvl_station["idBalise"]
                         station = self.save_station(
                             ffvl_id,
-                            ffvl_station["nom"],
-                            ffvl_station["nom"],
+                            StationNames(short_name=ffvl_station["nom"], name=ffvl_station["nom"]),
                             ffvl_station["latitude"],
                             ffvl_station["longitude"],
                             StationStatus.GREEN,

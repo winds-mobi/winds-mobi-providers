@@ -1,6 +1,6 @@
 import requests
 
-from winds_mobi_provider import Pressure, Provider, ProviderException, StationStatus
+from winds_mobi_provider import Pressure, Provider, ProviderException, StationNames, StationStatus
 
 
 class Pdcs(Provider):
@@ -20,8 +20,7 @@ class Pdcs(Provider):
                 try:
                     station = self.save_station(
                         pdcs_station["id"],
-                        pdcs_station["shortName"],
-                        pdcs_station["name"],
+                        StationNames(pdcs_station["shortName"], pdcs_station["name"]),
                         pdcs_station["coords"]["lat"],
                         pdcs_station["coords"]["lon"],
                         StationStatus.GREEN,

@@ -3,7 +3,7 @@ import collections
 import arrow
 import requests
 
-from winds_mobi_provider import Provider, ProviderException, StationStatus, user_agents
+from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus, user_agents
 
 Measure = collections.namedtuple("Measure", ("key", "wind_direction", "wind_average", "wind_maximum", "temperature"))
 
@@ -38,6 +38,7 @@ class Slf(Provider):
                 station_id = None
                 try:
                     slf_id = slf_station["properties"]["code"]
+                    slf_label = slf_station["properties"]["label"]
                     slf_network = slf_station["properties"]["network"]
                     if slf_network == "SMN":
                         self.log.warning(
@@ -48,8 +49,7 @@ class Slf(Provider):
 
                     station = self.save_station(
                         slf_id,
-                        slf_station["properties"]["label"],
-                        slf_station["properties"]["label"],
+                        StationNames(short_name=slf_label, name=slf_label),
                         slf_station["geometry"]["coordinates"][1],
                         slf_station["geometry"]["coordinates"][0],
                         StationStatus.GREEN,
