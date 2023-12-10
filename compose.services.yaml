@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: mongo:4.4.19
+    image: mongo:4.4.25
     ports:
       - "8011:27017"
     volumes:
