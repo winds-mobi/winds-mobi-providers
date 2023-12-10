@@ -4,7 +4,7 @@ import requests
 from psycopg2.extras import DictCursor
 
 import settings
-from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
 class Windy(Provider):
@@ -51,8 +51,9 @@ class Windy(Provider):
                     windy_id = windy_station["id"]
                     station = self.save_station(
                         windy_id,
-                        windy_station["name"],
-                        None,
+                        lambda names: StationNames(
+                            short_name=windy_station["name"], name=names.name or windy_station["name"]
+                        ),
                         windy_station["lat"],
                         windy_station["lon"],
                         StationStatus.GREEN,

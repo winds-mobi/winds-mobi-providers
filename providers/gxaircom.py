@@ -1,7 +1,7 @@
 import arrow
 import requests
 
-from winds_mobi_provider import Q_, Pressure, Provider, StationStatus, ureg
+from winds_mobi_provider import Q_, Pressure, Provider, StationNames, StationStatus, ureg
 
 
 class Gxaircom(Provider):
@@ -19,9 +19,9 @@ class Gxaircom(Provider):
                 try:
                     winds_station = self.save_station(
                         provider_id=station["stationId"],
-                        short_name=station["stationName"],
-                        name=None,  # Lets winds.mobi provide the full name with the help of Google Geocoding API
-                        default_name=station["stationName"],
+                        names=lambda names: StationNames(
+                            short_name=station["stationName"], name=names.name or station["stationName"]
+                        ),
                         latitude=station["lat"],
                         longitude=station["lon"],
                         status=StationStatus.GREEN if station["online"] == "1" else StationStatus.RED,

@@ -1,9 +1,10 @@
 import json
 import logging
 import math
+from collections import namedtuple
 from enum import Enum
 from random import randint
-from typing import Tuple
+from typing import Callable, Tuple
 
 import arrow
 import redis
@@ -27,6 +28,9 @@ class StationStatus(Enum):
     RED = "red"
     ORANGE = "orange"
     GREEN = "green"
+
+
+StationNames = namedtuple("StationNames", ["short_name", "name"])
 
 
 class Provider:
@@ -157,14 +161,11 @@ class Provider:
             raise ProviderException(f"[{api_name}] ZERO_RESULTS: url='{url}'")
         return result
 
-    def __parse_reverse_geocoding_results(self, address_key, short_name, name, default_name) -> Tuple[str, str]:
+    def __parse_reverse_geocoding_results(self, address_key: str) -> StationNames:
         cache = self.redis.hgetall(address_key)
-        if cache.get("error"):
-            if default_name:
-                self.log.warning(f"Unable to determine station names: {cache['error']}")
-                return short_name or default_name, name or default_name
-            else:
-                raise ProviderException(f"Unable to determine station names: {cache['error']}")
+        if error := cache.get("error"):
+            self.log.warning(f"Unable to determine station names: {error}")
+            return StationNames(None, None)
 
         address_types = [
             "airport",
@@ -194,15 +195,10 @@ class Provider:
                 # Use the first address because they are ordered by importance
                 for component in addresses[0]["address_components"]:
                     if address_type in component["types"]:
-                        return (
-                            short_name or component["short_name"] or default_name,
-                            name or component["long_name"] or default_name,
-                        )
-        if not default_name:
-            raise ProviderException(f"Google Reverse Geocoding API: no address match for '{address_key}'")
+                        return StationNames(component["short_name"], component["long_name"])
 
         self.log.warning(f"Google Reverse Geocoding API: no address match for '{address_key}'")
-        return short_name or default_name, name or default_name
+        return StationNames(None, None)
 
     def __compute_elevation(self, lat, lon) -> Tuple[float, bool]:
         radius = 500
@@ -271,15 +267,13 @@ class Provider:
     def save_station(
         self,
         provider_id,
-        short_name,
-        name,
+        names: StationNames | Callable[[StationNames], StationNames],
         latitude,
         longitude,
         status: StationStatus,
         altitude=None,
         tz=None,
         url=None,
-        default_name=None,
     ):
         if provider_id is None:
             raise ProviderException("Missing provider_id")
@@ -292,7 +286,9 @@ class Provider:
         if lat < -90 or lat > 90 or lon < -180 or lon > 180:
             raise ProviderException(f"Invalid latitude '{lat}' or longitude '{lon}'")
 
-        if not short_name or not name:
+        if isinstance(names, StationNames):
+            short_name, name = names
+        elif callable(names):
             address_key = f"address2/{lat},{lon}"
             if not self.redis.exists(address_key):
                 try:
@@ -314,10 +310,11 @@ class Provider:
                         self.log.exception("Unable to call Google Reverse Geocoding API")
                     self.add_redis_key(address_key, {"error": repr(e)}, self.google_api_error_cache_duration)
 
-            short_name, name = self.__parse_reverse_geocoding_results(address_key, short_name, name, default_name)
-            if len(short_name) > len(name):
-                # Swap short_name and name
-                short_name, name = name, short_name
+            short_name, name = names(self.__parse_reverse_geocoding_results(address_key))
+        else:
+            raise ProviderException(f"Invalid station names '{names}'")
+        if not short_name or not name:
+            raise ProviderException(f"Invalid station short_name '{short_name}' or name '{name}'")
 
         alt_key = f"alt/{lat},{lon}"
         if not self.redis.exists(alt_key):

@@ -5,7 +5,7 @@ import requests
 from dateutil import tz
 from lxml import html
 
-from winds_mobi_provider import Provider, ProviderException, StationStatus, user_agents
+from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus, user_agents
 
 
 class ThunerWetter(Provider):
@@ -60,8 +60,7 @@ class ThunerWetter(Provider):
 
             station = self.save_station(
                 "westquartier",
-                "Thun Westquartier",
-                "Thun Westquartier",
+                StationNames(short_name="Thun Westquartier", name="Thun Westquartier"),
                 46.7536663,
                 7.6211841,
                 StationStatus.GREEN,

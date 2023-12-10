@@ -5,7 +5,7 @@ import requests
 from dateutil import tz
 from lxml import etree
 
-from winds_mobi_provider import Provider, ProviderException, StationStatus
+from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus
 
 oberwallis_tz = tz.gettz("Europe/Zurich")
 dd_pattern = re.compile(r"(\d*)°.([\d.]*)'.([ONWS]+)")
@@ -209,8 +209,7 @@ class FluggruppeAletsch(Provider):
 
                 station = self.save_station(
                     station_id,
-                    parser.name(),
-                    parser.name(),
+                    StationNames(short_name=parser.name(), name=parser.name()),
                     parser.latitude(),
                     parser.longitude(),
                     StationStatus.GREEN,

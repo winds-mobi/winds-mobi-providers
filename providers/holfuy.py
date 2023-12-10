@@ -2,7 +2,7 @@ import arrow
 import arrow.parser
 import requests
 
-from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationStatus, ureg
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
 class Holfuy(Provider):
@@ -45,7 +45,13 @@ class Holfuy(Provider):
 
                     urls = {lang: url.format(id=holfuy_id) for lang, url in self.provider_urls.items()}
                     station = self.save_station(
-                        holfuy_id, name, name, latitude, longitude, StationStatus.GREEN, altitude=altitude, url=urls
+                        holfuy_id,
+                        StationNames(short_name=name, name=name),
+                        latitude,
+                        longitude,
+                        StationStatus.GREEN,
+                        altitude=altitude,
+                        url=urls,
                     )
                     station_id = station["_id"]
 

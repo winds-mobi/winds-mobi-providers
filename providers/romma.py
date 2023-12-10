@@ -6,7 +6,7 @@ from dateutil import tz
 from lxml import etree
 
 from settings import ROMMA_KEY
-from winds_mobi_provider import Pressure, Provider, ProviderException, StationStatus
+from winds_mobi_provider import Pressure, Provider, ProviderException, StationNames, StationStatus
 
 
 class Romma(Provider):
@@ -63,8 +63,7 @@ class Romma(Provider):
 
                     station = self.save_station(
                         romma_id,
-                        name,
-                        name,
+                        StationNames(short_name=name, name=name),
                         report.xpath("latitude")[0].text,
                         report.xpath("longitude")[0].text,
                         status,
