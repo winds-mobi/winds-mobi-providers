@@ -63,6 +63,9 @@ class Metar(Provider):
                 try:
                     metar_id = get_attr(metar, "station_id")
                     station = stations.get(metar_id)
+                    if not station:
+                        self.log.warning(f"Unable to find icao '{metar_id}' in stations.cache.json")
+                        continue
 
                     def get_station_names(names: StationNames) -> StationNames:
                         short_name = station["site"]
