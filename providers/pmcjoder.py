@@ -1,14 +1,19 @@
-import arrow
 import re
+from zoneinfo import ZoneInfo
+
+import arrow
 import requests
 from lxml import html
 
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
-class MyProvider(Provider):
+
+class PmcJoder(Provider):
     provider_code = "pmcjoder"
     provider_name = "pmcjoder.ch"
     provider_url = "https://www.pmcjoder.ch/webcam/neuhaus/wetterstation/wx.htm"
+
+    timezone = ZoneInfo("Europe/Zurich")
 
     wind_directions = {
         "N": 0,
@@ -35,17 +40,15 @@ class MyProvider(Provider):
         if match:
             time_str = match.group(1)
             date_str = match.group(2)
-            
+
             # Combine date and time strings
             datetime_str = f"{date_str} {time_str}"
-            
+
             # Parse the combined string using arrow
-            datetime_obj = arrow.get(datetime_str, "D/M/YY H:mm")
-            
+            datetime_obj = arrow.get(datetime_str, "D/M/YY H:mm").replace(tzinfo=self.timezone)
+
             # Convert to Unix timestamp
-            int_timestamp = datetime_obj.int_timestamp
-            print(int_timestamp)
-            return int_timestamp
+            return datetime_obj.int_timestamp
         else:
             raise ValueError("Date and time not found in the provided string")
 
@@ -55,10 +58,10 @@ class MyProvider(Provider):
             url = "https://www.pmcjoder.ch/webcam/neuhaus/wetterstation/details.htm"
 
             page = requests.get(url, timeout=(self.connect_timeout, self.read_timeout))
-    
+
             tree = html.fromstring(page.content)
 
-            date_blob = tree.xpath('//table//tr[3]//td[1]//font//text()')[0]
+            date_blob = tree.xpath("//table//tr[3]//td[1]//font//text()")[0]
 
             values = tree.xpath("//table//tr[position() >= 5 and position() <= 27]//td[2]//text()")
             values = [value.strip() for value in values]
@@ -66,7 +69,7 @@ class MyProvider(Provider):
             data = [
                 {
                     "id": "segelclub-neuhaus-interlaken",
-                    "shortName": "neuhuus",
+                    "shortName": "Neuhuus",
                     "name": "Segelclub Neuhaus-Interlaken",
                     "latitude": 46.736866,
                     "longitude": 7.654292,
@@ -122,9 +125,9 @@ class MyProvider(Provider):
         self.log.info("...Done !")
 
 
-def my_provider():
-    MyProvider().process_data()
+def pmcjoder():
+    PmcJoder().process_data()
 
 
 if __name__ == "__main__":
-    my_provider()
+    pmcjoder()

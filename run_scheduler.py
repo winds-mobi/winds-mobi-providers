@@ -50,6 +50,7 @@ def run_scheduler():
         ("providers.meteoswiss:meteoswiss", 5),
         ("providers.pdcs:pdcs", 5),
         ("providers.pioupiou:pioupiou", 5),
+        ("providers.pmcjoder:pmcjoder", 5),
         ("providers.romma:romma", 5),
         ("providers.slf:slf", 5),
         ("providers.thunerwetter:thunerwetter", 5),
