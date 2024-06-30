@@ -71,8 +71,8 @@ class PmcJoder(Provider):
                     "id": "segelclub-neuhaus-interlaken",
                     "shortName": "Neuhuus",
                     "name": "Segelclub Neuhaus-Interlaken",
-                    "latitude": 46.736866,
-                    "longitude": 7.654292,
+                    "latitude": 46.678212,
+                    "longitude": 7.815857,
                     "altitude": 559,
                     "status": "ok",
                     "measures": [
@@ -83,6 +83,7 @@ class PmcJoder(Provider):
                             "windMaximum": float(values[2]),
                             "temperature": float(values[6]),
                             "pressure": float(values[7]),
+                            "humidity": float(values[4]),
                         }
                     ],
                 }
@@ -111,6 +112,7 @@ class PmcJoder(Provider):
                             wind_maximum=Q_(station["measures"][0]["windMaximum"], ureg.kilometer / ureg.hour),
                             temperature=Q_(station["measures"][0]["temperature"], ureg.degC),
                             pressure=Pressure(station["measures"][0]["pressure"], qnh=None, qff=None),
+                            humidity=station["measures"][0]["humidity"],
                         )
                         self.insert_new_measures(measures_collection, winds_station, [new_measure])
 
