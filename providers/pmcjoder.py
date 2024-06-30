@@ -71,8 +71,8 @@ class PmcJoder(Provider):
                     "id": "segelclub-neuhaus-interlaken",
                     "shortName": "Neuhuus",
                     "name": "Segelclub Neuhaus-Interlaken",
-                    "latitude": 46.736866,
-                    "longitude": 7.654292,
+                    "latitude": 46.678212,
+                    "longitude": 7.815857,
                     "altitude": 559,
                     "status": "ok",
                     "measures": [
