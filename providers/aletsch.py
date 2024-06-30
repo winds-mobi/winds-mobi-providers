@@ -245,10 +245,10 @@ class FluggruppeAletsch(Provider):
         self.log.info("Done !")
 
 
-def fluggruppe_aletsch():
+def aletsch():
     aletsch_provider = FluggruppeAletsch()
     aletsch_provider.process_data()
 
 
 if __name__ == "__main__":
-    fluggruppe_aletsch()
+    aletsch()
