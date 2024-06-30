@@ -40,9 +40,9 @@ def run_scheduler():
 
     for provider_job in [
         # Alphabetical order
+        ("providers.aletsch:aletsch", 5),
         ("providers.borntofly:borntofly", 5),
         ("providers.ffvl:ffvl", 5),
-        ("providers.fluggruppe_aletsch:fluggruppe_aletsch", 5),
         ("providers.gxaircom:gxaircom", 5),
         ("providers.holfuy:holfuy", 5),
         ("providers.iweathar:iweathar", 5),
@@ -51,7 +51,6 @@ def run_scheduler():
         ("providers.pdcs:pdcs", 5),
         ("providers.pioupiou:pioupiou", 5),
         ("providers.pmcjoder:pmcjoder", 5),
-        ("providers.romma:romma", 5),
         ("providers.slf:slf", 5),
         ("providers.thunerwetter:thunerwetter", 5),
         ("providers.windline:windline", 5),
