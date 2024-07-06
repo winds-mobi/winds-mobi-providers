@@ -42,7 +42,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--provider",
-        help="Delete only stations from this 'provider', for example 'jdc'",
+        help="Delete only stations from this 'provider', for example 'holfuy'",
     )
     args = vars(parser.parse_args())
 
