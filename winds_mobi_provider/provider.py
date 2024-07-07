@@ -77,7 +77,8 @@ class Provider:
 
     def measures_collection(self, station_id):
         if station_id not in self.collection_names:
-            self.mongo_db.create_collection(station_id, **{"capped": True, "size": 500000, "max": 5000})
+            self.mongo_db.create_collection(station_id)
+            self.mongo_db[station_id].create_index([("time", ASCENDING)], expireAfterSeconds=60 * 60 * 24 * 10)
             self.collection_names.append(station_id)
         return self.mongo_db[station_id]
 
@@ -411,7 +412,8 @@ class Provider:
         if rain is not None:
             measure["rain"] = self.__to_rain(rain)
 
-        measure["time"] = arrow.now().int_timestamp
+        measure["time"] = arrow.get(measure["_id"]).datetime
+        measure["receivedAt"] = arrow.now().datetime
 
         fixes = self.mongo_db.stations_fix.find_one(for_station["_id"])
         if fixes and "measures" in fixes:
