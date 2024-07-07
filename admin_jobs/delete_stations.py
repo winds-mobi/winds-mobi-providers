@@ -16,16 +16,18 @@ def delete_stations(days: int, provider: Optional[str]):
     log.info(f"Deleting stations from '{provider or 'any'}' provider not seen since {days} days...")
     mongo_db = MongoClient(MONGODB_URL).get_database()
 
-    now = arrow.now().int_timestamp
-    query = {"seen": {"$lt": now - days * 3600 * 24}}
+    query = {
+        "$or": [
+            {"lastSeenAt": {"$exists": False}},
+            {"lastSeenAt": {"$lt": arrow.utcnow().shift(days=-days).datetime}},
+        ]
+    }
     if provider:
         query["pv-code"] = provider
     nb = 0
     for station in mongo_db.stations.find(query):
-        seen = arrow.Arrow.fromtimestamp(station["seen"])
-        log.info(
-            f"Deleting {station['_id']} ['{station['short']}'], last seen at {seen.format('YYYY-MM-DD HH:mm:ssZZ')}"
-        )
+        last_seen_at = arrow.get(station["lastSeenAt"]).to("local").format("YY-MM-DD HH:mm:ssZZ")
+        log.info(f"Deleting {station['_id']} ['{station['short']}'], last seen at {last_seen_at}")
         mongo_db[station["_id"]].drop()
         mongo_db.stations.delete_one({"_id": station["_id"]})
         nb += 1
