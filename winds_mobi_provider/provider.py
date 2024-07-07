@@ -353,14 +353,6 @@ class Provider:
             urls = {"default": self.provider_url}
         elif isinstance(url, str):
             urls = {"default": url}
-        # If url is a dict, the keys must correspond to an ISO 639-1 language code. It also needs a "default" key,
-        # "english" if available. Here an example:
-        # provider_urls = {
-        #     "default": "https://my-provider.com/en/stations/{station["id"]}",
-        #     "en": "https://my-provider.com/en/stations/{station["id"]}",
-        #     "de": "https://my-provider.com/de/stations/{station["id"]}",
-        #     "fr": "https://my-provider.com/fr/stations/{station["id"]}",
-        # }
         elif isinstance(url, dict):
             if "default" not in url:
                 raise ProviderException("No 'default' key in url")
