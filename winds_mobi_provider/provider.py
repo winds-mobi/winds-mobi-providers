@@ -261,7 +261,8 @@ class Provider:
             },
             "status": status,
             "tz": tz,
-            "seen": arrow.utcnow().int_timestamp,
+            "seen": arrow.utcnow().int_timestamp,  # deprecated
+            "lastSeenAt": arrow.utcnow().datetime,
         }
         return station
 
@@ -405,7 +406,7 @@ class Provider:
             measure["rain"] = self.__to_rain(rain)
 
         measure["time"] = arrow.get(measure["_id"]).datetime
-        measure["receivedAt"] = arrow.now().datetime
+        measure["receivedAt"] = arrow.utcnow().datetime
 
         fixes = self.mongo_db.stations_fix.find_one(for_station["_id"])
         if fixes and "measures" in fixes:
