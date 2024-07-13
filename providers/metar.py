@@ -81,7 +81,7 @@ class Metar(Provider):
                         station["lon"],
                         StationStatus.GREEN,
                         altitude=station["elev"],
-                        url=f"{self.provider_url}/data/metar/?id=${metar_id}&hours=0&decoded=yes&include_taf=yes",
+                        url=f"{self.provider_url}/data/metar/?id={metar_id}&hours=0&decoded=yes&include_taf=yes",
                     )
 
                     station_id = station["_id"]
