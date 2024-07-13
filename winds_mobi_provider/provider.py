@@ -34,9 +34,9 @@ StationNames = namedtuple("StationNames", ["short_name", "name"])
 
 
 class Provider:
-    provider_code = ""
-    provider_name = ""
-    provider_url = ""
+    provider_code = None
+    provider_name = None
+    provider_url = None
 
     connect_timeout = 7
     read_timeout = 30
@@ -54,6 +54,8 @@ class Provider:
         return (60 + randint(-5, 5)) * 24 * 3600
 
     def __init__(self):
+        if None not in (self.provider_code, self.provider_name, self.provider_url):
+            raise ProviderException("Missing provider_code, provider_name or provider_url")
         self.mongo_db = MongoClient(MONGODB_URL).get_database()
         self.__stations_collection = self.mongo_db.stations
         self.__stations_collection.create_index(

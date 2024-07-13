@@ -1,7 +1,6 @@
 import io
 import json
 import math
-import os
 from gzip import GzipFile
 from random import randint
 
@@ -82,7 +81,7 @@ class Metar(Provider):
                         station["lon"],
                         StationStatus.GREEN,
                         altitude=station["elev"],
-                        url=os.path.join(self.provider_url),
+                        url=f"{self.provider_url}/data/metar/?id=${metar_id}&hours=0&decoded=yes&include_taf=yes",
                     )
 
                     station_id = station["_id"]
