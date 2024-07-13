@@ -139,7 +139,7 @@ class FgaType2StationParser:
 
 
 class LorawistaParser:
-    url_pattern = "http://www.lorawista.ch/data/{}.xml"  # This URL is protected by an IPs whitelisting
+    url_pattern = "https://cloud.dercarlo.ch/lorawista/{}.xml"  # This URL is protected by an IPs whitelisting
 
     def __init__(self, path):
         self.url = self.url_pattern.format(path)
