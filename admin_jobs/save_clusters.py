@@ -23,6 +23,9 @@ def save_clusters(nb_clusters):
         mongo_db.stations.find({"status": {"$ne": "hidden"}, "last._id": {"$gt": now - 30 * 24 * 3600}})
     )
     range_clusters = np.geomspace(20, len(all_stations), num=nb_clusters, dtype=int)
+    mongo_db.stations_clusters.find_one_and_update(
+        {"_id": "save_clusters"}, {"$set": {"min": 20, "max": len(all_stations)}}, upsert=True
+    )
 
     ids = np.array([station["_id"] for station in all_stations])
 
