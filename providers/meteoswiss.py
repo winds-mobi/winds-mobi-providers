@@ -8,19 +8,7 @@ from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, Stati
 class MeteoSwiss(Provider):
     provider_code = "meteoswiss"
     provider_name = "meteoswiss.ch"
-    provider_urls_params = "#param={param}&station={id}"
-    provider_urls = {
-        "default": "https://www.meteoswiss.admin.ch/services-and-publications/applications/"
-        f"measurement-values-and-measuring-networks.html{provider_urls_params}",
-        "en": "https://www.meteoswiss.admin.ch/services-and-publications/applications/"
-        f"measurement-values-and-measuring-networks.html{provider_urls_params}",
-        "de": "https://www.meteoschweiz.admin.ch/service-und-publikationen/applikationen/"
-        f"messwerte-und-messnetze.html{provider_urls_params}",
-        "fr": "https://www.meteosuisse.admin.ch/services-et-publications/applications/"
-        f"valeurs-mesurees-et-reseaux-de-mesure.html{provider_urls_params}",
-        "it": "https://www.meteosvizzera.admin.ch/servizi-e-pubblicazioni/applicazioni/"
-        f"valori-attuali-e-reti-di-misura.html{provider_urls_params}",
-    }
+    provider_url = "https://www.meteoswiss.admin.ch"
 
     def __init__(self):
         super().__init__()
@@ -112,11 +100,6 @@ class MeteoSwiss(Provider):
                     meteoswiss_id = meteoswiss_station["id"]
                     name = meteoswiss_station["properties"]["station_name"]
                     location = meteoswiss_station["geometry"]["coordinates"]
-                    urls = {
-                        lang: url.format(param="messwerte-windgeschwindigkeit-kmh-10min", id=meteoswiss_id)
-                        for lang, url in self.provider_urls.items()
-                    }
-
                     lat, lon = self.lv85_to_wgs84.transform(location[0], location[1])
 
                     station = self.save_station(
@@ -127,7 +110,23 @@ class MeteoSwiss(Provider):
                         StationStatus.GREEN,
                         altitude=meteoswiss_station["properties"]["altitude"],
                         tz="Europe/Zurich",
-                        url=urls,
+                        url={
+                            "default": "https://www.meteoswiss.admin.ch/services-and-publications/applications/"
+                            f"measurement-values-and-measuring-networks.html"
+                            f"#param=messwerte-windgeschwindigkeit-kmh-10min&station={meteoswiss_id}",
+                            "en": "https://www.meteoswiss.admin.ch/services-and-publications/applications/"
+                            f"measurement-values-and-measuring-networks.html"
+                            f"#param=messwerte-windgeschwindigkeit-kmh-10min&station={meteoswiss_id}",
+                            "de": "https://www.meteoschweiz.admin.ch/service-und-publikationen/applikationen/"
+                            f"messwerte-und-messnetze.html"
+                            f"#param=messwerte-windgeschwindigkeit-kmh-10min&station={meteoswiss_id}",
+                            "fr": "https://www.meteosuisse.admin.ch/services-et-publications/applications/"
+                            f"valeurs-mesurees-et-reseaux-de-mesure.html"
+                            f"#param=messwerte-windgeschwindigkeit-kmh-10min&station={meteoswiss_id}",
+                            "it": "https://www.meteosvizzera.admin.ch/servizi-e-pubblicazioni/applicazioni/"
+                            f"valori-attuali-e-reti-di-misura.html"
+                            f"#param=messwerte-windgeschwindigkeit-kmh-10min&station={meteoswiss_id}",
+                        },
                     )
                     station_id = station["_id"]
 

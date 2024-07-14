@@ -8,13 +8,7 @@ from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, Stati
 class Holfuy(Provider):
     provider_code = "holfuy"
     provider_name = "holfuy.com"
-    provider_urls = {
-        "default": "https://holfuy.com/en/weather/{id}",
-        "en": "https://holfuy.com/en/weather/{id}",
-        "de": "https://holfuy.com/de/weather/{id}",
-        "fr": "https://holfuy.com/fr/weather/{id}",
-        "it": "https://holfuy.com/it/weather/{id}",
-    }
+    provider_url = "https://holfuy.com"
 
     def process_data(self):
         try:
@@ -43,7 +37,6 @@ class Holfuy(Provider):
                         raise ProviderException("No geolocation found")
                     altitude = location.get("altitude")
 
-                    urls = {lang: url.format(id=holfuy_id) for lang, url in self.provider_urls.items()}
                     station = self.save_station(
                         holfuy_id,
                         StationNames(short_name=name, name=name),
@@ -51,7 +44,13 @@ class Holfuy(Provider):
                         longitude,
                         StationStatus.GREEN,
                         altitude=altitude,
-                        url=urls,
+                        url={
+                            "default": f"{self.provider_url}/en/weather/{holfuy_id}",
+                            "en": f"{self.provider_url}/en/weather/{holfuy_id}",
+                            "de": f"{self.provider_url}/de/weather/{holfuy_id}",
+                            "fr": f"{self.provider_url}/fr/weather/{holfuy_id}",
+                            "it": f"{self.provider_url}/it/weather/{holfuy_id}",
+                        },
                     )
                     station_id = station["_id"]
 
