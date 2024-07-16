@@ -116,11 +116,6 @@ def find_duplicates(distance):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Find duplicate stations within a given distance")
-    parser.add_argument(
-        "--distance",
-        type=int,
-        default=50,
-        help="Maximum distance in meters between 2 duplicate stations [default: %(default)s]",
-    )
+    parser.add_argument("--distance", type=int, help="Maximum distance in meters between 2 duplicate stations")
     args = vars(parser.parse_args())
     find_duplicates(args["distance"])

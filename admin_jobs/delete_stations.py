@@ -35,10 +35,7 @@ def delete_stations(days: int, provider: Optional[str]):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Delete stations not seen since DAYS")
     parser.add_argument(
-        "--days",
-        type=int,
-        default=60,
-        help="Specify the number of days since 'last seen' before deleting the station [default: %(default)s]",
+        "--days", type=int, help="Specify the number of days since 'last seen' before deleting the station"
     )
     parser.add_argument(
         "--provider",
