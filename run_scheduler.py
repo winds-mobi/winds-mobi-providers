@@ -22,7 +22,7 @@ def run_scheduler():
     # Admin jobs
     scheduler.add_job(
         "admin_jobs.delete_stations:delete_stations",
-        args=(60, ""),
+        args=(60, None),
         trigger="cron",
         hour="3",
         minute="0",
@@ -30,7 +30,7 @@ def run_scheduler():
     )
     scheduler.add_job(
         "admin_jobs.save_clusters:save_clusters",
-        args=(50,),
+        args=(200, 60),
         trigger="cron",
         hour="3",
         minute="30",

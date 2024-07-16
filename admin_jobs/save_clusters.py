@@ -14,7 +14,7 @@ configure_logging()
 log = logging.getLogger(__name__)
 
 
-def save_clusters(nb_clusters):
+def save_clusters(min_cluster, nb_clusters):
     log.info(f"Creating {nb_clusters} station's clusters")
     mongo_db = MongoClient(MONGODB_URL).get_database()
 
@@ -22,7 +22,7 @@ def save_clusters(nb_clusters):
     all_stations = list(
         mongo_db.stations.find({"status": {"$ne": "hidden"}, "last._id": {"$gt": now - 30 * 24 * 3600}})
     )
-    range_clusters = np.geomspace(20, len(all_stations), num=nb_clusters, dtype=int)
+    range_clusters = np.geomspace(min_cluster, len(all_stations), num=nb_clusters, dtype=int)
     mongo_db.stations_clusters.find_one_and_update(
         {"_id": "save_clusters"}, {"$set": {"min": 20, "max": len(all_stations)}}, upsert=True
     )
@@ -75,9 +75,8 @@ def save_clusters(nb_clusters):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Save station's clusters in mongodb")
-    parser.add_argument(
-        "--num", type=int, default=50, help="Specify the number of cluster levels [default: %(default)s]"
-    )
+    parser.add_argument("--min", type=int, help="Specify min value of the clusters range")
+    parser.add_argument("--num", type=int, help="Specify number of clusters in range")
     args = vars(parser.parse_args())
 
-    save_clusters(args["num"])
+    save_clusters(args["min"], args["num"])
