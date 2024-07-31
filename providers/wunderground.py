@@ -18,11 +18,14 @@ class WUndergroundProvider(Provider):
             for wu_station_id in wu_station_ids:
                 # the API key didn't change for years, it might make sense to put it to settingy.py anyway?
                 # further information (german): https://loxwiki.atlassian.net/wiki/spaces/LOX/pages/1562837900/Wunderground-Anbindung+ohne+API-Key
-                url = "https://api.weather.com/v2/pws/observations/current?apiKey=e1f10a1e78da46f5b10a1e78da96f525&stationId="+wu_station_id+"&format=json&units=m"
+                url = (
+                    "https://api.weather.com/v2/pws/observations/current?apiKey=e1f10a1e78da46f5b10a1e78da96f525&stationId="
+                    + wu_station_id
+                    + "&format=json&units=m"
+                )
                 data = requests.get(url, timeout=(self.connect_timeout, self.read_timeout)).json()
-
-                #data sample:
-                #{
+                # data sample:
+                # {
                 #     "observations": [
                 #         {
                 #             "stationID": "INZIDE9",
@@ -64,7 +67,8 @@ class WUndergroundProvider(Provider):
                             provider_id=current_observation["stationID"],
                             # Let winds.mobi provide the full name (if found) with the help of Google Geocoding API
                             names=lambda names: StationNames(
-                                short_name=current_observation["neighborhood"], name=names.name or current_observation["neighborhood"]
+                                short_name=current_observation["neighborhood"],
+                                name=names.name or current_observation["neighborhood"],
                             ),
                             latitude=current_observation["lat"],
                             longitude=current_observation["lon"],
@@ -73,14 +77,18 @@ class WUndergroundProvider(Provider):
                             # "default" key, "english" if available. Here an example:
                             url={
                                 "default": f"{self.provider_url}/dashboard/pws/{current_observation['stationID']}",
-                            }
+                            },
                         )
                         station_id = winds_station["_id"]
 
                         measures_collection = self.measures_collection(station_id)
-                    
+
                         # remove the seconds -> only store one measure per minute at max.
-                        measure_key = arrow.get(current_observation["obsTimeUtc"], "YYYY-MM-DDTHH:mm:ssZ").replace(second=0).int_timestamp
+                        measure_key = (
+                            arrow.get(current_observation["obsTimeUtc"], "YYYY-MM-DDTHH:mm:ssZ")
+                            .replace(second=0)
+                            .int_timestamp
+                        )
 
                         self.log.info(measure_key)
 
@@ -90,8 +98,12 @@ class WUndergroundProvider(Provider):
                                     for_station=winds_station,
                                     _id=measure_key,
                                     wind_direction=current_observation["winddir"],
-                                    wind_average=Q_(current_observation["metric"]["windSpeed"], ureg.meter / ureg.second),
-                                    wind_maximum=Q_(current_observation["metric"]["windGust"], ureg.meter / ureg.second),
+                                    wind_average=Q_(
+                                        current_observation["metric"]["windSpeed"], ureg.meter / ureg.second
+                                    ),
+                                    wind_maximum=Q_(
+                                        current_observation["metric"]["windGust"], ureg.meter / ureg.second
+                                    ),
                                     temperature=Q_(current_observation["metric"]["temp"], ureg.degC),
                                     pressure=Pressure(current_observation["metric"]["pressure"], qnh=None, qff=None),
                                 )
