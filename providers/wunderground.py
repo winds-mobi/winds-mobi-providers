@@ -16,12 +16,14 @@ class WUndergroundProvider(Provider):
             wu_station_ids = ["INZIDE9"]
 
             for wu_station_id in wu_station_ids:
-                # the API key didn't change for years, it might make sense to put it to settingy.py anyway?
-                # further information (german): https://loxwiki.atlassian.net/wiki/spaces/LOX/pages/1562837900/Wunderground-Anbindung+ohne+API-Key
+
                 url = (
-                    "https://api.weather.com/v2/pws/observations/current?apiKey=e1f10a1e78da46f5b10a1e78da96f525&stationId="
-                    + wu_station_id
-                    + "&format=json&units=m"
+                    "https://api.weather.com/v2/pws/observations/current"
+                    # the API key didn't change for years, it might make sense to put it to settingy.py anyway?
+                    + "?apiKey=e1f10a1e78da46f5b10a1e78da96f525"
+                    + f"&stationId={wu_station_id}"
+                    + "&format=json"
+                    + "&units=m"
                 )
                 data = requests.get(url, timeout=(self.connect_timeout, self.read_timeout)).json()
                 # data sample:
