@@ -66,6 +66,7 @@ def run_scheduler():
         ("providers.windline:windline", 5),
         ("providers.windspots:windspots", 5),
         ("providers.windy:windy", 5),
+        ("providers.wunderground:wunderground", 5),
         ("providers.yvbeach:yvbeach", 5),
         ("providers.zermatt:zermatt", 5),
     ]:
