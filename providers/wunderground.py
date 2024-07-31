@@ -16,7 +16,6 @@ class WUndergroundProvider(Provider):
             wu_station_ids = ["INZIDE9"]
 
             for wu_station_id in wu_station_ids:
-
                 url = (
                     "https://api.weather.com/v2/pws/observations/current"
                     # the API key didn't change for years, it might make sense to put it to settingy.py anyway?
