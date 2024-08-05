@@ -17,6 +17,7 @@ services:
       - BORN_TO_FLY_DEVICE_ID
       - WINDY_API_KEY
       - PROVIDER
+      - KACHELMANN_API_KEY
 networks:
   default:
     name: winds-mobi
