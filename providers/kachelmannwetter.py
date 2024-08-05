@@ -1,7 +1,7 @@
 import arrow
 import requests
-import settings
 
+from settings import KACHELMANN_API_KEY
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
@@ -17,7 +17,7 @@ class KachelmannWetterProvider(Provider):
     provider_url = "https://api.kachelmannwetter.com"
 
     def process_data(self):
-        headers = {"x-api-Key": settings.KACHELMANN_API_KEY}
+        headers = {"x-api-Key": KACHELMANN_API_KEY}
 
         self.log.info("Processing wunderground data...")
         try:
