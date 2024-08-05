@@ -46,7 +46,7 @@ class KachelmannWetterProvider(Provider):
                         # If url is a dict, the keys must correspond to an ISO 639-1 language code. It also needs a
                         # "default" key, "english" if available. Here an example:
                         url={
-                            "default": f"https://kachelmannwetter.com/widget/station/" + station.name,
+                            "default": "https://kachelmannwetter.com/widget/station/" + station.name,
                         },
                     )
                     station_id = winds_station["_id"]
