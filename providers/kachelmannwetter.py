@@ -1,7 +1,7 @@
 import arrow
-
-import settings
 import requests
+import settings
+
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
