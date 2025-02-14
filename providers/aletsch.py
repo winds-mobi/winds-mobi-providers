@@ -33,8 +33,7 @@ class FgaType1StationParser:
 
     def parse(self, connect_timeout, read_timeout):
         response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
-        if response.status_code == 404:
-            raise ProviderException(f"Url '{self.url}' not found")
+        response.raise_for_status()
         self._station = etree.fromstring(response.content).find("./station")
 
     def name(self):
@@ -93,8 +92,7 @@ class FgaType2StationParser:
 
     def parse(self, connect_timeout, read_timeout):
         response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
-        if response.status_code == 404:
-            raise ProviderException(f"Url '{self.url}' not found")
+        response.raise_for_status()
         self._station = etree.fromstring(response.content).find("./station")
 
     def name(self):
@@ -147,8 +145,7 @@ class LorawistaParser:
 
     def parse(self, connect_timeout, read_timeout):
         response = requests.get(self.url, timeout=(connect_timeout, read_timeout))
-        if response.status_code == 404:
-            raise ProviderException(f"Url '{self.url}' not found")
+        response.raise_for_status()
         self._station = etree.fromstring(response.content)
 
     def name(self):
