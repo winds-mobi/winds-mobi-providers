@@ -19,7 +19,7 @@ class KachelmannWetterProvider(Provider):
     def process_data(self):
         headers = {"x-api-Key": KACHELMANN_API_KEY}
 
-        self.log.info("Processing wunderground data...")
+        self.log.info("Processing Kachelmannwetter data...")
         try:
             # TODO move station list to admin_db?
             # KM0023 = wetter station from Gleitschirm Club Montafon www.gscm.at
@@ -29,7 +29,7 @@ class KachelmannWetterProvider(Provider):
                 url = "https://api.kachelmannwetter.com/v02/station/" + station.id + "/observations/latest"
 
                 response = requests.get(url, timeout=(self.connect_timeout, self.read_timeout), headers=headers)
-                self.log.info(response)
+                response.raise_for_status()
                 data = response.json()
 
                 try:
@@ -55,8 +55,6 @@ class KachelmannWetterProvider(Provider):
 
                     # remove the seconds -> only store one measure per minute at max.
                     measure_key = arrow.get(data["data"]["temp"]["dateTime"]).int_timestamp
-
-                    self.log.info(measure_key)
 
                     if not self.has_measure(measures_collection, measure_key):
                         try:
