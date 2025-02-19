@@ -1,4 +1,5 @@
 * @ysavary
-/providers/windspots.py @Skyrider31
 /providers/gxaircom.py @gereic
 /providers/pmcjoder.py @MichalBryxi
+/providers/kachelmannwetter.py @SuperSludge
+/providers/wunderground.py @SuperSludge
