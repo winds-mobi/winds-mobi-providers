@@ -4,13 +4,13 @@ import requests
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
-class WUndergroundProvider(Provider):
+class WUnderground(Provider):
     provider_code = "wunderground"
-    provider_name = "//www.wunderground.com/"
-    provider_url = "https://www.wunderground.com/"
+    provider_name = "wunderground.com"
+    provider_url = "https://www.wunderground.com"
 
     def process_data(self):
-        self.log.info("Processing wunderground data...")
+        self.log.info("Processing WUnderground data...")
         try:
             # TODO move station list to admin_db?
             wu_station_ids = ["INZIDE9"]
@@ -18,7 +18,7 @@ class WUndergroundProvider(Provider):
             for wu_station_id in wu_station_ids:
                 url = (
                     "https://api.weather.com/v2/pws/observations/current"
-                    # the API key didn't change for years, it might make sense to put it to settingy.py anyway?
+                    # the API key didn't change for years
                     + "?apiKey=e1f10a1e78da46f5b10a1e78da96f525"
                     + f"&stationId={wu_station_id}"
                     + "&format=json"
@@ -60,13 +60,10 @@ class WUndergroundProvider(Provider):
                 #     ]
                 # }
 
-                self.log.info("foo")
-
                 for current_observation in data["observations"]:
                     try:
                         winds_station = self.save_station(
                             provider_id=current_observation["stationID"],
-                            # Let winds.mobi provide the full name (if found) with the help of Google Geocoding API
                             names=lambda names: StationNames(
                                 short_name=current_observation["neighborhood"],
                                 name=names.name or current_observation["neighborhood"],
@@ -74,8 +71,6 @@ class WUndergroundProvider(Provider):
                             latitude=current_observation["lat"],
                             longitude=current_observation["lon"],
                             status=StationStatus.GREEN if current_observation["qcStatus"] == 1 else StationStatus.RED,
-                            # If url is a dict, the keys must correspond to an ISO 639-1 language code. It also needs a
-                            # "default" key, "english" if available. Here an example:
                             url={
                                 "default": f"{self.provider_url}/dashboard/pws/{current_observation['stationID']}",
                             },
@@ -90,8 +85,6 @@ class WUndergroundProvider(Provider):
                             .replace(second=0)
                             .int_timestamp
                         )
-
-                        self.log.info(measure_key)
 
                         if not self.has_measure(measures_collection, measure_key):
                             try:
@@ -130,7 +123,7 @@ class WUndergroundProvider(Provider):
 
 
 def wunderground():
-    WUndergroundProvider().process_data()
+    WUnderground().process_data()
 
 
 if __name__ == "__main__":
