@@ -89,9 +89,11 @@ class Slf(Provider):
                                     slf_measure_dir["value"],
                                     slf_measures["windVelocityMean"][index]["value"],
                                     slf_measures["windVelocityMax"][index]["value"],
-                                    temperature=slf_measures["temperatureAir"][index]["value"]
-                                    if "temperatureAir" in slf_measures
-                                    else None,
+                                    temperature=(
+                                        slf_measures["temperatureAir"][index]["value"]
+                                        if "temperatureAir" in slf_measures
+                                        else None
+                                    ),
                                 )
                                 new_measures.append(measure)
                             except KeyError as e:

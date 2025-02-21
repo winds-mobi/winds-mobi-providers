@@ -71,9 +71,11 @@ class Holfuy(Provider):
                             holfuy_measure["wind"]["direction"],
                             Q_(holfuy_measure["wind"]["speed"], ureg.kilometer / ureg.hour),
                             Q_(holfuy_measure["wind"]["gust"], ureg.kilometer / ureg.hour),
-                            temperature=Q_(holfuy_measure["temperature"], ureg.degC)
-                            if "temperature" in holfuy_measure
-                            else None,
+                            temperature=(
+                                Q_(holfuy_measure["temperature"], ureg.degC)
+                                if "temperature" in holfuy_measure
+                                else None
+                            ),
                             pressure=Pressure(
                                 qfe=None,
                                 qnh=Q_(holfuy_measure["pressure"], ureg.hPa) if "pressure" in holfuy_measure else None,

@@ -2,7 +2,7 @@ import os
 from datetime import datetime, timedelta
 
 from apscheduler.schedulers.blocking import BlockingScheduler
-from pydantic import parse_obj_as
+from pydantic import TypeAdapter
 
 
 def run_scheduler():
@@ -73,7 +73,7 @@ def run_scheduler():
     ]:
         func = provider_job[0]
         func_name = func.split(":")[1]
-        if not parse_obj_as(bool, os.environ.get(f"DISABLE_PROVIDER_{func_name.upper()}", False)):
+        if not TypeAdapter(bool).validate_python(os.environ.get(f"DISABLE_PROVIDER_{func_name.upper()}", False)):
             interval = provider_job[1]
             scheduler.add_job(
                 func,

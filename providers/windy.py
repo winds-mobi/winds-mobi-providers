@@ -104,15 +104,19 @@ class Windy(Provider):
                                 Q_(wind_average, ureg.meter / ureg.second),
                                 Q_(wind_maximum, ureg.meter / ureg.second),
                                 temperature=windy_measures["temp"][index] if "temp" in windy_measures else None,
-                                pressure=Pressure(
-                                    qfe=Q_(windy_measures["pressure"][index] / 1000, ureg.hPa)
-                                    if windy_measures["pressure"][index] is not None
-                                    else None,
-                                    qnh=None,
-                                    qff=None,
-                                )
-                                if "pressure" in windy_measures
-                                else None,
+                                pressure=(
+                                    Pressure(
+                                        qfe=(
+                                            Q_(windy_measures["pressure"][index] / 1000, ureg.hPa)
+                                            if windy_measures["pressure"][index] is not None
+                                            else None
+                                        ),
+                                        qnh=None,
+                                        qff=None,
+                                    )
+                                    if "pressure" in windy_measures
+                                    else None
+                                ),
                             )
                         )
                 self.insert_new_measures(measures_collection, station, new_measures)

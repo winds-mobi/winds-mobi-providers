@@ -38,9 +38,11 @@ class Gxaircom(Provider):
                             wind_average=Q_(station["wSpeed"], ureg.kilometer / ureg.hour),
                             wind_maximum=Q_(station["wGust"], ureg.kilometer / ureg.hour),
                             temperature=Q_(station["temp"], ureg.degC) if station["temp"] is not None else None,
-                            pressure=Pressure(station["pressure"], qnh=None, qff=None)
-                            if station["pressure"] is not None
-                            else None,
+                            pressure=(
+                                Pressure(station["pressure"], qnh=None, qff=None)
+                                if station["pressure"] is not None
+                                else None
+                            ),
                         )
                         self.insert_new_measures(measures_collection, winds_station, [new_measure])
                 except Exception as e:

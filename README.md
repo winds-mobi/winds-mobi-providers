@@ -33,7 +33,7 @@ Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-
 ### Dependencies
 - [Homebrew](https://brew.sh)
 - Python 3.10
-- [Poetry 1.7.1](https://python-poetry.org)
+- [Poetry 2.1.1](https://python-poetry.org)
 - Google Cloud API key
 - Providers secrets (optional)
 
@@ -46,15 +46,16 @@ In `env.localhost`:
 
 #### On macOS
 Install libraries with homebrew:
-- `brew install libpq`
+- `brew install postgresql`
 - `brew install mysql-client`
+- `export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"`
 
 ### Create python virtual environment and install dependencies
 #### On macOS
 - `poetry install`
 
 ### Activate python virtual environment
-- `poetry shell`
+- `eval $(poetry env activate)`
 
 ### Start the databases
 You must already have the `.env` file created in the [previous section](#run-the-project-with-docker-compose-simple-way).
