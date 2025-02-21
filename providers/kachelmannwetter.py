@@ -11,7 +11,7 @@ class KachelmannWetterStation:
         self.name = name
 
 
-class KachelmannWetterProvider(Provider):
+class KachelmannWetter(Provider):
     provider_code = "kachelmannwetter"
     provider_name = "kachelmannwetter.com"
     provider_url = "https://api.kachelmannwetter.com"
@@ -19,7 +19,7 @@ class KachelmannWetterProvider(Provider):
     def process_data(self):
         headers = {"x-api-Key": KACHELMANN_API_KEY}
 
-        self.log.info("Processing Kachelmannwetter data...")
+        self.log.info("Processing KachelmannWetter data...")
         try:
             # TODO move station list to admin_db?
             # KM0023 = wetter station from Gleitschirm Club Montafon www.gscm.at
@@ -83,13 +83,13 @@ class KachelmannWetterProvider(Provider):
                     self.log.exception(f"Error while processing station '{station.id}': {e}")
 
         except Exception as e:
-            self.log.exception(f"Error while processing KachelmannWetterProvider: {e}")
+            self.log.exception(f"Error while processing KachelmannWetter: {e}")
 
         self.log.info("...Done !")
 
 
 def kachelmannwetter():
-    KachelmannWetterProvider().process_data()
+    KachelmannWetter().process_data()
 
 
 if __name__ == "__main__":

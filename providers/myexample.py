@@ -3,16 +3,16 @@ import arrow
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
-class MyProvider(Provider):
-    provider_code = "my-provider"
-    provider_name = "my-provider.com"
-    provider_url = "https://www.my-provider.com"
+class MyExample(Provider):
+    provider_code = "myexample"
+    provider_name = "myexample.com"
+    provider_url = "https://www.myexample.com"
 
     def process_data(self):
-        self.log.info("Processing MyProvider data...")
+        self.log.info("Processing MyExample data...")
         try:
             # data = requests.get(
-            #     "https://api.my-provider.com/stations.json", timeout=(self.connect_timeout, self.read_timeout)
+            #     "https://api.myexample.com/stations.json", timeout=(self.connect_timeout, self.read_timeout)
             # ).json()
             # Result example:
             data = [
@@ -86,14 +86,14 @@ class MyProvider(Provider):
                     self.log.exception(f"Error while processing station '{station['id']}': {e}")
 
         except Exception as e:
-            self.log.exception(f"Error while processing MyProvider: {e}")
+            self.log.exception(f"Error while processing MyExample: {e}")
 
         self.log.info("...Done !")
 
 
-def my_provider():
-    MyProvider().process_data()
+def myexample():
+    MyExample().process_data()
 
 
 if __name__ == "__main__":
-    my_provider()
+    myexample()
