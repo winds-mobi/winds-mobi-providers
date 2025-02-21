@@ -165,9 +165,7 @@ class MeteoSwiss(Provider):
 
                     if meteoswiss_id in rain_data:
                         # 1mm = 1 liter/m^2
-                        rain = self.get_value(
-                            rain_data[meteoswiss_id]["properties"], unit=ureg.liter / (ureg.meter**2)
-                        )
+                        rain = self.get_value(rain_data[meteoswiss_id]["properties"], unit=ureg.liter / (ureg.meter**2))
                     else:
                         rain = None
 
