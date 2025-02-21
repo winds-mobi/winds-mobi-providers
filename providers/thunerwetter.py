@@ -1,8 +1,8 @@
 import re
+from zoneinfo import ZoneInfo
 
 import arrow
 import requests
-from dateutil import tz
 from lxml import html
 
 from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus, user_agents
@@ -13,6 +13,7 @@ class ThunerWetter(Provider):
     provider_name = "thunerwetter.ch"
     provider_url = "http://www.thunerwetter.ch/wind.html"
     provider_url_temp = "http://www.thunerwetter.ch/temp.html"
+    timezone = ZoneInfo("Europe/Zurich")
 
     def process_data(self):
         station_id = None
@@ -44,8 +45,6 @@ class ThunerWetter(Provider):
             temp_pattern = re.compile(r"(?P<temp>[-+]?[0-9]{1,3}\.[0-9]) °C")
             humidity_pattern = re.compile(r"(?P<humidity>[0-9]{1,3}) %")
 
-            thun_tz = tz.gettz("Europe/Zurich")
-
             session = requests.Session()
             session.headers.update(user_agents.chrome)
 
@@ -68,7 +67,11 @@ class ThunerWetter(Provider):
             )
             station_id = station["_id"]
 
-            key = arrow.get(f'{date["date"]} {date["time"]}', "DD.MM.YYYY HH:mm").replace(tzinfo=thun_tz).int_timestamp
+            key = (
+                arrow.get(f'{date["date"]} {date["time"]}', "DD.MM.YYYY HH:mm")
+                .replace(tzinfo=self.timezone)
+                .int_timestamp
+            )
 
             measures_collection = self.measures_collection(station_id)
             new_measures = []
@@ -94,7 +97,7 @@ class ThunerWetter(Provider):
                 date = date_pattern.search(date_text).groupdict()
                 air_date = (
                     arrow.get(f'{date["date"]} {date["time"]}', "DD.MM.YYYY HH:mm")
-                    .replace(tzinfo=thun_tz)
+                    .replace(tzinfo=self.timezone)
                     .int_timestamp
                 )
 

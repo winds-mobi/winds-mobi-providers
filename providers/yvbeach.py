@@ -1,8 +1,8 @@
 import re
+from zoneinfo import ZoneInfo
 
 import arrow
 import requests
-from dateutil import tz
 
 from winds_mobi_provider import Provider, ProviderException, StationNames, StationStatus, user_agents
 
@@ -11,6 +11,7 @@ class YVBeach(Provider):
     provider_code = "yvbeach"
     provider_name = "yvbeach.com"
     provider_url = "http://www.yvbeach.com/yvmeteo.htm"
+    timezone = ZoneInfo("Europe/Zurich")
 
     def process_data(self):
         station_id = "yvbeach"
@@ -25,8 +26,6 @@ class YVBeach(Provider):
                 r"[A-Z]{1,3} - (?P<wind_dir>[0-9]{1,3})°"
             )
             temp_pattern = re.compile(r"<b>TEMPERATURES<br/>Air (?P<temp>[-+]?[0-9]*\.?[0-9]+)°C")
-
-            yvbeach_tz = tz.gettz("Europe/Zurich")
 
             session = requests.Session()
             session.headers.update(user_agents.chrome)
@@ -47,7 +46,7 @@ class YVBeach(Provider):
             date = date_pattern.search(content).groupdict()
             key = (
                 arrow.get(f'{date["date"]} {date["time"]}', "DD.MM.YYYY HH[h]mm")
-                .replace(tzinfo=yvbeach_tz)
+                .replace(tzinfo=self.timezone)
                 .int_timestamp
             )
 
