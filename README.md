@@ -81,7 +81,7 @@ Run the linter tools:
 You know good quality weather stations that would be useful for many paraglider pilots or kitesurfers? 
 
 Awesome! Fork this repository and open a pull request with your new provider code. It's easy, look at the following
-example: [providers/example.py](providers/example.py)
+example: [providers/myexample.py](providers/myexample.py)
 
 ## Licensing
 winds.mobi is licensed under the AGPL License, Version 3.0. See [LICENSE.txt](LICENSE.txt)
