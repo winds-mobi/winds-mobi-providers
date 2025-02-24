@@ -93,10 +93,10 @@ class WUnderground(Provider):
                                     _id=measure_key,
                                     wind_direction=current_observation["winddir"],
                                     wind_average=Q_(
-                                        current_observation["metric"]["windSpeed"], ureg.meter / ureg.second
+                                        current_observation["metric"]["windSpeed"], ureg.kilometer / ureg.hour
                                     ),
                                     wind_maximum=Q_(
-                                        current_observation["metric"]["windGust"], ureg.meter / ureg.second
+                                        current_observation["metric"]["windGust"], ureg.kilometer / ureg.hour
                                     ),
                                     temperature=Q_(current_observation["metric"]["temp"], ureg.degC),
                                     pressure=Pressure(current_observation["metric"]["pressure"], qnh=None, qff=None),
