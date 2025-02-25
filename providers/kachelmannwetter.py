@@ -62,8 +62,8 @@ class KachelmannWetter(Provider):
                                 for_station=winds_station,
                                 _id=measure_key,
                                 wind_direction=data["data"]["windDirection"]["value"],
-                                wind_average=Q_(data["data"]["windSpeed"]["value"], ureg.meter / ureg.second),
-                                wind_maximum=Q_(data["data"]["windGust10m"]["value"], ureg.meter / ureg.second),
+                                wind_average=Q_(data["data"]["windSpeed"]["value"], ureg.kilometer / ureg.hour),
+                                wind_maximum=Q_(data["data"]["windGust10m"]["value"], ureg.kilometer / ureg.hour),
                                 temperature=Q_(data["data"]["temp"]["value"], ureg.degC),
                                 pressure=Pressure(data["data"]["pressure"]["value"], qnh=None, qff=None),
                             )
