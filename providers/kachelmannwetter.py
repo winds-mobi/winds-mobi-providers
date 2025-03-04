@@ -2,7 +2,15 @@ import arrow
 import requests
 
 from settings import KACHELMANN_API_KEY
-from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
+from winds_mobi_provider import (
+    Q_,
+    Pressure,
+    Provider,
+    ProviderException,
+    StationNames,
+    StationStatus,
+    ureg,
+)
 
 
 class KachelmannWetterStation:
@@ -37,17 +45,14 @@ class KachelmannWetter(Provider):
                         provider_id=data["stationId"],
                         # Let winds.mobi provide the full name (if found) with the help of Google Geocoding API
                         names=lambda names: StationNames(
-                            short_name=data["name"],
-                            name=names.name or data["name"],
+                            short_name=data["name"], name=names.name or data["name"]
                         ),
                         latitude=data["lat"],
                         longitude=data["lon"],
                         status=StationStatus.GREEN,
                         # If url is a dict, the keys must correspond to an ISO 639-1 language code. It also needs a
                         # "default" key, "english" if available. Here an example:
-                        url={
-                            "default": "https://kachelmannwetter.com/widget/station/" + station.name,
-                        },
+                        url={"default": "https://kachelmannwetter.com/widget/station/" + station.name},
                     )
                     station_id = winds_station["_id"]
 
@@ -63,8 +68,8 @@ class KachelmannWetter(Provider):
                                 _id=measure_key,
                                 wind_direction=data["data"]["windDirection"]["value"],
                                 # unit for wind is knots. multiply by 1.852 to convert to km/h
-                                wind_average = Q_(data["data"]["windSpeed"]["value"] * 1.852, ureg.kilometer / ureg.hour)
-                                wind_maximum = Q_(data["data"]["windGust10m"]["value"] * 1.852, ureg.kilometer / ureg.hour)
+                                wind_average=Q_(data["data"]["windSpeed"]["value"] * 1.852, ureg.kilometer / ureg.hour),
+                                wind_maximum=Q_(data["data"]["windGust10m"]["value"] * 1.852, ureg.kilometer / ureg.hour),
                                 temperature=Q_(data["data"]["temp"]["value"], ureg.degC),
                                 pressure=Pressure(data["data"]["pressure"]["value"], qnh=None, qff=None),
                             )
