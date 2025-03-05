@@ -2,15 +2,7 @@ import arrow
 import requests
 
 from settings import KACHELMANN_API_KEY
-from winds_mobi_provider import (
-    Q_,
-    Pressure,
-    Provider,
-    ProviderException,
-    StationNames,
-    StationStatus,
-    ureg,
-)
+from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
 class KachelmannWetterStation:
@@ -34,17 +26,9 @@ class KachelmannWetter(Provider):
             stations = {KachelmannWetterStation(station_id="KM0023", name="schruns0at")}
 
             for station in stations:
-                url = (
-                    "https://api.kachelmannwetter.com/v02/station/"
-                    + station.id
-                    + "/observations/latest"
-                )
+                url = "https://api.kachelmannwetter.com/v02/station/" + station.id + "/observations/latest"
 
-                response = requests.get(
-                    url,
-                    timeout=(self.connect_timeout, self.read_timeout),
-                    headers=headers,
-                )
+                response = requests.get(url, timeout=(self.connect_timeout, self.read_timeout), headers=headers)
                 response.raise_for_status()
                 data = response.json()
 
@@ -53,7 +37,8 @@ class KachelmannWetter(Provider):
                         provider_id=data["stationId"],
                         # Let winds.mobi provide the full name (if found) with the help of Google Geocoding API
                         names=lambda names: StationNames(
-                            short_name=data["name"], name=names.name or data["name"]
+                            short_name=data["name"],
+                            name=names.name or data["name"],
                         ),
                         latitude=data["lat"],
                         longitude=data["lon"],
@@ -61,8 +46,7 @@ class KachelmannWetter(Provider):
                         # If url is a dict, the keys must correspond to an ISO 639-1 language code. It also needs a
                         # "default" key, "english" if available. Here an example:
                         url={
-                            "default": "https://kachelmannwetter.com/widget/station/"
-                            + station.name
+                            "default": "https://kachelmannwetter.com/widget/station/" + station.name,
                         },
                     )
                     station_id = winds_station["_id"]
@@ -70,9 +54,7 @@ class KachelmannWetter(Provider):
                     measures_collection = self.measures_collection(station_id)
 
                     # remove the seconds -> only store one measure per minute at max.
-                    measure_key = arrow.get(
-                        data["data"]["temp"]["dateTime"]
-                    ).int_timestamp
+                    measure_key = arrow.get(data["data"]["temp"]["dateTime"]).int_timestamp
 
                     if not self.has_measure(measures_collection, measure_key):
                         try:
@@ -81,26 +63,14 @@ class KachelmannWetter(Provider):
                                 _id=measure_key,
                                 wind_direction=data["data"]["windDirection"]["value"],
                                 # unit for wind is knots. multiply by 1.852 to convert to km/h
-                                wind_average=Q_(
-                                    data["data"]["windSpeed"]["value"] * 1.852,
-                                    ureg.kilometer / ureg.hour,
-                                ),
+                                wind_average=Q_(data["data"]["windSpeed"]["value"] * 1.852, ureg.kilometer / ureg.hour),
                                 wind_maximum=Q_(
-                                    data["data"]["windGust10m"]["value"] * 1.852,
-                                    ureg.kilometer / ureg.hour,
+                                    data["data"]["windGust10m"]["value"] * 1.852, ureg.kilometer / ureg.hour
                                 ),
-                                temperature=Q_(
-                                    data["data"]["temp"]["value"], ureg.degC
-                                ),
-                                pressure=Pressure(
-                                    data["data"]["pressure"]["value"],
-                                    qnh=None,
-                                    qff=None,
-                                ),
+                                temperature=Q_(data["data"]["temp"]["value"], ureg.degC),
+                                pressure=Pressure(data["data"]["pressure"]["value"], qnh=None, qff=None),
                             )
-                            self.insert_new_measures(
-                                measures_collection, winds_station, [new_measure]
-                            )
+                            self.insert_new_measures(measures_collection, winds_station, [new_measure])
                         except ProviderException as e:
                             self.log.warning(
                                 f"Error while processing measure '{measure_key}' for station '{station_id}': {e}"
@@ -111,13 +81,9 @@ class KachelmannWetter(Provider):
                             )
 
                 except ProviderException as e:
-                    self.log.warning(
-                        f"Error while processing station '{station.id}': {e}"
-                    )
+                    self.log.warning(f"Error while processing station '{station.id}': {e}")
                 except Exception as e:
-                    self.log.exception(
-                        f"Error while processing station '{station.id}': {e}"
-                    )
+                    self.log.exception(f"Error while processing station '{station.id}': {e}")
 
         except Exception as e:
             self.log.exception(f"Error while processing KachelmannWetter: {e}")
