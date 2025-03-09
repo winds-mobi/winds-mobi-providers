@@ -62,7 +62,6 @@ class KachelmannWetter(Provider):
                                 for_station=winds_station,
                                 _id=measure_key,
                                 wind_direction=data["data"]["windDirection"]["value"],
-                                # unit for wind is knots. multiply by 1.852 to convert to km/h
                                 wind_average=Q_(data["data"]["windSpeed"]["value"], ureg.knot),
                                 wind_maximum=Q_(data["data"]["windGust10m"]["value"], ureg.knot),
                                 temperature=Q_(data["data"]["temp"]["value"], ureg.degC),
