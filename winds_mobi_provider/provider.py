@@ -72,7 +72,7 @@ class Provider:
         self.google_api_key = GOOGLE_API_KEY
         self.timezone_finder = TimezoneFinder(in_memory=True)
         self.log = logging.getLogger(self.provider_code)
-        sentry_sdk.set_tag("provider", self.provider_name)
+        sentry_sdk.set_tag("provider", self.provider_code)
 
     def stations_collection(self):
         return self.__stations_collection

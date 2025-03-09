@@ -7,7 +7,7 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
 # Logging and monitoring
 SENTRY_URL = os.environ.get("SENTRY_URL")
-ENVIRONMENT = os.environ.get("ENVIRONMENT") or "development"
+ENVIRONMENT = os.environ.get("ENVIRONMENT") or "local"
 
 # Providers
 ADMIN_DB_URL = os.environ.get("ADMIN_DB_URL") or "postgres://postgres:postgres@localhost:5432/winds_mobi"
