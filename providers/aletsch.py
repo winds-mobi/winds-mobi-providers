@@ -190,7 +190,6 @@ class FluggruppeAletsch(Provider):
 
     stations = [
         ("ried-brig", FgaType1StationParser("ried-brig/XML")),
-        ("blitzingu", FgaType1StationParser("blitzingu/XML")),
         ("bellwald", FgaType1StationParser("fleschen/XML")),
         ("fieschertal", FgaType1StationParser("fieschertal/XML")),
         ("chaeserstatt", FgaType1StationParser("chaeserstatt/XML")),
