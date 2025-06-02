@@ -42,16 +42,16 @@ class Provider:
     read_timeout = 30
 
     @property
-    def usage_limit_cache_duration(self):
+    def api_limit_cache_duration(self):
         return (12 + randint(-2, 2)) * 3600
 
     @property
-    def google_api_error_cache_duration(self):
-        return (30 + randint(-5, 5)) * 24 * 3600
+    def api_error_cache_duration(self):
+        return (60 + randint(-6, 6)) * 24 * 3600
 
     @property
-    def google_api_cache_duration(self):
-        return (60 + randint(-5, 5)) * 24 * 3600
+    def api_cache_duration(self):
+        return (120 + randint(-12, 12)) * 24 * 3600
 
     def __init__(self):
         if None in (self.provider_code, self.provider_name, self.provider_url):
@@ -305,16 +305,16 @@ class Provider:
                     self.add_redis_key(
                         address_key,
                         {"json": json.dumps(result)},
-                        self.google_api_cache_duration,
+                        self.api_cache_duration,
                     )
                 except TimeoutError as e:
                     raise e
                 except UsageLimitException as e:
-                    self.add_redis_key(address_key, {"error": repr(e)}, self.usage_limit_cache_duration)
+                    self.add_redis_key(address_key, {"error": repr(e)}, self.api_limit_cache_duration)
                 except Exception as e:
                     if not isinstance(e, ProviderException):
                         self.log.exception("Unable to call Google Reverse Geocoding API")
-                    self.add_redis_key(address_key, {"error": repr(e)}, self.google_api_error_cache_duration)
+                    self.add_redis_key(address_key, {"error": repr(e)}, self.api_error_cache_duration)
 
             short_name, name = names(self.__parse_reverse_geocoding_results(address_key))
         else:
@@ -326,15 +326,15 @@ class Provider:
         if not self.redis.exists(alt_key):
             try:
                 elevation, is_peak = self.__compute_elevation(lat, lon)
-                self.add_redis_key(alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.google_api_cache_duration)
+                self.add_redis_key(alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.api_cache_duration)
             except TimeoutError as e:
                 raise e
             except UsageLimitException as e:
-                self.add_redis_key(alt_key, {"error": repr(e)}, self.usage_limit_cache_duration)
+                self.add_redis_key(alt_key, {"error": repr(e)}, self.api_limit_cache_duration)
             except Exception as e:
                 if not isinstance(e, ProviderException):
                     self.log.exception("Unable to call Google Elevation API")
-                self.add_redis_key(alt_key, {"error": repr(e)}, self.google_api_error_cache_duration)
+                self.add_redis_key(alt_key, {"error": repr(e)}, self.api_error_cache_duration)
 
         if not altitude:
             if self.redis.hexists(alt_key, "error"):
