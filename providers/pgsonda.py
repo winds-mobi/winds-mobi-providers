@@ -7,8 +7,8 @@ from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, Stati
 
 class PgSonda(Provider):
     provider_code = "pgsonda"
-    provider_name = "PGsonda.cz"
-    provider_url = "https://pgsonda.cz/"
+    provider_name = "pgsonda.cz"
+    provider_url = "https://pgsonda.cz"
 
     timezone = ZoneInfo("Europe/Zurich")
 
@@ -83,7 +83,7 @@ class PgSonda(Provider):
                         longitude=station["longitude"],
                         altitude=station["altitude"],
                         status=StationStatus.GREEN if station["status"] == "ok" else StationStatus.RED,
-                        url="https://pgsonda.cz/",
+                        url=f"{self.provider_url}/{station['id']}",
                     )
 
                     measure_key = station["measures"][0]["time"]
