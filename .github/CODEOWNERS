@@ -1,5 +1,6 @@
 * @ysavary
 /providers/gxaircom.py @gereic
 /providers/pmcjoder.py @MichalBryxi
+/providers/pgsonda.py @MichalBryxi
 /providers/kachelmannwetter.py @SuperSludge
 /providers/wunderground.py @SuperSludge
