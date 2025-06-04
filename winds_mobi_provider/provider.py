@@ -3,7 +3,6 @@ import logging
 import math
 from collections import namedtuple
 from enum import Enum
-from random import randint
 from typing import Callable, Tuple
 from zoneinfo import ZoneInfo
 
@@ -43,15 +42,15 @@ class Provider:
 
     @property
     def api_limit_cache_duration(self):
-        return (12 + randint(-2, 2)) * 3600
+        return 3600
 
     @property
     def api_error_cache_duration(self):
-        return (60 + randint(-6, 6)) * 24 * 3600
+        return 30 * 24 * 3600
 
     @property
     def api_cache_duration(self):
-        return (120 + randint(-12, 12)) * 24 * 3600
+        return 365 * 24 * 3600
 
     def __init__(self):
         if None in (self.provider_code, self.provider_name, self.provider_url):
@@ -203,7 +202,7 @@ class Provider:
         self.log.warning(f"Google Reverse Geocoding API: no address match for '{address_key}'")
         return StationNames(None, None)
 
-    def __compute_elevation(self, lat, lon) -> Tuple[float, bool]:
+    def __compute_elevation(self, lat: float, lon: float) -> Tuple[float, bool]:
         radius = 500
         nb = 6
         path = f"{lat},{lon}|"
@@ -211,9 +210,9 @@ class Provider:
             angle = math.pi * 2 * k / nb
             dx = radius * math.cos(angle)
             dy = radius * math.sin(angle)
-            path += "{lat},{lon}".format(
-                lat=str(lat + (180 / math.pi) * (dy / 6378137)),
-                lon=str(lon + (180 / math.pi) * (dx / 6378137) / math.cos(lat * math.pi / 180)),
+            path += "{lat:.6f},{lon:.6f}".format(
+                lat=lat + (180 / math.pi) * (dy / 6378137),
+                lon=lon + (180 / math.pi) * (dx / 6378137) / math.cos(lat * math.pi / 180),
             )
             if k < nb - 1:
                 path += "|"
