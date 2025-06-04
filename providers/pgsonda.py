@@ -31,6 +31,7 @@ class PgSonda(Provider):
 
                     latitude = float(rec.get("gps_lat", 0.0))
                     longitude = float(rec.get("gps_lng", 0.0))
+                    altitude = float(rec.get("amsl", 0.0))
 
                     ts = rec["db_epoch"]
 
@@ -42,6 +43,7 @@ class PgSonda(Provider):
                     temp_c = float(rec.get("avg_temp", 0.0))
                     humidity = float(rec.get("avg_hum", 0.0))
                     pressure_pa = float(rec.get("avg_preszero", 0.0))
+                    rain = float(rec.get("avg_rain_hour", 0.0))
 
                     data.append(
                         {
@@ -51,6 +53,7 @@ class PgSonda(Provider):
                             "latitude": latitude,
                             "longitude": longitude,
                             "status": "ok",
+                            "altitude": altitude,
                             "measures": [
                                 {
                                     "time": ts,
@@ -60,6 +63,7 @@ class PgSonda(Provider):
                                     "temperature": temp_c,
                                     "pressure": pressure_pa,
                                     "humidity": humidity,
+                                    "rain": rain,
                                 }
                             ],
                         }
@@ -77,6 +81,7 @@ class PgSonda(Provider):
                         names=StationNames(short_name=station["shortName"], name=station["name"]),
                         latitude=station["latitude"],
                         longitude=station["longitude"],
+                        altitude=station["altitude"],
                         status=StationStatus.GREEN if station["status"] == "ok" else StationStatus.RED,
                         url="https://pgsonda.cz/",
                     )
@@ -97,6 +102,7 @@ class PgSonda(Provider):
                             temperature=Q_(station["measures"][0]["temperature"], ureg.degC),
                             pressure=Pressure(station["measures"][0]["pressure"], qnh=None, qff=None),
                             humidity=station["measures"][0]["humidity"],
+                            rain=station["measures"][0]["rain"],
                         )
                         self.insert_new_measures(measures_collection, winds_station, [new_measure])
 
