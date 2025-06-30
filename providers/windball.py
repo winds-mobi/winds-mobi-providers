@@ -3,6 +3,7 @@ import requests
 
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
+
 class Windball(Provider):
     provider_code = "windball"
     provider_name = "windball.ch"
@@ -15,15 +16,16 @@ class Windball(Provider):
                 "https://server.windball.ch/api/windsmobi", timeout=(self.connect_timeout, self.read_timeout)
             ).json()
             for station in data:
-            
+
                 # Let winds.mobi provide the geocoding_name (if found) with the help of Google Geocoding API
                 def build_station_name(geocoding_names):
-                  if geocoding_names.name == station["name"]:
-                      return StationNames(short_name=station["name"], name=station["name"])
-                  else:
-                      return StationNames(short_name=station["name"], name=station["name"] + " (" + geocoding_names.name + ")")
-                         
-                            
+                    if geocoding_names.name == station["name"]:
+                        return StationNames(short_name=station["name"], name=station["name"])
+                    else:
+                        return StationNames(
+                            short_name=station["name"], name=station["name"] + " (" + geocoding_names.name + ")"
+                        )
+
                 try:
                     winds_station = self.save_station(
                         provider_id=station["id"],
@@ -71,7 +73,8 @@ class Windball(Provider):
             self.log.exception(f"Error while processing windball: {e}")
 
         self.log.info("...Done !")
-        
+
+
 def windball():
     Windball().process_data()
 
