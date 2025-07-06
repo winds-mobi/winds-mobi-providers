@@ -30,7 +30,7 @@ class Windball(Provider):
                     elif station["status"] == "enabled":
                         status = StationStatus.GREEN
                     else:
-                        status = StationStatus.RED
+                        status = StationStatus.HIDDEN
 
                     winds_station = self.save_station(
                         provider_id=station["id"],
