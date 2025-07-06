@@ -264,7 +264,6 @@ class Provider:
             },
             "status": status,
             "tz": timezone.key,
-            "seen": arrow.utcnow().int_timestamp,  # deprecated
             "lastSeenAt": arrow.utcnow().datetime,
         }
         return station
