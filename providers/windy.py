@@ -33,7 +33,7 @@ class Windy(Provider):
                 pass
 
     def process_data(self):
-        windy_ids = list(map(lambda s: str(s["id"]), self.get_stations_metadata()))
+        selected_ids = list(map(lambda s: s["id"], self.get_stations_metadata()))
 
         stations = {}
         try:
@@ -43,9 +43,9 @@ class Windy(Provider):
                 f"https://stations.windy.com/pws/stations/{self.api_key}",
                 timeout=(self.connect_timeout, self.read_timeout),
             )
-            windy_stations = result.json()["header"]
+            windy_stations = result.json()
 
-            for windy_station in filter(lambda s: s["id"] in windy_ids, windy_stations):
+            for windy_station in filter(lambda s: s["id"] in selected_ids, windy_stations):
                 windy_id = None
                 try:
                     windy_id = windy_station["id"]
@@ -87,9 +87,9 @@ class Windy(Provider):
                 new_measures = []
                 for index, ts in enumerate(windy_measures["ts"]):
                     key = arrow.get(ts).int_timestamp
-                    wind_direction = windy_measures["windDir"][index]
+                    wind_direction = windy_measures["wind_dir"][index]
                     wind_average = windy_measures["wind"][index]
-                    wind_maximum = windy_measures["gust"][index]
+                    wind_maximum = windy_measures["wind_gust"][index]
                     if (
                         wind_direction is not None
                         and wind_average is not None
