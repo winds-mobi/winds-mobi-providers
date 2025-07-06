@@ -4,3 +4,4 @@
 /providers/pgsonda.py @MichalBryxi
 /providers/kachelmannwetter.py @SuperSludge
 /providers/wunderground.py @SuperSludge
+/providers/windball.py @pierregremaud

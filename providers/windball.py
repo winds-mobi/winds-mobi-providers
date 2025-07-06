@@ -22,18 +22,23 @@ class Windball(Provider):
                     if geocoding_names.name == station["name"]:
                         return StationNames(short_name=station["name"], name=station["name"])
                     else:
-                        return StationNames(
-                            short_name=station["name"], name=station["name"] + " (" + geocoding_names.name + ")"
-                        )
+                        return StationNames(short_name=station["name"], name=geocoding_names.name)
 
                 try:
+                    if "name" in station and station["name"].startswith("Test"):
+                        status = StationStatus.HIDDEN
+                    elif station["status"] == "enabled":
+                        status = StationStatus.GREEN
+                    else:
+                        status = StationStatus.RED
+
                     winds_station = self.save_station(
                         provider_id=station["id"],
                         # Let winds.mobi provide the full name (if found) with the help of Google Geocoding API
                         names=build_station_name,  # Pass the function here
                         latitude=station["latitude"],
                         longitude=station["longitude"],
-                        status=StationStatus.GREEN if station["status"] == "enabled" else StationStatus.RED,
+                        status=status,
                         # If url is a dict, the keys must correspond to an ISO 639-1 language code. It also needs a
                         # "default" key, "english" if available. Here an example:
                         url={
