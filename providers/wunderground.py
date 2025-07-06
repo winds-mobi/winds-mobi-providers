@@ -13,7 +13,7 @@ class WUnderground(Provider):
         self.log.info("Processing WUnderground data...")
         try:
             # TODO move station list to admin_db?
-            wu_station_ids = ["INZIDE9"]
+            wu_station_ids = ["INZIDE9", "ISOGND5", "IHAFSL5"]
 
             for wu_station_id in wu_station_ids:
                 url = (
