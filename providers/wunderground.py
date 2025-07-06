@@ -1,6 +1,9 @@
 import arrow
+import psycopg2
 import requests
+from psycopg2.extras import DictCursor
 
+import settings
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
 
@@ -9,11 +12,29 @@ class WUnderground(Provider):
     provider_name = "wunderground.com"
     provider_url = "https://www.wunderground.com"
 
+    def __init__(self, admin_db_url):
+        super().__init__()
+        self.admin_db_url = admin_db_url
+
+    def get_stations_metadata(self):
+        connection = None
+        cursor = None
+        try:
+            connection = psycopg2.connect(self.admin_db_url)
+            cursor = connection.cursor(cursor_factory=DictCursor)
+            cursor.execute("select * from winds_mobi_wunderground_station")
+            return cursor.fetchall()
+        finally:
+            try:
+                cursor.close()
+                connection.close()
+            except Exception:
+                pass
+
     def process_data(self):
         self.log.info("Processing WUnderground data...")
         try:
-            # TODO move station list to admin_db?
-            wu_station_ids = ["INZIDE9"]
+            wu_station_ids = list(map(lambda s: s["id"], self.get_stations_metadata()))
 
             for wu_station_id in wu_station_ids:
                 url = (
@@ -123,7 +144,7 @@ class WUnderground(Provider):
 
 
 def wunderground():
-    WUnderground().process_data()
+    WUnderground(settings.ADMIN_DB_URL).process_data()
 
 
 if __name__ == "__main__":
