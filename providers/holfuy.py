@@ -30,6 +30,10 @@ class Holfuy(Provider):
                 try:
                     holfuy_id = holfuy_station["id"]
                     name = holfuy_station["name"]
+
+                    if holfuy_id not in holfuy_measures:
+                        raise ProviderException(f"Station '{name}' not found in 'api.holfuy.com/live/'")
+
                     location = holfuy_station["location"]
                     latitude = location.get("latitude")
                     longitude = location.get("longitude")
@@ -54,10 +58,6 @@ class Holfuy(Provider):
                     )
                     station_id = station["_id"]
 
-                    if holfuy_id not in holfuy_measures:
-                        raise ProviderException(
-                            f"Station '{name}' not found in 'api.holfuy.com/live/': type='{holfuy_station['type']}'"
-                        )
                     holfuy_measure = holfuy_measures[holfuy_id]
                     last_measure_date = arrow.get(holfuy_measure["dateTime"])
                     key = last_measure_date.int_timestamp
