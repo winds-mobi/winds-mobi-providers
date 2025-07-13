@@ -1,7 +1,24 @@
 services:
+  mongodb:
+    image: mongo:4.4.25
+    ports:
+      - "8011:27017"
+    volumes:
+      - ./volumes/mongodb:/data/db
+
+  redis:
+    image: redis:7.0.4
+    ports:
+      - "8012:6379"
+
   providers:
     build:
       context: .
+    profiles:
+      - application
+    depends_on:
+      - mongodb
+      - redis
     volumes:
       - .:/opt/project
     environment:
@@ -18,6 +35,7 @@ services:
       - WINDY_API_KEY
       - PROVIDER
       - KACHELMANN_API_KEY
+
 networks:
   default:
     name: winds-mobi
