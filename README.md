@@ -18,14 +18,11 @@ In `.env`:
 - fill GOOGLE_API_KEY with you own [Google Cloud API key](https://cloud.google.com/docs/authentication/api-keys#creating_an_api_key)
 - optionally fill the missing secrets for each provider you want to test
 
-### Start the databases
-- `docker compose -f compose.services.yaml up`
-
-### Run the providers
-- `docker compose up`
+### Build and run the project
+- `docker compose --profile=application up`
 
 Or, run only a specific provider:
-- `PROVIDER=ffvl docker compose up`
+- `PROVIDER=myexample docker compose --profile=application up`
 
 Some providers need [winds-mobi-admin](https://github.com/winds-mobi/winds-mobi-admin#run-the-project-with-docker-compose-simple-way) running to get stations metadata.
 
