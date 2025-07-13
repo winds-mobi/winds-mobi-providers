@@ -471,8 +471,8 @@ class Provider:
             self.__providers_collection.update_one(
                 {"_id": self.provider_code},
                 {
-                    "$set": {"name": self.provider_name, "url": self.provider_url, "lastSeenAt": now},
-                    "$setOnInsert": {"firstSeenAt": now},
+                    "$set": {"name": self.provider_name, "url": self.provider_url, "lastSeenAt": now.datetime},
+                    "$setOnInsert": {"firstSeenAt": now.datetime},
                 },
                 upsert=True,
             )
