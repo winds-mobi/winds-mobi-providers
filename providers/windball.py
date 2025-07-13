@@ -13,13 +13,13 @@ class Windball(Provider):
         self.log.info("Processing windball data...")
         try:
             data = requests.get(
-                "https://server.windball.ch/api/windsmobi", timeout=(self.connect_timeout, self.read_timeout)
+                "https://server.windball.ch/api/windsmobi?units=kmh", timeout=(self.connect_timeout, self.read_timeout)
             ).json()
             for station in data:
 
                 # Let winds.mobi provide the geocoding_name (if found) with the help of Google Geocoding API
                 def build_station_name(geocoding_names):
-                    if geocoding_names.name == station["name"]:
+                    if geocoding_names.name is None:
                         return StationNames(short_name=station["name"], name=station["name"])
                     else:
                         return StationNames(short_name=station["name"], name=geocoding_names.name)
@@ -56,8 +56,8 @@ class Windball(Provider):
                                     for_station=winds_station,
                                     _id=measure_key,
                                     wind_direction=measure["windDirection"],
-                                    wind_average=Q_(measure["windAverage"], ureg.meter / ureg.second),
-                                    wind_maximum=Q_(measure["windMaximum"], ureg.meter / ureg.second),
+                                    wind_average=Q_(measure["windAverage"], ureg.kilometer / ureg.hour),
+                                    wind_maximum=Q_(measure["windMaximum"], ureg.kilometer / ureg.hour),
                                 )
                                 self.insert_new_measures(measures_collection, winds_station, [new_measure])
                             except ProviderException as e:
