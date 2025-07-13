@@ -48,6 +48,7 @@ class Provider:
         if None in (self.provider_code, self.provider_name, self.provider_url):
             raise ProviderException("Missing provider_code, provider_name or provider_url")
         self.mongo_db = MongoClient(MONGODB_URL).get_database()
+        self.__providers_collection = self.mongo_db.providers
         self.__stations_collection = self.mongo_db.stations
         self.__stations_collection.create_index(
             [
@@ -466,6 +467,15 @@ class Provider:
             )
 
             self.__add_last_measure(self.__measures_collection(station["_id"]), station["_id"])
+            now = arrow.utcnow()
+            self.__providers_collection.update_one(
+                {"_id": self.provider_code},
+                {
+                    "$set": {"name": self.provider_name, "url": self.provider_url, "lastSeenAt": now},
+                    "$setOnInsert": {"firstSeenAt": now},
+                },
+                upsert=True,
+            )
 
 
 class ProviderException(Exception):
