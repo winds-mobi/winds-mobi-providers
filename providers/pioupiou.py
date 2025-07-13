@@ -65,13 +65,10 @@ class Pioupiou(Provider):
                     )
                     station_id = station["_id"]
 
-                    measures_collection = self.measures_collection(station_id)
-                    new_measures = []
-
                     piou_measure = piou_station["measurements"]
                     last_measure_date = arrow.get(piou_measure["date"])
                     key = last_measure_date.int_timestamp
-                    if not self.has_measure(measures_collection, key):
+                    if not self.has_measure(station, key):
                         measure = self.create_measure(
                             station,
                             key,
@@ -80,9 +77,7 @@ class Pioupiou(Provider):
                             piou_measure["wind_speed_max"],
                             pressure=Pressure(qfe=piou_measure["pressure"], qnh=None, qff=None),
                         )
-                        new_measures.append(measure)
-
-                    self.insert_new_measures(measures_collection, station, new_measures)
+                        self.insert_measures(station, measure)
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station_id}': {e}")

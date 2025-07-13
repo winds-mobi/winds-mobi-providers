@@ -141,9 +141,6 @@ class MeteoSwiss(Provider):
                         meteoswiss_station["properties"]["reference_ts"], "YYYY-MM-DDTHH:mm:ssZ"
                     ).int_timestamp
 
-                    measures_collection = self.measures_collection(station_id)
-                    new_measures = []
-
                     if meteoswiss_id in temperature_data:
                         temperature = self.get_value(temperature_data[meteoswiss_id]["properties"], unit=ureg.degC)
                     else:
@@ -169,7 +166,7 @@ class MeteoSwiss(Provider):
                     else:
                         rain = None
 
-                    if not self.has_measure(measures_collection, key):
+                    if not self.has_measure(station, key):
                         measure = self.create_measure(
                             station,
                             key,
@@ -181,9 +178,7 @@ class MeteoSwiss(Provider):
                             pressure=pressure,
                             rain=rain,
                         )
-                        new_measures.append(measure)
-
-                    self.insert_new_measures(measures_collection, station, new_measures)
+                        self.insert_measures(station, measure)
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station_id}': {e}")

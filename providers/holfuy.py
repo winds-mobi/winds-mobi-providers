@@ -54,9 +54,6 @@ class Holfuy(Provider):
                     )
                     station_id = station["_id"]
 
-                    measures_collection = self.measures_collection(station_id)
-                    new_measures = []
-
                     if holfuy_id not in holfuy_measures:
                         raise ProviderException(
                             f"Station '{name}' not found in 'api.holfuy.com/live/': type='{holfuy_station['type']}'"
@@ -64,7 +61,7 @@ class Holfuy(Provider):
                     holfuy_measure = holfuy_measures[holfuy_id]
                     last_measure_date = arrow.get(holfuy_measure["dateTime"])
                     key = last_measure_date.int_timestamp
-                    if not self.has_measure(measures_collection, key):
+                    if not self.has_measure(station, key):
                         measure = self.create_measure(
                             station,
                             key,
@@ -82,9 +79,7 @@ class Holfuy(Provider):
                                 qff=None,
                             ),
                         )
-                        new_measures.append(measure)
-
-                    self.insert_new_measures(measures_collection, station, new_measures)
+                        self.insert_measures(station, measure)
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station_id or holfuy_id}': {e}")

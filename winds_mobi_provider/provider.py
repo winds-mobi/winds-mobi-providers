@@ -40,17 +40,9 @@ class Provider:
     connect_timeout = 7
     read_timeout = 30
 
-    @property
-    def api_limit_cache_duration(self):
-        return 3600
-
-    @property
-    def api_error_cache_duration(self):
-        return 30 * 24 * 3600
-
-    @property
-    def api_cache_duration(self):
-        return 365 * 24 * 3600
+    __api_limit_cache_duration = 3600
+    __api_error_cache_duration = 30 * 24 * 3600
+    __api_cache_duration = 365 * 24 * 3600
 
     def __init__(self):
         if None in (self.provider_code, self.provider_name, self.provider_url):
@@ -73,39 +65,57 @@ class Provider:
         self.log = logging.getLogger(self.provider_code)
         sentry_sdk.set_tag("provider", self.provider_code)
 
-    def stations_collection(self):
-        return self.__stations_collection
-
-    def measures_collection(self, station_id):
+    def __create_measures_collection(self, station_id):
         if station_id not in self.collection_names:
             self.mongo_db.create_collection(station_id)
             self.mongo_db[station_id].create_index([("time", ASCENDING)], expireAfterSeconds=60 * 60 * 24 * 10)
             self.collection_names.append(station_id)
+
+    def __measures_collection(self, station_id):
         return self.mongo_db[station_id]
+
+    def __to_int(self, value, mandatory=False):
+        try:
+            return int(round(float(value)))
+        except (TypeError, ValueError):
+            if mandatory:
+                return 0
+            return None
+
+    def __to_float(self, value, ndigits=1, mandatory=False):
+        try:
+            return round(float(value), ndigits)
+        except (TypeError, ValueError):
+            if mandatory:
+                return 0.0
+            return None
+
+    def __to_bool(self, value):
+        return str(value).lower() in ["true", "yes"]
 
     def __to_wind_direction(self, value):
         if isinstance(value, ureg.Quantity):
-            return to_int(value.to(ureg.degree).magnitude, mandatory=True)
+            return self.__to_int(value.to(ureg.degree).magnitude, mandatory=True)
         else:
-            return to_int(value, mandatory=True)
+            return self.__to_int(value, mandatory=True)
 
     def __to_wind_speed(self, value):
         if isinstance(value, ureg.Quantity):
-            return to_float(value.to(ureg.kilometer / ureg.hour).magnitude, mandatory=True)
+            return self.__to_float(value.to(ureg.kilometer / ureg.hour).magnitude, mandatory=True)
         else:
-            return to_float(value, mandatory=True)
+            return self.__to_float(value, mandatory=True)
 
     def __to_temperature(self, value):
         if isinstance(value, ureg.Quantity):
-            return to_float(value.to(ureg.degC).magnitude)
+            return self.__to_float(value.to(ureg.degC).magnitude)
         else:
-            return to_float(value)
+            return self.__to_float(value)
 
     def __to_pressure(self, value):
         if isinstance(value, ureg.Quantity):
-            return to_float(value.to(ureg.hPa).magnitude, ndigits=4)
+            return self.__to_float(value.to(ureg.hPa).magnitude, ndigits=4)
         else:
-            return to_float(value, ndigits=4)
+            return self.__to_float(value, ndigits=4)
 
     def __compute_pressures(self, p: Pressure, altitude, temperature, humidity):
         # Normalize pressure to HPa
@@ -128,27 +138,27 @@ class Provider:
                 qff, elevationM=altitude, currentTempC=temperature, meanTempC=temperature, humidity=humidity
             )
 
-        return {"qfe": to_float(qfe), "qnh": to_float(qnh), "qff": to_float(qff)}
+        return {"qfe": self.__to_float(qfe), "qnh": self.__to_float(qnh), "qff": self.__to_float(qff)}
 
     def __to_altitude(self, value):
         if isinstance(value, ureg.Quantity):
-            return to_int(value.to(ureg.meter).magnitude)
+            return self.__to_int(value.to(ureg.meter).magnitude)
         else:
-            return to_int(value)
+            return self.__to_int(value)
 
     def __to_rain(self, value):
         if isinstance(value, ureg.Quantity):
-            return to_float(value.to(ureg.liter / (ureg.meter**2)).magnitude, 1)
+            return self.__to_float(value.to(ureg.liter / (ureg.meter**2)).magnitude, 1)
         else:
-            return to_float(value, 1)
+            return self.__to_float(value, 1)
 
-    def add_redis_key(self, key, values, cache_duration):
+    def __add_redis_key(self, key, values, cache_duration):
         pipe = self.redis.pipeline()
-        pipe.hmset(key, values)
+        pipe.hset(key, mapping=values)
         pipe.expire(key, cache_duration)
         pipe.execute()
 
-    def call_google_api(self, url, api_name):
+    def __call_google_api(self, url, api_name):
         path = furl(url)
         path.args["key"] = self.google_api_key
         result = requests.get(path.url, timeout=(self.connect_timeout, self.read_timeout)).json()
@@ -217,7 +227,7 @@ class Provider:
             if k < nb - 1:
                 path += "|"
 
-        result = self.call_google_api(
+        result = self.__call_google_api(
             f"https://maps.googleapis.com/maps/api/elevation/json?locations={path}", "Google Elevation API"
         )
         elevation = float(result["results"][0]["elevation"])
@@ -254,12 +264,12 @@ class Provider:
             "short": fixes.get("short") or short_name,
             "name": fixes.get("name") or name,
             "alt": self.__to_altitude(fixes["alt"] if "alt" in fixes else altitude),
-            "peak": to_bool(fixes["peak"] if "peak" in fixes else is_peak),
+            "peak": self.__to_bool(fixes["peak"] if "peak" in fixes else is_peak),
             "loc": {
                 "type": "Point",
                 "coordinates": [
-                    to_float(fixes["longitude"] if "longitude" in fixes else longitude, 6),
-                    to_float(fixes["latitude"] if "latitude" in fixes else latitude, 6),
+                    self.__to_float(fixes["longitude"] if "longitude" in fixes else longitude, 6),
+                    self.__to_float(fixes["latitude"] if "latitude" in fixes else latitude, 6),
                 ],
             },
             "status": status,
@@ -278,13 +288,13 @@ class Provider:
         altitude=None,
         timezone: ZoneInfo = None,
         url=None,
-    ):
+    ) -> dict:
         if provider_id is None:
             raise ProviderException("Missing provider_id")
         station_id = self.get_station_id(provider_id)
 
-        lat = to_float(latitude, 6)
-        lon = to_float(longitude, 6)
+        lat = self.__to_float(latitude, 6)
+        lon = self.__to_float(longitude, 6)
         if lat is None or lon is None:
             raise ProviderException("Missing latitude or longitude")
         if lat < -90 or lat > 90 or lon < -180 or lon > 180:
@@ -296,23 +306,23 @@ class Provider:
             address_key = f"address2/{lat},{lon}"
             if not self.redis.exists(address_key):
                 try:
-                    result = self.call_google_api(
+                    result = self.__call_google_api(
                         f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
                         "Google Reverse Geocoding API",
                     )
-                    self.add_redis_key(
+                    self.__add_redis_key(
                         address_key,
                         {"json": json.dumps(result)},
-                        self.api_cache_duration,
+                        self.__api_cache_duration,
                     )
                 except TimeoutError as e:
                     raise e
                 except UsageLimitException as e:
-                    self.add_redis_key(address_key, {"error": repr(e)}, self.api_limit_cache_duration)
+                    self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_limit_cache_duration)
                 except Exception as e:
                     if not isinstance(e, ProviderException):
                         self.log.exception("Unable to call Google Reverse Geocoding API")
-                    self.add_redis_key(address_key, {"error": repr(e)}, self.api_error_cache_duration)
+                    self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_error_cache_duration)
 
             short_name, name = names(self.__parse_reverse_geocoding_results(address_key))
         else:
@@ -324,15 +334,15 @@ class Provider:
         if not self.redis.exists(alt_key):
             try:
                 elevation, is_peak = self.__compute_elevation(lat, lon)
-                self.add_redis_key(alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.api_cache_duration)
+                self.__add_redis_key(alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.__api_cache_duration)
             except TimeoutError as e:
                 raise e
             except UsageLimitException as e:
-                self.add_redis_key(alt_key, {"error": repr(e)}, self.api_limit_cache_duration)
+                self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_limit_cache_duration)
             except Exception as e:
                 if not isinstance(e, ProviderException):
                     self.log.exception("Unable to call Google Elevation API")
-                self.add_redis_key(alt_key, {"error": repr(e)}, self.api_error_cache_duration)
+                self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_error_cache_duration)
 
         if not altitude:
             if self.redis.hexists(alt_key, "error"):
@@ -368,13 +378,14 @@ class Provider:
         station = self.__create_station(
             provider_id, short_name, name, lat, lon, altitude, is_peak, status.value, timezone, urls, fixes
         )
-        self.stations_collection().update_one({"_id": station_id}, {"$set": station}, upsert=True)
+        self.__stations_collection.update_one({"_id": station_id}, {"$set": station}, upsert=True)
+        self.__create_measures_collection(station_id)
         station["_id"] = station_id
         return station
 
     def create_measure(
         self,
-        for_station,
+        station,
         _id,
         wind_direction,
         wind_average,
@@ -383,11 +394,11 @@ class Provider:
         humidity=None,
         pressure: Pressure = None,
         rain=None,
-    ):
+    ) -> dict:
         if all((wind_direction is None, wind_average is None, wind_maximum is None)):
             raise ProviderException("All mandatory values are null!")
 
-        measure = {
+        measure: dict = {
             "_id": int(round(_id)),
             # Mandatory values: 0 if not present
             "w-dir": self.__to_wind_direction(wind_direction),
@@ -399,10 +410,10 @@ class Provider:
         if temperature is not None:
             measure["temp"] = self.__to_temperature(temperature)
         if humidity is not None:
-            measure["hum"] = to_float(humidity, 1)
+            measure["hum"] = self.__to_float(humidity, 1)
         if pressure is not None and (pressure.qfe is not None or pressure.qnh is not None or pressure.qff is not None):
             measure["pres"] = self.__compute_pressures(
-                pressure, for_station["alt"], measure.get("temp", None), measure.get("hum", None)
+                pressure, station["alt"], measure.get("temp"), measure.get("hum")
             )
         if rain is not None:
             measure["rain"] = self.__to_rain(rain)
@@ -410,7 +421,7 @@ class Provider:
         measure["time"] = arrow.get(measure["_id"]).datetime
         measure["receivedAt"] = arrow.utcnow().datetime
 
-        fixes = self.mongo_db.stations_fix.find_one(for_station["_id"])
+        fixes = self.mongo_db.stations_fix.find_one(station["_id"])
         if fixes and "measures" in fixes:
             for key, offset in fixes["measures"].items():
                 try:
@@ -425,19 +436,24 @@ class Provider:
 
         return measure
 
-    def has_measure(self, measure_collection, key):
-        return measure_collection.count_documents({"_id": key}) > 0
+    def has_measure(self, station: dict, timestamp: int) -> bool:
+        return self.__measures_collection(station["_id"]).count_documents({"_id": timestamp}) > 0
 
-    def __add_last_measure(self, measure_collection, station_id):
-        last_measure = measure_collection.find_one({"$query": {}, "$orderby": {"_id": -1}})
+    def __add_last_measure(self, measures_collection, station_id):
+        last_measure = measures_collection.find_one({"$query": {}, "$orderby": {"_id": -1}})
         if last_measure:
-            self.stations_collection().update_one({"_id": station_id}, {"$set": {"last": last_measure}})
+            self.__stations_collection.update_one({"_id": station_id}, {"$set": {"last": last_measure}})
 
-    def insert_new_measures(self, measure_collection, station, new_measures):
-        if len(new_measures) > 0:
-            measure_collection.insert_many(sorted(new_measures, key=lambda m: m["_id"]))
+    def insert_measures(self, station: dict, measures: list[dict] | dict):
+        if not isinstance(measures, list):
+            measures = [measures]
 
-            end_date = arrow.Arrow.fromtimestamp(new_measures[-1]["_id"], ZoneInfo(station["tz"]))
+        if len(measures) > 0:
+            result = self.__measures_collection(station["_id"]).insert_many(measures, ordered=False)
+            if len(result.inserted_ids) != len(measures):
+                self.log.warning(f"{len(measures) - len(result.inserted_ids)} measure(s) not inserted")
+
+            end_date = arrow.Arrow.fromtimestamp(measures[-1]["_id"], ZoneInfo(station["tz"]))
             self.log.info(
                 "⏱ {end_date} ({end_date_local}) '{short}'/'{name}' ({id}): {nb} values inserted".format(
                     end_date=end_date.format("YY-MM-DD HH:mm:ssZZ"),
@@ -445,11 +461,11 @@ class Provider:
                     short=station["short"],
                     name=station["name"],
                     id=station["_id"],
-                    nb=str(len(new_measures)),
+                    nb=len(result.inserted_ids),
                 )
             )
 
-            self.__add_last_measure(measure_collection, station["_id"])
+            self.__add_last_measure(self.__measures_collection(station["_id"]), station["_id"])
 
 
 class ProviderException(Exception):
@@ -458,25 +474,3 @@ class ProviderException(Exception):
 
 class UsageLimitException(ProviderException):
     pass
-
-
-def to_int(value, mandatory=False):
-    try:
-        return int(round(float(value)))
-    except (TypeError, ValueError):
-        if mandatory:
-            return 0
-        return None
-
-
-def to_float(value, ndigits=1, mandatory=False):
-    try:
-        return round(float(value), ndigits)
-    except (TypeError, ValueError):
-        if mandatory:
-            return 0.0
-        return None
-
-
-def to_bool(value):
-    return str(value).lower() in ["true", "yes"]

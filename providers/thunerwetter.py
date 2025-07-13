@@ -73,10 +73,7 @@ class ThunerWetter(Provider):
                 .int_timestamp
             )
 
-            measures_collection = self.measures_collection(station_id)
-            new_measures = []
-
-            if not self.has_measure(measures_collection, key):
+            if not self.has_measure(station, key):
                 wind_elements = wind_tree.xpath('//td[text()="Ø 10 Minuten"]')
 
                 # Wind average
@@ -123,9 +120,7 @@ class ThunerWetter(Provider):
                     temperature=temp["temp"],
                     humidity=humidity["humidity"],
                 )
-                new_measures.append(measure)
-
-            self.insert_new_measures(measures_collection, station, new_measures)
+                self.insert_measures(station, measure)
 
         except ProviderException as e:
             self.log.warning(f"Error while processing station '{station_id}': {e}")

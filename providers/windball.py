@@ -47,19 +47,19 @@ class Windball(Provider):
                     )
                     station_id = winds_station["_id"]
 
-                    measures_collection = self.measures_collection(station_id)
+                    measures = []
                     for measure in station["measures"]:
                         measure_key = arrow.get(measure["time"]).int_timestamp
-                        if not self.has_measure(measures_collection, measure_key):
+                        if not self.has_measure(winds_station, measure_key):
                             try:
-                                new_measure = self.create_measure(
-                                    for_station=winds_station,
+                                measure = self.create_measure(
+                                    station=winds_station,
                                     _id=measure_key,
                                     wind_direction=measure["windDirection"],
                                     wind_average=Q_(measure["windAverage"], ureg.kilometer / ureg.hour),
                                     wind_maximum=Q_(measure["windMaximum"], ureg.kilometer / ureg.hour),
                                 )
-                                self.insert_new_measures(measures_collection, winds_station, [new_measure])
+                                measures.append(measure)
                             except ProviderException as e:
                                 self.log.warning(
                                     f"Error while processing measure '{measure_key}' for station '{station_id}': {e}"
@@ -68,6 +68,7 @@ class Windball(Provider):
                                 self.log.exception(
                                     f"Error while processing measure '{measure_key}' for station '{station_id}': {e}"
                                 )
+                    self.insert_measures(winds_station, measures)
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station['id']}': {e}")

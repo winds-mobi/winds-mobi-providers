@@ -98,8 +98,6 @@ class WUnderground(Provider):
                         )
                         station_id = winds_station["_id"]
 
-                        measures_collection = self.measures_collection(station_id)
-
                         # remove the seconds -> only store one measure per minute at max.
                         measure_key = (
                             arrow.get(current_observation["obsTimeUtc"], "YYYY-MM-DDTHH:mm:ssZ")
@@ -107,10 +105,10 @@ class WUnderground(Provider):
                             .int_timestamp
                         )
 
-                        if not self.has_measure(measures_collection, measure_key):
+                        if not self.has_measure(winds_station, measure_key):
                             try:
                                 new_measure = self.create_measure(
-                                    for_station=winds_station,
+                                    station=winds_station,
                                     _id=measure_key,
                                     wind_direction=current_observation["winddir"],
                                     wind_average=Q_(
@@ -122,7 +120,7 @@ class WUnderground(Provider):
                                     temperature=Q_(current_observation["metric"]["temp"], ureg.degC),
                                     pressure=Pressure(current_observation["metric"]["pressure"], qnh=None, qff=None),
                                 )
-                                self.insert_new_measures(measures_collection, winds_station, [new_measure])
+                                self.insert_measures(winds_station, new_measure)
                             except ProviderException as e:
                                 self.log.warning(
                                     f"Error while processing measure '{measure_key}' for station '{station_id}': {e}"

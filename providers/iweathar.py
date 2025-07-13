@@ -67,8 +67,7 @@ class IWeathar(Provider):
 
                     if status == StationStatus.GREEN:
                         key = int(get_attr(item, "UNIX_DATE_STAMP"))
-                        measures_collection = self.measures_collection(station_id)
-                        if not self.has_measure(measures_collection, key):
+                        if not self.has_measure(station, key):
                             try:
                                 wind_dir_attr = get_attr(item, "WIND_ANG")
                                 wind_dir = Q_(int(wind_dir_attr), ureg.degree)
@@ -102,7 +101,7 @@ class IWeathar(Provider):
                                     pressure=Pressure(qfe=pressure, qnh=None, qff=None),
                                     rain=rain,
                                 )
-                                self.insert_new_measures(measures_collection, station, [measure])
+                                self.insert_measures(station, measure)
                             except ProviderException as e:
                                 self.log.warning(
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}"

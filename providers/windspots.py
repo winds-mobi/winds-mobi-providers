@@ -66,8 +66,7 @@ class Windspots(Provider):
                                 f"inconsistent with measure time '{key_time}'"
                             )
 
-                        measures_collection = self.measures_collection(station_id)
-                        if not self.has_measure(measures_collection, key):
+                        if not self.has_measure(station, key):
                             try:
                                 measure = self.create_measure(
                                     station,
@@ -78,7 +77,7 @@ class Windspots(Provider):
                                     temperature=windspots_measure.get("airTemperature"),
                                     humidity=windspots_measure.get("airHumidity"),
                                 )
-                                self.insert_new_measures(measures_collection, station, [measure])
+                                self.insert_measures(station, measure)
                             except ProviderException as e:
                                 self.log.warning(
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}"

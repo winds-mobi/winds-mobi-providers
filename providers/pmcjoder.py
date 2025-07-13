@@ -101,11 +101,9 @@ class PmcJoder(Provider):
                     )
 
                     measure_key = station["measures"][0]["time"]
-                    measures_collection = self.measures_collection(winds_station["_id"])
-
-                    if not self.has_measure(measures_collection, measure_key):
-                        new_measure = self.create_measure(
-                            for_station=winds_station,
+                    if not self.has_measure(winds_station, measure_key):
+                        measure = self.create_measure(
+                            station=winds_station,
                             _id=measure_key,
                             wind_direction=station["measures"][0]["windDirection"],
                             wind_average=Q_(station["measures"][0]["windAverage"], ureg.kilometer / ureg.hour),
@@ -114,7 +112,7 @@ class PmcJoder(Provider):
                             pressure=Pressure(station["measures"][0]["pressure"], qnh=None, qff=None),
                             humidity=station["measures"][0]["humidity"],
                         )
-                        self.insert_new_measures(measures_collection, winds_station, [new_measure])
+                        self.insert_measures(winds_station, measure)
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station['id']}': {e}")
