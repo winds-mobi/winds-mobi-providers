@@ -67,9 +67,7 @@ class Slf(Provider):
                     )
                     slf_measures = result.json()
 
-                    measures_collection = self.measures_collection(station_id)
-                    new_measures = []
-
+                    measures = []
                     # At this time, SLF provides data every 30 minutes but the weekly list is updated only every hour.
                     # Using 6 last values to support 10 minutes rate if needed.
                     for index, slf_measure_dir in enumerate(slf_measures["windDirectionMean"][:6]):
@@ -81,7 +79,7 @@ class Slf(Provider):
                             continue
 
                         key = arrow.get(timestamp).int_timestamp
-                        if not self.has_measure(measures_collection, key):
+                        if not self.has_measure(station, key):
                             try:
                                 measure = self.create_measure(
                                     station,
@@ -95,7 +93,7 @@ class Slf(Provider):
                                         else None
                                     ),
                                 )
-                                new_measures.append(measure)
+                                measures.append(measure)
                             except KeyError as e:
                                 self.log.warning(
                                     f"Error while processing measure '{key}' for station '{station_id}': "
@@ -110,7 +108,7 @@ class Slf(Provider):
                                     f"Error while processing measure '{key}' for station '{station_id}': {e}"
                                 )
 
-                    self.insert_new_measures(measures_collection, station, new_measures)
+                    self.insert_measures(station, measures)
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing station '{station_id}': {e}")

@@ -87,8 +87,7 @@ class Metar(Provider):
                     station_id = station["_id"]
                     key = arrow.get(get_attr(metar, "observation_time"), "YYYY-MM-DDTHH:mm:ssZ").int_timestamp
 
-                    measures_collection = self.measures_collection(station_id)
-                    if not self.has_measure(measures_collection, key):
+                    if not self.has_measure(station, key):
                         try:
                             if (
                                 not metar.xpath("wind_dir_degrees")
@@ -133,7 +132,7 @@ class Metar(Provider):
                                     qff=pressure_sea,
                                 ),
                             )
-                            self.insert_new_measures(measures_collection, station, [measure])
+                            self.insert_measures(station, measure)
                         except ProviderException as e:
                             self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
                         except Exception as e:

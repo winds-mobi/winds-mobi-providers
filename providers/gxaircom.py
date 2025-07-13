@@ -28,11 +28,10 @@ class Gxaircom(Provider):
                         altitude=station["alt"],
                     )
                     measure_key = arrow.get(station["DT"], "YYYY-MM-DD HH:mm:ss").int_timestamp
-                    measures_collection = self.measures_collection(winds_station["_id"])
 
-                    if not self.has_measure(measures_collection, measure_key):
-                        new_measure = self.create_measure(
-                            for_station=winds_station,
+                    if not self.has_measure(winds_station, measure_key):
+                        measure = self.create_measure(
+                            station=winds_station,
                             _id=measure_key,
                             wind_direction=station["wDir"],
                             wind_average=Q_(station["wSpeed"], ureg.kilometer / ureg.hour),
@@ -44,7 +43,7 @@ class Gxaircom(Provider):
                                 else None
                             ),
                         )
-                        self.insert_new_measures(measures_collection, winds_station, [new_measure])
+                        self.insert_measures(winds_station, measure)
                 except Exception as e:
                     self.log.exception(
                         f"Error while processing station {station['stationId']}({station['stationName']}): {e}"

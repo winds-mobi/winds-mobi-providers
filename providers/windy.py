@@ -83,8 +83,7 @@ class Windy(Provider):
                 if not windy_measures:
                     continue
 
-                measures_collection = self.measures_collection(station_id)
-                new_measures = []
+                measures = []
                 for index, ts in enumerate(windy_measures["ts"]):
                     key = arrow.get(ts).int_timestamp
                     wind_direction = windy_measures["wind_dir"][index]
@@ -94,32 +93,31 @@ class Windy(Provider):
                         wind_direction is not None
                         and wind_average is not None
                         and wind_maximum is not None
-                        and not self.has_measure(measures_collection, key)
+                        and not self.has_measure(station, key)
                     ):
-                        new_measures.append(
-                            self.create_measure(
-                                station,
-                                key,
-                                wind_direction,
-                                Q_(wind_average, ureg.meter / ureg.second),
-                                Q_(wind_maximum, ureg.meter / ureg.second),
-                                temperature=windy_measures["temp"][index] if "temp" in windy_measures else None,
-                                pressure=(
-                                    Pressure(
-                                        qfe=(
-                                            Q_(windy_measures["pressure"][index] / 1000, ureg.hPa)
-                                            if windy_measures["pressure"][index] is not None
-                                            else None
-                                        ),
-                                        qnh=None,
-                                        qff=None,
-                                    )
-                                    if "pressure" in windy_measures
-                                    else None
-                                ),
-                            )
+                        measure = self.create_measure(
+                            station,
+                            key,
+                            wind_direction,
+                            Q_(wind_average, ureg.meter / ureg.second),
+                            Q_(wind_maximum, ureg.meter / ureg.second),
+                            temperature=windy_measures["temp"][index] if "temp" in windy_measures else None,
+                            pressure=(
+                                Pressure(
+                                    qfe=(
+                                        Q_(windy_measures["pressure"][index] / 1000, ureg.hPa)
+                                        if windy_measures["pressure"][index] is not None
+                                        else None
+                                    ),
+                                    qnh=None,
+                                    qff=None,
+                                )
+                                if "pressure" in windy_measures
+                                else None
+                            ),
                         )
-                self.insert_new_measures(measures_collection, station, new_measures)
+                        measures.append(measure)
+                self.insert_measures(station, measures)
 
             except ProviderException as e:
                 self.log.warning(f"Error while processing measures for station '{station_id}': {e}")

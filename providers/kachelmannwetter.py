@@ -51,15 +51,13 @@ class KachelmannWetter(Provider):
                     )
                     station_id = winds_station["_id"]
 
-                    measures_collection = self.measures_collection(station_id)
-
                     # remove the seconds -> only store one measure per minute at max.
                     measure_key = arrow.get(data["data"]["temp"]["dateTime"]).int_timestamp
 
-                    if not self.has_measure(measures_collection, measure_key):
+                    if not self.has_measure(winds_station, measure_key):
                         try:
-                            new_measure = self.create_measure(
-                                for_station=winds_station,
+                            measure = self.create_measure(
+                                station=winds_station,
                                 _id=measure_key,
                                 wind_direction=data["data"]["windDirection"]["value"],
                                 wind_average=Q_(data["data"]["windSpeed"]["value"], ureg.knot),
@@ -67,7 +65,7 @@ class KachelmannWetter(Provider):
                                 temperature=Q_(data["data"]["temp"]["value"], ureg.degC),
                                 pressure=Pressure(data["data"]["pressure"]["value"], qnh=None, qff=None),
                             )
-                            self.insert_new_measures(measures_collection, winds_station, [new_measure])
+                            self.insert_measures(winds_station, measure)
                         except ProviderException as e:
                             self.log.warning(
                                 f"Error while processing measure '{measure_key}' for station '{station_id}': {e}"

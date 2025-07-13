@@ -130,8 +130,7 @@ class Zermatt(Provider):
                                 .int_timestamp
                             )
 
-                            measures_collection = self.measures_collection(station_id)
-                            if not self.has_measure(measures_collection, key):
+                            if not self.has_measure(station, key):
                                 # class="wCurr"
                                 wind_dir_text = table_rows[i + 1].xpath("td[@class='c4']")[0].text
                                 if wind_dir_text == "-":
@@ -156,7 +155,7 @@ class Zermatt(Provider):
                                 measure = self.create_measure(
                                     station, key, wind_dir, wind_avg, wind_max, temperature=temp
                                 )
-                                self.insert_new_measures(measures_collection, station, [measure])
+                                self.insert_measures(station, measure)
                         else:
                             self.log.warning(f"No data for station '{station_id}'")
                     except ProviderException as e:

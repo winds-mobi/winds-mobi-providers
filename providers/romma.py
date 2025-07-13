@@ -76,14 +76,12 @@ class Romma(Provider):
                         self.log.warning(f"Station '{station_id}' has no wind direction value")
                         continue
 
-                    measures_collection = self.measures_collection(station_id)
                     key = (
                         arrow.get(report.xpath("date")[0].text, "D-MM-YYYY H:mm")
                         .replace(tzinfo=self.timezone)
                         .int_timestamp
                     )
-
-                    if not self.has_measure(measures_collection, key):
+                    if not self.has_measure(station, key):
                         try:
                             measure = self.create_measure(
                                 station,
@@ -97,7 +95,7 @@ class Romma(Provider):
                                     qfe=self.get_value(report.xpath("pression")[0].text), qnh=None, qff=None
                                 ),
                             )
-                            self.insert_new_measures(measures_collection, station, [measure])
+                            self.insert_measures(station, measure)
                         except ProviderException as e:
                             self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
                         except Exception as e:

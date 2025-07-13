@@ -216,9 +216,8 @@ class FluggruppeAletsch(Provider):
                     altitude=parser.elevation(),
                 )
 
-                measures_collection = self.measures_collection(station["_id"])
                 key = parser.key()
-                if not self.has_measure(measures_collection, key):
+                if not self.has_measure(station, key):
                     try:
                         measure = self.create_measure(
                             station,
@@ -231,7 +230,7 @@ class FluggruppeAletsch(Provider):
                             humidity=parser.humidity(),
                         )
 
-                        self.insert_new_measures(measures_collection, station, [measure])
+                        self.insert_measures(station, measure)
                     except ProviderException as e:
                         self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
                     except Exception as e:

@@ -174,9 +174,6 @@ class Windline(Provider):
                     station_id = station["_id"]
 
                     try:
-                        measures_collection = self.measures_collection(station_id)
-                        new_measures = []
-
                         wind_average_rows = self.get_measures(
                             mysql_cursor, windline_id, self.wind_average_type, start_date
                         )
@@ -191,12 +188,13 @@ class Windline(Provider):
                         )
                         humidity_rows = self.get_measures(mysql_cursor, windline_id, self.humidity_type, start_date)
 
+                        measures = []
                         # The wind average measure is the time reference for a measure
                         for wind_average_row in wind_average_rows:
                             try:
                                 key = arrow.get(wind_average_row[0]).int_timestamp
-                                if key not in [measure["_id"] for measure in new_measures] and not self.has_measure(
-                                    measures_collection, key
+                                if key not in [measure["_id"] for measure in measures] and not self.has_measure(
+                                    station, key
                                 ):
                                     wind_average = Q_(float(wind_average_row[1]), ureg.meter / ureg.second)
 
@@ -248,11 +246,11 @@ class Windline(Provider):
                                         temperature=temperature,
                                         humidity=humidity,
                                     )
-                                    new_measures.append(measure)
+                                    measures.append(measure)
                             except NoMeasure:
                                 pass
 
-                        self.insert_new_measures(measures_collection, station, new_measures)
+                        self.insert_measures(station, measures)
 
                     except ProviderException as e:
                         self.log.warning(f"Error while processing measures for station '{station_id}': {e}")

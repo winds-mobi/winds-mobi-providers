@@ -76,14 +76,13 @@ class Ffvl(Provider):
                         raise ProviderException(f"Unknown station '{station_id}'")
                     station = stations[station_id]
 
-                    measures_collection = self.measures_collection(station_id)
                     key = (
                         arrow.get(ffvl_measure["date"], "YYYY-MM-DD HH:mm:ss")
                         .replace(tzinfo=self.timezone)
                         .int_timestamp
                     )
 
-                    if not self.has_measure(measures_collection, key):
+                    if not self.has_measure(station, key):
                         measure = self.create_measure(
                             station,
                             key,
@@ -94,7 +93,7 @@ class Ffvl(Provider):
                             humidity=ffvl_measure["hydrometrie"],
                             pressure=Pressure(qfe=ffvl_measure["pression"], qnh=None, qff=None),
                         )
-                        self.insert_new_measures(measures_collection, station, [measure])
+                        self.insert_measures(station, measure)
 
                 except ProviderException as e:
                     self.log.warning(f"Error while processing measures for station '{station_id}': {e}")
