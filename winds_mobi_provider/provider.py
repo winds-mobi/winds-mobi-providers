@@ -42,7 +42,7 @@ class Provider:
 
     __api_limit_cache_duration = 3600
     __api_error_cache_duration = 30 * 24 * 3600
-    __api_cache_duration = 365 * 24 * 3600
+    __api_cache_duration = 2 * 365 * 24 * 3600
 
     def __init__(self):
         if None in (self.provider_code, self.provider_name, self.provider_url):

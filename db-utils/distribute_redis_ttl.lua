@@ -36,7 +36,7 @@ repeat
                     keys_error = keys_error + 1
                 end
             else
-                -- redis.call("EXPIRE", key, math.random(1, 365 * 24 * 3600))
+                -- redis.call("EXPIRE", key, math.random(1, 2 * 365 * 24 * 3600))
                 keys_updated = keys_updated + 1
             end
         elseif current_ttl == -1 then
