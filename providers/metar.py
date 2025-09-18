@@ -85,7 +85,7 @@ class Metar(Provider):
                     )
 
                     station_id = station["_id"]
-                    key = arrow.get(get_attr(metar, "observation_time"), "YYYY-MM-DDTHH:mm:ssZ").int_timestamp
+                    key = arrow.get(get_attr(metar, "observation_time")).int_timestamp
 
                     if not self.has_measure(station, key):
                         try:
