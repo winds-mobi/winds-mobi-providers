@@ -1,5 +1,5 @@
-import requests
 import arrow
+import requests
 
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
