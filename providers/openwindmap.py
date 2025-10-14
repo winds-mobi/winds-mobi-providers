@@ -3,7 +3,8 @@ import arrow
 
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
 
-#api doc: https://developers.pioupiou.fr/api/live/
+
+# api doc: https://developers.pioupiou.fr/api/live/
 class OpenWindMap(Provider):
     provider_code = "openwindmap"
     provider_name = "api.pioupiou.fr"
@@ -12,9 +13,7 @@ class OpenWindMap(Provider):
     def process_data(self):
         self.log.info("Processing openwindmap data...")
         try:
-            data = requests.get(
-                 f"{self.provider_url}/all", timeout=(self.connect_timeout, self.read_timeout)
-             ).json()
+            data = requests.get(f"{self.provider_url}/all", timeout=(self.connect_timeout, self.read_timeout)).json()
 
             for station in data["data"]:
                 try:
@@ -29,9 +28,7 @@ class OpenWindMap(Provider):
                         status=StationStatus.GREEN if station["status"]["state"] == "on" else StationStatus.RED,
                         # If url is a dict, the keys must correspond to an ISO 639-1 language code. It also needs a
                         # "default" key, "english" if available. Here an example:
-                        url={
-                            "default": f"{self.provider_url}/{station['id']}"
-                        },
+                        url={"default": f"{self.provider_url}/{station['id']}"},
                     )
                     station_id = winds_station["_id"]
 
@@ -44,9 +41,19 @@ class OpenWindMap(Provider):
                                 station=winds_station,
                                 _id=measure_key,
                                 wind_direction=measure["wind_heading"] or None,
-                                wind_average=Q_(measure["wind_speed_avg"], ureg.meter / ureg.second) if measure["wind_speed_avg"] else None,
-                                wind_maximum=Q_(measure["wind_speed_max"], ureg.meter / ureg.second) if measure["wind_speed_max"] else None,
-                                pressure=Pressure(measure["pressure"], qnh=None, qff=None) if measure["pressure"] else None,
+                                wind_average=(
+                                    Q_(measure["wind_speed_avg"], ureg.meter / ureg.second)
+                                    if measure["wind_speed_avg"]
+                                    else None
+                                ),
+                                wind_maximum=(
+                                    Q_(measure["wind_speed_max"], ureg.meter / ureg.second)
+                                    if measure["wind_speed_max"]
+                                    else None
+                                ),
+                                pressure=(
+                                    Pressure(measure["pressure"], qnh=None, qff=None) if measure["pressure"] else None
+                                ),
                             )
                             measures.append(new_measure)
                         except ProviderException as e:
