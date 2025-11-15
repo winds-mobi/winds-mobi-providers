@@ -27,15 +27,15 @@ services:
       - REDIS_URL
       - ADMIN_DB_URL
       - GOOGLE_API_KEY
-      - WINDLINE_SQL_URL
-      - CHECKWX_API_KEY
-      - ROMMA_KEY
-      - IWEATHAR_KEY
+      - PROVIDER
       - BORN_TO_FLY_VENDOR_ID
       - BORN_TO_FLY_DEVICE_ID
-      - WINDY_API_KEY
-      - PROVIDER
+      - FFVL_API_KEY
+      - IWEATHAR_KEY
       - KACHELMANN_API_KEY
+      - ROMMA_KEY
+      - WINDLINE_SQL_URL
+      - WINDY_API_KEY
 
 networks:
   default:
