@@ -12,6 +12,7 @@ import requests
 import sentry_sdk
 from furl import furl
 from pymongo import ASCENDING, GEOSPHERE, MongoClient
+from sentry_sdk import metrics
 from timezonefinder import TimezoneFinder
 
 from settings import GOOGLE_API_KEY, MONGODB_URL, REDIS_URL
@@ -162,6 +163,7 @@ class Provider:
     def __call_google_api(self, url, api_name):
         path = furl(url)
         path.args["key"] = self.google_api_key
+        metrics.count("google.api.call", 1, attributes={"api": api_name})
         result = requests.get(path.url, timeout=(self.connect_timeout, self.read_timeout)).json()
         if result["status"] == "OVER_QUERY_LIMIT":
             raise UsageLimitException(f"[{api_name}] OVER_QUERY_LIMIT")
@@ -229,7 +231,7 @@ class Provider:
                 path += "|"
 
         result = self.__call_google_api(
-            f"https://maps.googleapis.com/maps/api/elevation/json?locations={path}", "Google Elevation API"
+            f"https://maps.googleapis.com/maps/api/elevation/json?locations={path}", "Maps Elevation API"
         )
         elevation = float(result["results"][0]["elevation"])
         is_peak = False
@@ -309,7 +311,7 @@ class Provider:
                 try:
                     result = self.__call_google_api(
                         f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
-                        "Google Reverse Geocoding API",
+                        "Geocoding API",
                     )
                     self.__add_redis_key(
                         address_key,
