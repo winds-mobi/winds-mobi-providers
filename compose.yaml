@@ -22,6 +22,7 @@ services:
     volumes:
       - .:/opt/project
     environment:
+      - SENTRY_URL
       - MONGODB_URL
       - REDIS_URL
       - ADMIN_DB_URL
