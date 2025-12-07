@@ -1,19 +1,16 @@
-FROM python:3.10.11-slim-bullseye AS base
-
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+FROM python:3.13.10-slim-trixie AS base
 
 RUN apt-get update; \
     apt-get --yes --no-install-recommends install pkg-config libpq5 libmariadb3
 
 FROM base AS python-dependencies
+COPY --from=ghcr.io/astral-sh/uv:0.9.16 /uv /uvx /bin/
 
 RUN apt-get update; \
     apt-get --yes --no-install-recommends install build-essential libpq-dev libmariadb-dev curl
-RUN curl -sSL https://install.python-poetry.org | python - --version 1.7.1
 
-COPY pyproject.toml poetry.lock ./
-RUN POETRY_VIRTUALENVS_IN_PROJECT=true /root/.local/bin/poetry install --only=main
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked
 
 FROM base AS runtime
 

@@ -16,7 +16,6 @@ class Windball(Provider):
                 "https://server.windball.ch/api/windsmobi?units=kmh", timeout=(self.connect_timeout, self.read_timeout)
             ).json()
             for station in data:
-
                 # Let winds.mobi provide the geocoding_name (if found) with the help of Google Geocoding API
                 def build_station_name(geocoding_names):
                     if geocoding_names.name is None:

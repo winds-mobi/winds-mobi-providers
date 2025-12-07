@@ -3,7 +3,27 @@ on: [ push, pull_request ]
 
 jobs:
   test-python:
-    uses: winds-mobi/winds-mobi-cicd/.github/workflows/test-python.yaml@main
-    with:
-      python_version: 3.10.11
-      poetry_version: 1.7.1
+    name: Lint and test
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.16"
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+
+      - name: Run uv linter and formatter
+        run: |
+          uv run ruff check
+          uv run ruff format --check
+
+      - name: Run tests
+        run: uv run pytest
