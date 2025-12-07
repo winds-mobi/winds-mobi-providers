@@ -75,18 +75,22 @@ class Zermatt(Provider):
                 table_rows = group.xpath("tbody/tr")
                 i = 0
                 while i < len(table_rows):
-                    next_cell = table_rows[i + 1].xpath("td")
-                    if next_cell[0].attrib["class"] == "c1":
-                        has_data = True
-                        next_row = 4
-                    elif next_cell[0].attrib["class"] == "c5":
-                        has_data = False
-                        next_row = 2
-                    elif next_cell[0].attrib["class"] == "station":
+                    try:
+                        next_cell = table_rows[i + 1].xpath("td")
+                        if next_cell[0].attrib["class"] == "c1":
+                            has_data = True
+                            next_row = 4
+                        elif next_cell[0].attrib["class"] == "c5":
+                            has_data = False
+                            next_row = 2
+                        elif next_cell[0].attrib["class"] == "station":
+                            has_data = False
+                            next_row = 1
+                        else:
+                            raise ProviderException("Unexpected table rows")
+                    except IndexError:
                         has_data = False
                         next_row = 1
-                    else:
-                        raise ProviderException("Unexpected table rows")
 
                     try:
                         id_main = self.cleanup_id(table_rows[i].xpath("td")[0].text)
