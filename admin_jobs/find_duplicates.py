@@ -100,7 +100,7 @@ def find_duplicates(distance):
                     date = Arrow.fromtimestamp(station["last"]["_id"]).format("YY-MM-DD HH:mm:ssZZ")
                 rating = f"{ratings[index]}*" if index == highest_rating_index else ratings[index]
                 left_alignment = f"{station['_id']} ({station['short']}/{station['name']})"
-                logs.append(f"{rating : <3} {left_alignment : <70}{date}")
+                logs.append(f"{rating: <3} {left_alignment: <70}{date}")
 
             lon = stations[0]["loc"]["coordinates"][0]
             lat = stations[0]["loc"]["coordinates"][1]

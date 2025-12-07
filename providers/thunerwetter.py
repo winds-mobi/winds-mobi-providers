@@ -68,7 +68,7 @@ class ThunerWetter(Provider):
             station_id = station["_id"]
 
             key = (
-                arrow.get(f'{date["date"]} {date["time"]}', "DD.MM.YYYY HH:mm")
+                arrow.get(f"{date['date']} {date['time']}", "DD.MM.YYYY HH:mm")
                 .replace(tzinfo=self.timezone)
                 .int_timestamp
             )
@@ -93,7 +93,7 @@ class ThunerWetter(Provider):
                 date_text = date_element.text.strip()
                 date = date_pattern.search(date_text).groupdict()
                 air_date = (
-                    arrow.get(f'{date["date"]} {date["time"]}', "DD.MM.YYYY HH:mm")
+                    arrow.get(f"{date['date']} {date['time']}", "DD.MM.YYYY HH:mm")
                     .replace(tzinfo=self.timezone)
                     .int_timestamp
                 )

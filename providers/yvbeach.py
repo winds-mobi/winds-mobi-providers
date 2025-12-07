@@ -45,7 +45,7 @@ class YVBeach(Provider):
 
             date = date_pattern.search(content).groupdict()
             key = (
-                arrow.get(f'{date["date"]} {date["time"]}', "DD.MM.YYYY HH[h]mm")
+                arrow.get(f"{date['date']} {date['time']}", "DD.MM.YYYY HH[h]mm")
                 .replace(tzinfo=self.timezone)
                 .int_timestamp
             )

@@ -350,13 +350,13 @@ class Provider:
         if not altitude:
             if self.redis.hexists(alt_key, "error"):
                 raise ProviderException(
-                    f"Unable to determine station 'alt': " f"{self.redis.hget(alt_key, 'error')} for '{alt_key}'"
+                    f"Unable to determine station 'alt': {self.redis.hget(alt_key, 'error')} for '{alt_key}'"
                 )
             altitude = self.redis.hget(alt_key, "alt")
 
         if self.redis.hexists(alt_key, "error") == "error":
             raise ProviderException(
-                f"Unable to determine station 'peak': " f"{self.redis.hget(alt_key, 'error')} for '{alt_key}'"
+                f"Unable to determine station 'peak': {self.redis.hget(alt_key, 'error')} for '{alt_key}'"
             )
         is_peak = self.redis.hget(alt_key, "is_peak") == "True"
 
