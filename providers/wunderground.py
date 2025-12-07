@@ -37,52 +37,55 @@ class WUnderground(Provider):
             wu_station_ids = list(map(lambda s: s["id"], self.get_stations_metadata()))
 
             for wu_station_id in wu_station_ids:
-                url = (
-                    "https://api.weather.com/v2/pws/observations/current"
-                    # the API key didn't change for years
-                    + "?apiKey=e1f10a1e78da46f5b10a1e78da96f525"
-                    + f"&stationId={wu_station_id}"
-                    + "&format=json"
-                    + "&units=m"
-                )
-                data = requests.get(url, timeout=(self.connect_timeout, self.read_timeout)).json()
-                # data sample:
-                # {
-                #     "observations": [
-                #         {
-                #             "stationID": "INZIDE9",
-                #             "obsTimeUtc": "2024-07-31T16:34:50Z",
-                #             "obsTimeLocal": "2024-07-31 18:34:50",
-                #             "neighborhood": "Nüziders",
-                #             "softwareType": "EasyWeatherPro_V5.1.3",
-                #             "country": "AT",
-                #             "solarRadiation": 3.4,
-                #             "lon": 9.802861,
-                #             "realtimeFrequency": null,
-                #             "epoch": 1722443690,
-                #             "lat": 47.1663,
-                #             "uv": 0,
-                #             "winddir": 240,
-                #             "humidity": 94,
-                #             "qcStatus": 1,
-                #             "metric": {
-                #                 "temp": 19,
-                #                 "heatIndex": 19,
-                #                 "dewpt": 18,
-                #                 "windChill": 19,
-                #                 "windSpeed": 3,
-                #                 "windGust": 4,
-                #                 "pressure": 1015.41,
-                #                 "precipRate": 19.81,
-                #                 "precipTotal": 17.3,
-                #                 "elev": 549
-                #             }
-                #         }
-                #     ]
-                # }
+                try:
+                    url = (
+                        "https://api.weather.com/v2/pws/observations/current"
+                        # the API key didn't change for years
+                        + "?apiKey=e1f10a1e78da46f5b10a1e78da96f525"
+                        + f"&stationId={wu_station_id}"
+                        + "&format=json"
+                        + "&units=m"
+                    )
+                    result = requests.get(url, timeout=(self.connect_timeout, self.read_timeout))
+                    if not result.text:
+                        raise ProviderException("No data")
+                    data = result.json()
+                    # data sample:
+                    # {
+                    #     "observations": [
+                    #         {
+                    #             "stationID": "INZIDE9",
+                    #             "obsTimeUtc": "2024-07-31T16:34:50Z",
+                    #             "obsTimeLocal": "2024-07-31 18:34:50",
+                    #             "neighborhood": "Nüziders",
+                    #             "softwareType": "EasyWeatherPro_V5.1.3",
+                    #             "country": "AT",
+                    #             "solarRadiation": 3.4,
+                    #             "lon": 9.802861,
+                    #             "realtimeFrequency": null,
+                    #             "epoch": 1722443690,
+                    #             "lat": 47.1663,
+                    #             "uv": 0,
+                    #             "winddir": 240,
+                    #             "humidity": 94,
+                    #             "qcStatus": 1,
+                    #             "metric": {
+                    #                 "temp": 19,
+                    #                 "heatIndex": 19,
+                    #                 "dewpt": 18,
+                    #                 "windChill": 19,
+                    #                 "windSpeed": 3,
+                    #                 "windGust": 4,
+                    #                 "pressure": 1015.41,
+                    #                 "precipRate": 19.81,
+                    #                 "precipTotal": 17.3,
+                    #                 "elev": 549
+                    #             }
+                    #         }
+                    #     ]
+                    # }
 
-                for current_observation in data["observations"]:
-                    try:
+                    for current_observation in data["observations"]:
                         winds_station = self.save_station(
                             provider_id=current_observation["stationID"],
                             names=lambda names: StationNames(
@@ -130,10 +133,10 @@ class WUnderground(Provider):
                                     f"Error while processing measure '{measure_key}' for station '{station_id}': {e}"
                                 )
 
-                    except ProviderException as e:
-                        self.log.warning(f"Error while processing station '{wu_station_id}': {e}")
-                    except Exception as e:
-                        self.log.exception(f"Error while processing station '{wu_station_id}': {e}")
+                except ProviderException as e:
+                    self.log.warning(f"Error while processing station '{wu_station_id}': {e}")
+                except Exception as e:
+                    self.log.exception(f"Error while processing station '{wu_station_id}': {e}")
 
         except Exception as e:
             self.log.exception(f"Error while processing WUndergroundProvider: {e}")
