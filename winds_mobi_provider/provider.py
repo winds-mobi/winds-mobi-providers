@@ -15,7 +15,7 @@ from pymongo import ASCENDING, GEOSPHERE, MongoClient
 from sentry_sdk import metrics
 from timezonefinder import TimezoneFinder
 
-from settings import GOOGLE_API_KEY, MONGODB_URL, REDIS_URL
+from settings import GOOGLE_API_KEY, MONGODB_URL, OPEN_ELEVATION_API_URL, REDIS_URL
 from winds_mobi_provider.logging import configure_logging
 from winds_mobi_provider.units import Pressure, ureg
 from winds_mobi_provider.uwxutils import TWxUtils
@@ -41,9 +41,12 @@ class Provider:
     connect_timeout = 7
     read_timeout = 30
 
-    __api_limit_cache_duration = 3600
-    __api_error_cache_duration = 30 * 24 * 3600
-    __api_cache_duration = 2 * 365 * 24 * 3600
+    __google_api_limit_cache_duration = 3600
+    __google_api_error_cache_duration = 30 * 24 * 3600
+    __google_api_cache_duration = 2 * 365 * 24 * 3600
+
+    __local_api_error_cache_duration = 1 * 24 * 3600
+    __local_api_cache_duration = 30 * 24 * 3600
 
     def __init__(self):
         if None in (self.provider_code, self.provider_name, self.provider_url):
@@ -64,6 +67,7 @@ class Provider:
         self.redis = redis.StrictRedis.from_url(url=REDIS_URL, decode_responses=True)
         self.google_api_key = GOOGLE_API_KEY
         self.timezone_finder = TimezoneFinder(in_memory=True)
+        self.open_elevation_api_url = OPEN_ELEVATION_API_URL
         self.log = logging.getLogger(self.provider_code)
         sentry_sdk.set_tag("provider", self.provider_code)
 
@@ -176,6 +180,15 @@ class Provider:
             raise ProviderException(f"[{api_name}] ZERO_RESULTS: url='{url}'")
         return result
 
+    def __call_local_api(self, url, api_name):
+        metrics.count("local.api.call", 1, attributes={"api": api_name})
+        result = requests.get(url, timeout=(self.connect_timeout, self.read_timeout))
+        if 400 <= result.status_code < 500:
+            raise ProviderException(f"[{api_name}] INVALID_REQUEST: url='{url}', status='{result.status_code}'")
+        elif 500 <= result.status_code < 600:
+            raise ProviderException(f"[{api_name}] INVALID_REQUEST: url='{url}', status='{result.status_code}'")
+        return result.json()
+
     def __parse_reverse_geocoding_results(self, address_key: str) -> StationNames:
         cache = self.redis.hgetall(address_key)
         if error := cache.get("error"):
@@ -212,7 +225,7 @@ class Provider:
                     if address_type in component["types"]:
                         return StationNames(component["short_name"], component["long_name"])
 
-        self.log.warning(f"Google Reverse Geocoding API: no address match for '{address_key}'")
+        self.log.warning(f"Google Geocoding API: no address match for '{address_key}'")
         return StationNames(None, None)
 
     def __compute_elevation(self, lat: float, lon: float) -> Tuple[float, bool]:
@@ -230,8 +243,8 @@ class Provider:
             if k < nb - 1:
                 path += "|"
 
-        result = self.__call_google_api(
-            f"https://maps.googleapis.com/maps/api/elevation/json?locations={path}", "Maps Elevation API"
+        result = self.__call_local_api(
+            f"{self.open_elevation_api_url}/api/v1/lookup?locations={path}", "Open Elevation API"
         )
         elevation = float(result["results"][0]["elevation"])
         is_peak = False
@@ -316,16 +329,16 @@ class Provider:
                     self.__add_redis_key(
                         address_key,
                         {"json": json.dumps(result)},
-                        self.__api_cache_duration,
+                        self.__google_api_cache_duration,
                     )
-                except TimeoutError as e:
+                except requests.exceptions.Timeout as e:
                     raise e
                 except UsageLimitException as e:
-                    self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_limit_cache_duration)
+                    self.__add_redis_key(address_key, {"error": repr(e)}, self.__google_api_limit_cache_duration)
                 except Exception as e:
                     if not isinstance(e, ProviderException):
-                        self.log.exception("Unable to call Google Reverse Geocoding API")
-                    self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_error_cache_duration)
+                        self.log.exception("Unable to call Google Geocoding API")
+                    self.__add_redis_key(address_key, {"error": repr(e)}, self.__google_api_error_cache_duration)
 
             short_name, name = names(self.__parse_reverse_geocoding_results(address_key))
         else:
@@ -333,19 +346,19 @@ class Provider:
         if not short_name or not name:
             raise ProviderException(f"Invalid station short_name '{short_name}' or name '{name}'")
 
-        alt_key = f"alt/{lat},{lon}"
+        alt_key = f"alt2/{lat},{lon}"
         if not self.redis.exists(alt_key):
             try:
                 elevation, is_peak = self.__compute_elevation(lat, lon)
-                self.__add_redis_key(alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.__api_cache_duration)
-            except TimeoutError as e:
+                self.__add_redis_key(
+                    alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.__local_api_cache_duration
+                )
+            except requests.exceptions.Timeout as e:
                 raise e
-            except UsageLimitException as e:
-                self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_limit_cache_duration)
             except Exception as e:
                 if not isinstance(e, ProviderException):
-                    self.log.exception("Unable to call Google Elevation API")
-                self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_error_cache_duration)
+                    self.log.exception("Unable to call Local Open Elevation API")
+                self.__add_redis_key(alt_key, {"error": repr(e)}, self.__local_api_error_cache_duration)
 
         if not altitude:
             if self.redis.hexists(alt_key, "error"):
