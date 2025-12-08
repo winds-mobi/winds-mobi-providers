@@ -163,7 +163,7 @@ class Provider:
     def __call_google_api(self, url, api_name):
         path = furl(url)
         path.args["key"] = self.google_api_key
-        metrics.count("google.api.call", 1, attributes={"api": api_name})
+        metrics.count("api.call", 1, attributes={"name": api_name, "provider": self.provider_code})
         result = requests.get(path.url, timeout=(self.connect_timeout, self.read_timeout)).json()
         if result["status"] == "OVER_QUERY_LIMIT":
             raise UsageLimitException(f"[{api_name}] OVER_QUERY_LIMIT")
@@ -212,7 +212,7 @@ class Provider:
                     if address_type in component["types"]:
                         return StationNames(component["short_name"], component["long_name"])
 
-        self.log.warning(f"Google Reverse Geocoding API: no address match for '{address_key}'")
+        self.log.warning(f"Google Geocoding API: no address match for '{address_key}'")
         return StationNames(None, None)
 
     def __compute_elevation(self, lat: float, lon: float) -> tuple[float, bool]:
@@ -230,7 +230,7 @@ class Provider:
                 path += "|"
 
         result = self.__call_google_api(
-            f"https://maps.googleapis.com/maps/api/elevation/json?locations={path}", "Maps Elevation API"
+            f"https://maps.googleapis.com/maps/api/elevation/json?locations={path}", "Google Maps Elevation API"
         )
         elevation = float(result["results"][0]["elevation"])
         is_peak = False
@@ -310,7 +310,7 @@ class Provider:
                 try:
                     result = self.__call_google_api(
                         f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
-                        "Geocoding API",
+                        "Google Geocoding API",
                     )
                     self.__add_redis_key(
                         address_key,
@@ -323,7 +323,7 @@ class Provider:
                     self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_limit_cache_duration)
                 except Exception as e:
                     if not isinstance(e, ProviderException):
-                        self.log.exception("Unable to call Google Reverse Geocoding API")
+                        self.log.exception("Unable to call Google Geocoding API")
                     self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_error_cache_duration)
 
             short_name, name = names(self.__parse_reverse_geocoding_results(address_key))
