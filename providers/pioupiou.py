@@ -1,6 +1,5 @@
 import arrow
 import requests
-from arrow.parser import ParserError
 
 from winds_mobi_provider import Pressure, Provider, ProviderException, StationNames, StationStatus
 
@@ -47,11 +46,8 @@ class Pioupiou(Provider):
                         continue
 
                     location_date = None
-                    if location["date"]:
-                        try:
-                            location_date = arrow.get(location["date"])
-                        except ParserError:
-                            pass
+                    if location.get("date"):
+                        location_date = arrow.get(location["date"])
 
                     station = self.save_station(
                         piou_id,

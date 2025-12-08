@@ -59,7 +59,7 @@ def find_duplicates(distance):
     X = X.T
 
     try:
-        bulk_operations = [UpdateMany({}, {"$set": {"duplicates": None}})]
+        bulk_operations: list[UpdateMany | UpdateOne] = [UpdateMany({}, {"$set": {"duplicates": None}})]
         model = AgglomerativeClustering(linkage="ward", n_clusters=None, distance_threshold=distance / 100000)
         clusters = model.fit_predict(X)
 

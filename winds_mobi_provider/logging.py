@@ -10,6 +10,6 @@ HERE = Path(__file__).parents[0]
 
 
 def configure_logging():
-    with open(Path(HERE, "logging.yml"), "r") as file:
+    with open(Path(HERE, "logging.yml")) as file:
         dictConfig(yaml.load(file, Loader=yaml.FullLoader))
     sentry_sdk.init(SENTRY_URL, environment=ENVIRONMENT)

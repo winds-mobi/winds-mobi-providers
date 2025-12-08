@@ -70,37 +70,37 @@ class BornToFly(Provider):
             )
             station_id = station["_id"]
 
-            with zipfile.ZipFile(BytesIO(response.content)) as zip_file:
-                with zip_file.open(zip_file.filelist[0].filename) as csv_file:
-                    reader = csv.DictReader(
-                        TextIOWrapper(csv_file, "utf-8"),
-                        fieldnames=("time", "wind_avg", "na", "na", "na", "wind_max", "na", "na", "na", "wind_dir"),
-                        delimiter=";",
-                    )
-                    mesures = []
-                    # Reversed without 1st row that contains field names
-                    rows = list(reader)[:0:-1]
-                    for row in rows:
-                        key = arrow.get(row["time"], "DD.MM.YYYY HH:mm:ss").replace(tzinfo=self.timezone).int_timestamp
-                        if not self.has_measure(station, key):
-                            try:
-                                measure = self.create_measure(
-                                    station,
-                                    key,
-                                    self.wind_directions[row["wind_dir"]],
-                                    row["wind_avg"].replace(",", "."),
-                                    row["wind_max"].replace(",", "."),
-                                )
-                                mesures.append(measure)
-                            except ProviderException as e:
-                                self.log.warning(
-                                    f"Error while processing measure '{key}' for station '{station_id}': {e}"
-                                )
-                            except Exception as e:
-                                self.log.exception(
-                                    f"Error while processing measure '{key}' for station '{station_id}': {e}"
-                                )
-                    self.insert_measures(station, mesures)
+            with (
+                zipfile.ZipFile(BytesIO(response.content)) as zip_file,
+                zip_file.open(zip_file.filelist[0].filename) as csv_file,
+            ):
+                reader = csv.DictReader(
+                    TextIOWrapper(csv_file, "utf-8"),
+                    fieldnames=("time", "wind_avg", "na", "na", "na", "wind_max", "na", "na", "na", "wind_dir"),
+                    delimiter=";",
+                )
+                mesures = []
+                # Reversed without 1st row that contains field names
+                rows = list(reader)[:0:-1]
+                for row in rows:
+                    key = arrow.get(row["time"], "DD.MM.YYYY HH:mm:ss").replace(tzinfo=self.timezone).int_timestamp
+                    if not self.has_measure(station, key):
+                        try:
+                            measure = self.create_measure(
+                                station,
+                                key,
+                                self.wind_directions[row["wind_dir"]],
+                                row["wind_avg"].replace(",", "."),
+                                row["wind_max"].replace(",", "."),
+                            )
+                            mesures.append(measure)
+                        except ProviderException as e:
+                            self.log.warning(f"Error while processing measure '{key}' for station '{station_id}': {e}")
+                        except Exception as e:
+                            self.log.exception(
+                                f"Error while processing measure '{key}' for station '{station_id}': {e}"
+                            )
+                self.insert_measures(station, mesures)
 
         except Exception as e:
             self.log.exception(f"Error while processing BornToFly: {e}")
