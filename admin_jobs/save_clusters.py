@@ -47,7 +47,7 @@ def save_clusters(min_cluster, nb_clusters):
                 average = np.average(cluster, 0)
                 middle = cluster[KDTree(cluster).query(average)[1]]
 
-                indexes = np.where((X == middle).all(axis=1))[0]
+                indexes = np.where((middle == X).all(axis=1))[0]
                 if len(indexes) > 1:
                     stations = list(
                         mongo_db.stations.find(

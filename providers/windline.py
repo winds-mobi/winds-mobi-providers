@@ -34,29 +34,23 @@ class Windline(Provider):
     temperature_type = 16400
     humidity_type = 16401
 
+    status = {
+        "offline": StationStatus.HIDDEN,
+        "maintenance": StationStatus.RED,
+        "demo": StationStatus.ORANGE,
+        "online": StationStatus.GREEN,
+    }
+
     def __init__(self, windline_sql_url):
         super().__init__()
         self.windline_sql_url = windline_sql_url
-
-    # Windline status: offline, maintenance, demo or online
-    def get_status(self, status):
-        if status == "offline":
-            return StationStatus.HIDDEN
-        elif status == "maintenance":
-            return StationStatus.RED
-        elif status == "demo":
-            return StationStatus.ORANGE
-        elif status == "online":
-            return StationStatus.GREEN
-        else:
-            return StationStatus.HIDDEN
 
     def get_property_id(self, cursor, key):
         cursor.execute("SELECT tblstationpropertylistno FROM tblstationpropertylist WHERE uniquename=%s", (key,))
         try:
             return cursor.fetchone()[0]
-        except TypeError:
-            raise ProviderException(f"No property '{key}'")
+        except TypeError as e:
+            raise ProviderException(f"No property '{key}'") from e
 
     def get_property_value(self, cursor, station_no, property_id):
         cursor.execute(
@@ -65,8 +59,8 @@ class Windline(Provider):
         )
         try:
             return cursor.fetchone()[0]
-        except TypeError:
-            raise ProviderException(f"No property value for property '{property_id}'")
+        except TypeError as e:
+            raise ProviderException(f"No property value for property '{property_id}'") from e
 
     def get_measures(self, cursor, station_id, data_id, start_date):
         cursor.execute(
@@ -168,7 +162,7 @@ class Windline(Provider):
                         StationNames(short_name, name),
                         wgs84.parse_dms(latitude),
                         wgs84.parse_dms(longitude),
-                        self.get_status(status),
+                        self.status.get(status, StationStatus.HIDDEN),
                         altitude=self.get_property_value(mysql_cursor, station_no, self.altitude_property_id),
                     )
                     station_id = station["_id"]

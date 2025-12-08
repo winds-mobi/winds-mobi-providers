@@ -1,6 +1,5 @@
 import argparse
 import logging
-from typing import Optional
 
 import arrow
 from pymongo import MongoClient
@@ -12,11 +11,11 @@ configure_logging()
 log = logging.getLogger(__name__)
 
 
-def delete_stations(days: int, provider: Optional[str]):
+def delete_stations(days: int, provider: str | None):
     log.info(f"Deleting stations from '{provider or 'any'}' provider not seen since {days} days...")
     mongo_db = MongoClient(MONGODB_URL).get_database()
 
-    query = {
+    query: dict = {
         "$or": [
             {"lastSeenAt": {"$exists": False}},
             {"lastSeenAt": {"$lt": arrow.utcnow().shift(days=-days).datetime}},

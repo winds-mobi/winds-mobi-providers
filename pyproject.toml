@@ -38,3 +38,14 @@ dev = [
 [tool.ruff]
 line-length = 120
 exclude = ["winds_mobi_provider/uwxutils.py"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",
+    "F",
+    "SIM",
+    "B",
+    "UP",
+    "I",
+]
+ignore = ["B023"]

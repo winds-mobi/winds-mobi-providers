@@ -46,15 +46,15 @@ class Windspots(Provider):
                         )
                         try:
                             windspots_measure = result.json()
-                        except ValueError:
-                            raise ProviderException("Action=Data return invalid json response")
+                        except ValueError as e:
+                            raise ProviderException("Action=Data return invalid json response") from e
 
                         try:
                             key = arrow.get(windspots_measure["@lastUpdate"], "YYYY-M-DTHH:mm:ssZ").int_timestamp
-                        except arrow.parser.ParserError:
+                        except arrow.parser.ParserError as e:
                             raise ProviderException(
                                 f"Unable to parse measure date: '{windspots_measure['@lastUpdate']}"
-                            )
+                            ) from e
 
                         wind_direction_last = windspots_measure["windDirectionChart"]["serie"]["points"][0]
                         wind_direction_key = int(wind_direction_last["date"]) // 1000

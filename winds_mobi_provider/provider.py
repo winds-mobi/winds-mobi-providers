@@ -2,8 +2,8 @@ import json
 import logging
 import math
 from collections import namedtuple
+from collections.abc import Callable
 from enum import Enum
-from typing import Callable, Tuple
 from zoneinfo import ZoneInfo
 
 import arrow
@@ -215,7 +215,7 @@ class Provider:
         self.log.warning(f"Google Reverse Geocoding API: no address match for '{address_key}'")
         return StationNames(None, None)
 
-    def __compute_elevation(self, lat: float, lon: float) -> Tuple[float, bool]:
+    def __compute_elevation(self, lat: float, lon: float) -> tuple[float, bool]:
         radius = 500
         nb = 6
         path = f"{lat},{lon}|"
@@ -223,10 +223,9 @@ class Provider:
             angle = math.pi * 2 * k / nb
             dx = radius * math.cos(angle)
             dy = radius * math.sin(angle)
-            path += "{lat:.6f},{lon:.6f}".format(
-                lat=lat + (180 / math.pi) * (dy / 6378137),
-                lon=lon + (180 / math.pi) * (dx / 6378137) / math.cos(lat * math.pi / 180),
-            )
+            lat = lat + (180 / math.pi) * (dy / 6378137)
+            lon = lon + (180 / math.pi) * (dx / 6378137) / math.cos(lat * math.pi / 180)
+            path += f"{lat:.6f},{lon:.6f}"
             if k < nb - 1:
                 path += "|"
 
@@ -266,13 +265,13 @@ class Provider:
             "url": urls,
             "short": fixes.get("short") or short_name,
             "name": fixes.get("name") or name,
-            "alt": self.__to_altitude(fixes["alt"] if "alt" in fixes else altitude),
-            "peak": self.__to_bool(fixes["peak"] if "peak" in fixes else is_peak),
+            "alt": self.__to_altitude(fixes.get("alt", altitude)),
+            "peak": self.__to_bool(fixes.get("peak", is_peak)),
             "loc": {
                 "type": "Point",
                 "coordinates": [
-                    self.__to_float(fixes["longitude"] if "longitude" in fixes else longitude, 6),
-                    self.__to_float(fixes["latitude"] if "latitude" in fixes else latitude, 6),
+                    self.__to_float(fixes.get("longitude", longitude), 6),
+                    self.__to_float(fixes.get("latitude", latitude), 6),
                 ],
             },
             "status": status,

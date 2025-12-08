@@ -121,7 +121,7 @@ class Zermatt(Provider):
                             zermatt_station["latitude"],
                             zermatt_station["longitude"],
                             StationStatus.GREEN if has_data else StationStatus.RED,
-                            altitude=zermatt_station["altitude"] if "altitude" in zermatt_station else None,
+                            altitude=zermatt_station.get("altitude"),
                             url=self.provider_url,
                         )
                         station_id = station["_id"]
