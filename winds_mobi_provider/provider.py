@@ -262,14 +262,14 @@ class Provider:
         distance = radius * c
         return distance
 
-    def __coordinates_changed(self, station_id, lat2, lon2):
+    def __coordinates_changed(self, station_id, lat, lon) -> tuple[bool, tuple[float, float] | None]:
         coordinates = self.__stations_collection.find_one(station_id, projection={"loc.coordinates": True})
         if coordinates:
-            lon1, lat1 = coordinates["loc"]["coordinates"]
-            distance = self.__haversine_distance(lat1, lon1, lat2, lon2)
+            previous_lon, previous_lat = coordinates["loc"]["coordinates"]
+            distance = self.__haversine_distance(previous_lat, previous_lon, lat, lon)
             if distance < 5:
-                return False
-        return True
+                return False, (previous_lat, previous_lon)
+        return True, None
 
     def get_station_id(self, provider_id):
         return self.provider_code + "-" + str(provider_id)
@@ -347,25 +347,30 @@ class Provider:
             short_name, name = names
         elif callable(names):
             address_key = f"address2/{lat},{lon}"
-            if not self.redis.exists(address_key) and self.__coordinates_changed(station_id, lat, lon):
-                try:
-                    result = self.__call_google_api(
-                        f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
-                        "Google Geocoding API",
-                    )
-                    self.__add_redis_key(
-                        address_key,
-                        {"json": json.dumps(result)},
-                        self.__api_cache_duration,
-                    )
-                except TimeoutError as e:
-                    raise e
-                except UsageLimitException as e:
-                    self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_limit_cache_duration)
-                except Exception as e:
-                    if not isinstance(e, ProviderException):
-                        self.log.exception("Unable to call Google Geocoding API")
-                    self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_error_cache_duration)
+            if not self.redis.exists(address_key):
+                coordinates_changed, (previous_lat, previous_lon) = self.__coordinates_changed(station_id, lat, lon)
+                if coordinates_changed:
+                    try:
+                        result = self.__call_google_api(
+                            f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
+                            "Google Geocoding API",
+                        )
+                        self.__add_redis_key(
+                            address_key,
+                            {"json": json.dumps(result)},
+                            self.__api_cache_duration,
+                        )
+                    except TimeoutError as e:
+                        raise e
+                    except UsageLimitException as e:
+                        self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_limit_cache_duration)
+                    except Exception as e:
+                        if not isinstance(e, ProviderException):
+                            self.log.exception("Unable to call Google Geocoding API")
+                        self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_error_cache_duration)
+                else:
+                    lat, lon = previous_lat, previous_lon
+                    address_key = f"address2/{lat},{lon}"
 
             cache = self.redis.hgetall(address_key)
             if error := cache.get("error"):
@@ -379,18 +384,25 @@ class Provider:
             raise ProviderException(f"Invalid station short_name '{short_name}' or name '{name}'")
 
         alt_key = f"alt/{lat},{lon}"
-        if not self.redis.exists(alt_key) and self.__coordinates_changed(station_id, lat, lon):
-            try:
-                elevation, is_peak = self.__compute_elevation(lat, lon)
-                self.__add_redis_key(alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.__api_cache_duration)
-            except TimeoutError as e:
-                raise e
-            except UsageLimitException as e:
-                self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_limit_cache_duration)
-            except Exception as e:
-                if not isinstance(e, ProviderException):
-                    self.log.exception("Unable to call Google Elevation API")
-                self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_error_cache_duration)
+        if not self.redis.exists(alt_key):
+            coordinates_changed, (previous_lat, previous_lon) = self.__coordinates_changed(station_id, lat, lon)
+            if coordinates_changed:
+                try:
+                    elevation, is_peak = self.__compute_elevation(lat, lon)
+                    self.__add_redis_key(
+                        alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.__api_cache_duration
+                    )
+                except TimeoutError as e:
+                    raise e
+                except UsageLimitException as e:
+                    self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_limit_cache_duration)
+                except Exception as e:
+                    if not isinstance(e, ProviderException):
+                        self.log.exception("Unable to call Google Elevation API")
+                    self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_error_cache_duration)
+            else:
+                lat, lon = previous_lat, previous_lon
+                alt_key = f"alt/{lat},{lon}"
 
         cache = self.redis.hgetall(alt_key)
         if error := cache.get("error"):
