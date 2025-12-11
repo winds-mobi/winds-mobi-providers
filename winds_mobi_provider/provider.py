@@ -262,14 +262,14 @@ class Provider:
         distance = radius * c
         return distance
 
-    def __station_slightly_moved(self, station_id, lat, lon) -> tuple[bool, tuple[float, float] | None]:
+    def __station_slightly_moved(self, station_id, lat, lon) -> tuple[float, float] | None:
         coordinates = self.__stations_collection.find_one(station_id, projection={"loc.coordinates": True})
         if coordinates:
             previous_lon, previous_lat = coordinates["loc"]["coordinates"]
             distance = self.__haversine_distance(previous_lat, previous_lon, lat, lon)
             if 0 < distance < 5:
-                return True, (previous_lat, previous_lon)
-        return False, None
+                return previous_lat, previous_lon
+        return None
 
     def get_station_id(self, provider_id):
         return self.provider_code + "-" + str(provider_id)
@@ -348,9 +348,9 @@ class Provider:
         elif callable(names):
             address_key = f"address2/{lat},{lon}"
             if not self.redis.exists(address_key):
-                slightly_moved, (previous_lat, previous_lon) = self.__station_slightly_moved(station_id, lat, lon)
-                if slightly_moved:
+                if slightly_moved := self.__station_slightly_moved(station_id, lat, lon):
                     # Reduce the number of calls to Google API when the station has moved slightly
+                    previous_lat, previous_lon = slightly_moved
                     lat, lon = previous_lat, previous_lon
                     address_key = f"address2/{lat},{lon}"
                 else:
@@ -386,9 +386,9 @@ class Provider:
 
         alt_key = f"alt/{lat},{lon}"
         if not self.redis.exists(alt_key):
-            slightly_moved, (previous_lat, previous_lon) = self.__station_slightly_moved(station_id, lat, lon)
-            if slightly_moved:
+            if slightly_moved := self.__station_slightly_moved(station_id, lat, lon):
                 # Reduce the number of calls to Google API when the station has moved slightly
+                previous_lat, previous_lon = slightly_moved
                 lat, lon = previous_lat, previous_lon
                 alt_key = f"alt/{lat},{lon}"
             else:
