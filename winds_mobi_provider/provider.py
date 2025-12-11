@@ -43,7 +43,7 @@ class Provider:
 
     __api_limit_cache_duration = 3600
     __api_error_cache_duration = 30 * 24 * 3600
-    __api_cache_duration = 2 * 365 * 24 * 3600
+    __api_cache_duration = 3 * 30 * 24 * 3600
 
     def __init__(self):
         if None in (self.provider_code, self.provider_name, self.provider_url):
@@ -176,12 +176,7 @@ class Provider:
             raise ProviderException(f"[{api_name}] ZERO_RESULTS: url='{url}'")
         return result
 
-    def __parse_reverse_geocoding_results(self, address_key: str) -> StationNames:
-        cache = self.redis.hgetall(address_key)
-        if error := cache.get("error"):
-            self.log.warning(f"Unable to determine station names: {error}")
-            return StationNames(None, None)
-
+    def __get_station_names_from_geocoding_results(self, address_key: str, results: list) -> StationNames:
         address_types = [
             "airport",
             "locality",
@@ -202,9 +197,7 @@ class Provider:
                         pass
             return 100
 
-        addresses = json.loads(cache["json"])["results"]
-        addresses.sort(key=order_by_type)
-
+        addresses = sorted(results, key=order_by_type)
         if len(addresses) > 0:
             for address_type in address_types:
                 # Use the first address because they are ordered by importance
@@ -214,6 +207,13 @@ class Provider:
 
         self.log.warning(f"Google Geocoding API: no address match for '{address_key}'")
         return StationNames(None, None)
+
+    def __get_country_code_from_geocoding_results(self, address_key: str, results: list) -> str | None:
+        for address in results:
+            if "country" in address["types"]:
+                return address["address_components"][0]["short_name"]
+        self.log.warning(f"Google Geocoding API: no country match for '{address_key}'")
+        return None
 
     def __compute_elevation(self, lat: float, lon: float) -> tuple[float, bool]:
         radius = 500
@@ -244,11 +244,50 @@ class Provider:
                 break
         return elevation, is_peak
 
+    def __haversine_distance(self, lat1, lon1, lat2, lon2):
+        # Radius of the Earth in km
+        radius = 6371.0
+
+        # Convert degrees to radians
+        phi1 = math.radians(lat1)
+        phi2 = math.radians(lat2)
+        delta_phi = math.radians(lat2 - lat1)
+        delta_lambda = math.radians(lon2 - lon1)
+
+        # Haversine formula
+        a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
+
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+        distance = radius * c
+        return distance
+
+    def __coordinates_changed(self, station_id, lat2, lon2):
+        coordinates = self.__stations_collection.find_one(station_id, projection={"loc.coordinates": True})
+        if coordinates:
+            lon1, lat1 = coordinates["loc"]["coordinates"]
+            distance = self.__haversine_distance(lat1, lon1, lat2, lon2)
+            if distance < 5:
+                return False
+        return True
+
     def get_station_id(self, provider_id):
         return self.provider_code + "-" + str(provider_id)
 
     def __create_station(
-        self, provider_id, short_name, name, latitude, longitude, altitude, is_peak, status, timezone, urls, fixes
+        self,
+        provider_id,
+        short_name,
+        name,
+        latitude,
+        longitude,
+        altitude,
+        is_peak,
+        status,
+        country_code,
+        timezone,
+        urls,
+        fixes,
     ):
         if fixes is None:
             fixes = {}
@@ -275,6 +314,7 @@ class Provider:
                 ],
             },
             "status": status,
+            "country": country_code,
             "tz": timezone.key,
             "lastSeenAt": arrow.utcnow().datetime,
         }
@@ -302,11 +342,12 @@ class Provider:
         if lat < -90 or lat > 90 or lon < -180 or lon > 180:
             raise ProviderException(f"Invalid latitude '{lat}' or longitude '{lon}'")
 
+        country_code = None
         if isinstance(names, StationNames):
             short_name, name = names
         elif callable(names):
             address_key = f"address2/{lat},{lon}"
-            if not self.redis.exists(address_key):
+            if not self.redis.exists(address_key) and self.__coordinates_changed(station_id, lat, lon):
                 try:
                     result = self.__call_google_api(
                         f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
@@ -326,14 +367,19 @@ class Provider:
                         self.log.exception("Unable to call Google Geocoding API")
                     self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_error_cache_duration)
 
-            short_name, name = names(self.__parse_reverse_geocoding_results(address_key))
+            cache = self.redis.hgetall(address_key)
+            if error := cache.get("error"):
+                raise ProviderException(f"Unable to get station geocoding for '{address_key}': {error}")
+            results = json.loads(cache["json"])["results"]
+            short_name, name = names(self.__get_station_names_from_geocoding_results(address_key, results))
+            country_code = self.__get_country_code_from_geocoding_results(address_key, results)
         else:
             raise ProviderException(f"Invalid station names '{names}'")
         if not short_name or not name:
             raise ProviderException(f"Invalid station short_name '{short_name}' or name '{name}'")
 
         alt_key = f"alt/{lat},{lon}"
-        if not self.redis.exists(alt_key):
+        if not self.redis.exists(alt_key) and self.__coordinates_changed(station_id, lat, lon):
             try:
                 elevation, is_peak = self.__compute_elevation(lat, lon)
                 self.__add_redis_key(alt_key, {"alt": elevation, "is_peak": str(is_peak)}, self.__api_cache_duration)
@@ -346,18 +392,12 @@ class Provider:
                     self.log.exception("Unable to call Google Elevation API")
                 self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_error_cache_duration)
 
+        cache = self.redis.hgetall(alt_key)
+        if error := cache.get("error"):
+            raise ProviderException(f"Unable to get station elevation for '{alt_key}': {error}")
         if not altitude:
-            if self.redis.hexists(alt_key, "error"):
-                raise ProviderException(
-                    f"Unable to determine station 'alt': {self.redis.hget(alt_key, 'error')} for '{alt_key}'"
-                )
-            altitude = self.redis.hget(alt_key, "alt")
-
-        if self.redis.hexists(alt_key, "error") == "error":
-            raise ProviderException(
-                f"Unable to determine station 'peak': {self.redis.hget(alt_key, 'error')} for '{alt_key}'"
-            )
-        is_peak = self.redis.hget(alt_key, "is_peak") == "True"
+            altitude = cache["alt"]
+        is_peak = cache["is_peak"] == "True"
 
         if not timezone:
             try:
@@ -378,7 +418,18 @@ class Provider:
 
         fixes = self.mongo_db.stations_fix.find_one(station_id)
         station = self.__create_station(
-            provider_id, short_name, name, lat, lon, altitude, is_peak, status.value, timezone, urls, fixes
+            provider_id,
+            short_name,
+            name,
+            lat,
+            lon,
+            altitude,
+            is_peak,
+            status.value,
+            country_code,
+            timezone,
+            urls,
+            fixes,
         )
         self.__stations_collection.update_one({"_id": station_id}, {"$set": station}, upsert=True)
         self.__create_measures_collection(station_id)
