@@ -262,14 +262,14 @@ class Provider:
         distance = radius * c
         return distance
 
-    def __coordinates_changed(self, station_id, lat, lon) -> tuple[bool, tuple[float, float] | None]:
+    def __station_slightly_moved(self, station_id, lat, lon) -> tuple[bool, tuple[float, float] | None]:
         coordinates = self.__stations_collection.find_one(station_id, projection={"loc.coordinates": True})
         if coordinates:
             previous_lon, previous_lat = coordinates["loc"]["coordinates"]
             distance = self.__haversine_distance(previous_lat, previous_lon, lat, lon)
-            if distance < 5:
-                return False, (previous_lat, previous_lon)
-        return True, None
+            if 0 < distance < 5:
+                return True, (previous_lat, previous_lon)
+        return False, None
 
     def get_station_id(self, provider_id):
         return self.provider_code + "-" + str(provider_id)
@@ -348,8 +348,12 @@ class Provider:
         elif callable(names):
             address_key = f"address2/{lat},{lon}"
             if not self.redis.exists(address_key):
-                coordinates_changed, (previous_lat, previous_lon) = self.__coordinates_changed(station_id, lat, lon)
-                if coordinates_changed:
+                slightly_moved, (previous_lat, previous_lon) = self.__station_slightly_moved(station_id, lat, lon)
+                if slightly_moved:
+                    # Reduce the number of calls to Google API when the station has moved slightly
+                    lat, lon = previous_lat, previous_lon
+                    address_key = f"address2/{lat},{lon}"
+                else:
                     try:
                         result = self.__call_google_api(
                             f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
@@ -368,9 +372,6 @@ class Provider:
                         if not isinstance(e, ProviderException):
                             self.log.exception("Unable to call Google Geocoding API")
                         self.__add_redis_key(address_key, {"error": repr(e)}, self.__api_error_cache_duration)
-                else:
-                    lat, lon = previous_lat, previous_lon
-                    address_key = f"address2/{lat},{lon}"
 
             cache = self.redis.hgetall(address_key)
             if error := cache.get("error"):
@@ -385,8 +386,12 @@ class Provider:
 
         alt_key = f"alt/{lat},{lon}"
         if not self.redis.exists(alt_key):
-            coordinates_changed, (previous_lat, previous_lon) = self.__coordinates_changed(station_id, lat, lon)
-            if coordinates_changed:
+            slightly_moved, (previous_lat, previous_lon) = self.__station_slightly_moved(station_id, lat, lon)
+            if slightly_moved:
+                # Reduce the number of calls to Google API when the station has moved slightly
+                lat, lon = previous_lat, previous_lon
+                alt_key = f"alt/{lat},{lon}"
+            else:
                 try:
                     elevation, is_peak = self.__compute_elevation(lat, lon)
                     self.__add_redis_key(
@@ -400,9 +405,6 @@ class Provider:
                     if not isinstance(e, ProviderException):
                         self.log.exception("Unable to call Google Elevation API")
                     self.__add_redis_key(alt_key, {"error": repr(e)}, self.__api_error_cache_duration)
-            else:
-                lat, lon = previous_lat, previous_lon
-                alt_key = f"alt/{lat},{lon}"
 
         cache = self.redis.hgetall(alt_key)
         if error := cache.get("error"):
