@@ -53,6 +53,7 @@ def run_scheduler():
         ("providers.aletsch:aletsch", 5),
         ("providers.borntofly:borntofly", 5),
         ("providers.ffvl:ffvl", 5),
+        ("providers.grafcan:grafcan", 10),
         ("providers.gxaircom:gxaircom", 5),
         ("providers.holfuy:holfuy", 5),
         ("providers.iweathar:iweathar", 5),
