@@ -14,6 +14,7 @@ ADMIN_DB_URL = os.environ.get("ADMIN_DB_URL") or "postgres://postgres:postgres@l
 BORN_TO_FLY_VENDOR_ID = os.environ.get("BORN_TO_FLY_VENDOR_ID")
 BORN_TO_FLY_DEVICE_ID = os.environ.get("BORN_TO_FLY_DEVICE_ID")
 FFVL_API_KEY = os.environ.get("FFVL_API_KEY")
+GRAFCAN_API_KEY = os.environ.get("GRAFCAN_API_KEY")
 IWEATHAR_KEY = os.environ.get("IWEATHAR_KEY")
 KACHELMANN_API_KEY = os.environ.get("KACHELMANN_API_KEY")
 ROMMA_KEY = os.environ.get("ROMMA_KEY")
