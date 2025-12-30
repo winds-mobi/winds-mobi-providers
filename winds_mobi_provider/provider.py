@@ -256,7 +256,6 @@ class Provider:
 
         # Haversine formula
         a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
-
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
         distance = radius * c
@@ -267,7 +266,8 @@ class Provider:
         if coordinates:
             previous_lon, previous_lat = coordinates["loc"]["coordinates"]
             distance = self.__haversine_distance(previous_lat, previous_lon, lat, lon)
-            if 0 < distance < 5:
+            # 5 meters
+            if 0 < distance < 5 / 1000:
                 return previous_lat, previous_lon
         return None
 
