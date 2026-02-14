@@ -137,7 +137,7 @@ class FgaType2StationParser:
 
 
 class LorawistaParser:
-    url_pattern = "https://cloud.dercarlo.ch/lorawista/{}.xml"  # This URL is protected by an IPs whitelisting
+    url_pattern = "https://www.lorawista.ch/api/{}.xml"  # This URL is protected by an IPs whitelisting
 
     def __init__(self, path):
         self.url = self.url_pattern.format(path)
@@ -199,6 +199,7 @@ class FluggruppeAletsch(Provider):
         ("rothorli", FgaType2StationParser("rothorli", "Visperterminen Rothorn", "7.938", "46.2497")),
         ("klaena", FgaType2StationParser("klaena", "Rosswald Klaena", "8.0632", "46.3135")),
         ("bitsch", LorawistaParser("bitsch")),
+        ("susten", LorawistaParser("susten")),
     ]
 
     def process_data(self):
