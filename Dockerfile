@@ -1,4 +1,4 @@
-FROM python:3.13.10-slim-trixie AS base
+FROM python:3.13.13-slim-trixie AS base
 
 RUN apt-get update; \
     apt-get --yes --no-install-recommends install libpq5 libmariadb3
