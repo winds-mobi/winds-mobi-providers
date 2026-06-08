@@ -182,6 +182,9 @@ class LorawistaParser:
     def humidity(self):
         return self._station.findtext("humid")
 
+    def pressure(self):
+        return self._station.findtext("baro")
+
 
 class FluggruppeAletsch(Provider):
     provider_code = "aletsch"
@@ -196,7 +199,7 @@ class FluggruppeAletsch(Provider):
         ("jeizinen", FgaType1StationParser("jeizinen/XML")),
         ("grimsel", FgaType1StationParser("grimselpass/XML")),
         ("hohbiel", FgaType1StationParser("hohbiel/XML")),
-        ("rothorli", FgaType2StationParser("rothorli", "Visperterminen Rothorn", "7.938", "46.2497")),
+        ("rothorli", FgaType1StationParser("rothorli/XML")),
         ("klaena", FgaType2StationParser("klaena", "Rosswald Klaena", "8.0632", "46.3135")),
         ("bitsch", LorawistaParser("bitsch")),
     ]
