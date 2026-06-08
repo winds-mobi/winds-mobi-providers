@@ -7,32 +7,32 @@ license = "	AGPL-3.0-only"
 requires-python = ">=3.13"
 
 dependencies = [
-    "apscheduler==3.11.1",
+    "apscheduler==3.11.2",
     "arrow==1.4.0",
-    "cachetools==6.2.2",
+    "cachetools==7.1.4",
     "furl==2.1.4",
-    "lxml==6.0.2",
-    "mysqlclient==2.2.7",
-    "pint==0.25.2",
-    "psycopg2==2.9.11",
-    "pyaml==25.7.0",
-    "pydantic==2.12.5",
-    "pymongo==4.15.5",
+    "lxml==6.1.1",
+    "mysqlclient==2.2.8",
+    "pint==0.25.3",
+    "psycopg2==2.9.12",
+    "pyaml==26.2.1",
+    "pydantic==2.13.4",
+    "pymongo==4.17.0",
     "pyproj==3.7.2",
-    "redis==7.1.0",
-    "requests[socks]==2.32.5",
-    "scikit-learn==1.7.2",
-    "scipy==1.16.3",
-    "sentry-sdk==2.47.0",
-    "tenacity==9.1.2",
-    "timezonefinder==8.1.0",
+    "redis==7.4.1",
+    "requests[socks]==2.34.2",
+    "scikit-learn==1.9.0",
+    "scipy==1.17.1",
+    "sentry-sdk==2.61.1",
+    "tenacity==9.1.4",
+    "timezonefinder==8.2.4",
 ]
 
 [dependency-groups]
 dev = [
-    "pytest==9.0.2",
-    "ruff==0.14.8",
-    "scipy-stubs==1.16.3.2",
+    "pytest==9.0.3",
+    "ruff==0.15.16",
+    "scipy-stubs==1.17.1.5",
 ]
 
 [tool.ruff]
