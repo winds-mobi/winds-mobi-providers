@@ -266,8 +266,8 @@ class Provider:
         if coordinates:
             previous_lon, previous_lat = coordinates["loc"]["coordinates"]
             distance = self.__haversine_distance(previous_lat, previous_lon, lat, lon)
-            # 5 meters
-            if 0 < distance < 5 / 1000:
+            # Returns to the previous position if the station has not moved more than 10 meters
+            if 0 < distance < 10 / 1000:
                 return previous_lat, previous_lon
         return None
 
@@ -348,12 +348,16 @@ class Provider:
         elif callable(names):
             address_key = f"address2/{lat},{lon}"
             if not self.redis.exists(address_key):
+                use_previous_location = False
                 if slightly_moved := self.__station_slightly_moved(station_id, lat, lon):
                     # Reduce the number of calls to Google API when the station has moved slightly
                     previous_lat, previous_lon = slightly_moved
-                    lat, lon = previous_lat, previous_lon
-                    address_key = f"address2/{lat},{lon}"
-                else:
+                    if self.redis.exists(f"address2/{previous_lat},{previous_lon}"):
+                        lat, lon = previous_lat, previous_lon
+                        address_key = f"address2/{lat},{lon}"
+                        use_previous_location = True
+
+                if not use_previous_location:
                     try:
                         result = self.__call_google_api(
                             f"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lon}",
@@ -386,12 +390,16 @@ class Provider:
 
         alt_key = f"alt/{lat},{lon}"
         if not self.redis.exists(alt_key):
+            use_previous_location = False
             if slightly_moved := self.__station_slightly_moved(station_id, lat, lon):
                 # Reduce the number of calls to Google API when the station has moved slightly
                 previous_lat, previous_lon = slightly_moved
-                lat, lon = previous_lat, previous_lon
-                alt_key = f"alt/{lat},{lon}"
-            else:
+                if self.redis.exists(f"alt/{previous_lat},{previous_lon}"):
+                    lat, lon = previous_lat, previous_lon
+                    alt_key = f"alt/{lat},{lon}"
+                    use_previous_location = True
+
+            if not use_previous_location:
                 try:
                     elevation, is_peak = self.__compute_elevation(lat, lon)
                     self.__add_redis_key(
