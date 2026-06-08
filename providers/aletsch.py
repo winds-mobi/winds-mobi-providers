@@ -203,6 +203,7 @@ class FluggruppeAletsch(Provider):
         ("klaena", FgaType2StationParser("klaena", "Rosswald Klaena", "8.0632", "46.3135")),
         ("bitsch", LorawistaParser("bitsch")),
         ("susten", LorawistaParser("susten")),
+        ("ritzingerfeld", LorawistaParser("ritzingerfeld")),
     ]
 
     def process_data(self):
