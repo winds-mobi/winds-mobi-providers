@@ -3,7 +3,7 @@ name = "winds-mobi-provider"
 description = "Python scripts that get the weather data from different providers and save it in a common format into mongodb."
 version = "0.0.0"
 authors = [{ name = "winds.mobi" }]
-license = "	AGPL-3.0-only"
+license = "AGPL-3.0-only"
 requires-python = ">=3.13"
 
 dependencies = [
