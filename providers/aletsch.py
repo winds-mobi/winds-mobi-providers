@@ -56,6 +56,8 @@ class FgaType1StationParser:
 
     def direction(self):
         direction = self._get_value("./wind/direction_grad") or self._get_value("./wind/direction_wind")
+        if direction is None:
+            return None
         return direction.replace("°", "")
 
     def speed(self):
