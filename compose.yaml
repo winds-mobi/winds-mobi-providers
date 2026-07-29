@@ -31,6 +31,7 @@ services:
       - BORN_TO_FLY_VENDOR_ID
       - BORN_TO_FLY_DEVICE_ID
       - FFVL_API_KEY
+      - GRAFCAN_API_KEY
       - IWEATHAR_KEY
       - KACHELMANN_API_KEY
       - ROMMA_KEY
