@@ -4,13 +4,13 @@ RUN apt-get update; \
     apt-get --yes --no-install-recommends install libpq5 libmariadb3
 
 FROM base AS python-dependencies
-COPY --from=ghcr.io/astral-sh/uv:0.9.16 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.12.0 /uv /uvx /bin/
 
 RUN apt-get update; \
     apt-get --yes --no-install-recommends install build-essential pkg-config libpq-dev libmariadb-dev curl
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --locked
+RUN uv sync --no-dev --locked
 
 FROM base AS runtime
 
