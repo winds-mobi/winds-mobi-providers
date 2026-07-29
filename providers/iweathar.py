@@ -27,12 +27,11 @@ class IWeathar(Provider):
         try:
             self.log.info("Processing iWeathar data...")
 
-            result_tree = etree.parse(
+            result_tree = etree.fromstring(
                 requests.get(
                     f"https://iweathar.co.za/live_data.php?unit=kmh&key={self.iweathar_key}",
-                    stream=True,
                     timeout=(self.connect_timeout, self.read_timeout),
-                ).raw
+                ).content
             )
 
             for item in result_tree.xpath("//ITEM"):
