@@ -8,3 +8,5 @@ dist
 volumes
 .env*
 compose*.yaml
+
+.venv

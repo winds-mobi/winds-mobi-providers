@@ -59,6 +59,7 @@ def run_scheduler():
         ("providers.kachelmannwetter:kachelmannwetter", 5),
         ("providers.metar:metar", 10),
         ("providers.meteoswiss:meteoswiss", 5),
+	("providers.paraweather:paraweather", 5),
         ("providers.pdcs:pdcs", 5),
         ("providers.pioupiou:pioupiou", 5),
         ("providers.pmcjoder:pmcjoder", 5),
