@@ -3,12 +3,14 @@
 Set PARAWEATHER_API_KEY and provide station coordinates via API latitude/longitude
 or PARAWEATHER_COORDINATES JSON mapping station IDs to latitude/longitude.
 """
+
 import json
 import math
 import os
 from datetime import datetime
-from zoneinfo import ZoneInfo
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
 import requests
 
 from winds_mobi_provider import Q_, Pressure, Provider, ProviderException, StationNames, StationStatus, ureg
@@ -33,8 +35,7 @@ class ParaWeather(Provider):
             with coordinates_file.open(encoding="utf-8") as f:
                 coordinates = json.load(f)
 
-        response = requests.get(self.api_url, params={"auth": key},
-                                timeout=(self.connect_timeout, self.read_timeout))
+        response = requests.get(self.api_url, params={"auth": key}, timeout=(self.connect_timeout, self.read_timeout))
         response.raise_for_status()
         stations = response.json()["meteo"]
         if not isinstance(stations, dict):
@@ -72,13 +73,19 @@ class ParaWeather(Provider):
                 raw = station["data"]
                 fields = ("ws", "wg", "wdn", "ta", "pa", "rh")
                 values = {field: float(raw[field]) for field in fields}
-                valid = (all(math.isfinite(x) for x in values.values())
-                         and values["ws"] >= 0 and values["wg"] >= 0
-                         and 0 <= values["wdn"] <= 360
-                         and values["pa"] > 0 and 0 <= values["rh"] <= 100)
-                timestamp = int(datetime.strptime(
-                    station["ts"], "%Y-%m-%d %H:%M:%S"
-                ).replace(tzinfo=ZoneInfo("Europe/Bucharest")).timestamp())
+                valid = (
+                    all(math.isfinite(x) for x in values.values())
+                    and values["ws"] >= 0
+                    and values["wg"] >= 0
+                    and 0 <= values["wdn"] <= 360
+                    and values["pa"] > 0
+                    and 0 <= values["rh"] <= 100
+                )
+                timestamp = int(
+                    datetime.strptime(station["ts"], "%Y-%m-%d %H:%M:%S")
+                    .replace(tzinfo=ZoneInfo("Europe/Bucharest"))
+                    .timestamp()
+                )
             except (KeyError, ValueError, TypeError):
                 valid = False
 
@@ -93,7 +100,8 @@ class ParaWeather(Provider):
         saved = self.save_station(
             provider_id=station_id,
             names=StationNames(short_name=name, name=name),
-            latitude=float(lat), longitude=float(lon),
+            latitude=float(lat),
+            longitude=float(lon),
             status=StationStatus.GREEN if valid else StationStatus.RED,
             altitude=altitude,
             timezone=None,  # Let winds.mobi resolve the station location timezone.
@@ -102,7 +110,8 @@ class ParaWeather(Provider):
         if not valid or self.has_measure(saved, timestamp):
             return
         measure = self.create_measure(
-            station=saved, _id=timestamp,
+            station=saved,
+            _id=timestamp,
             wind_direction=values["wdn"] % 360,
             wind_average=Q_(values["ws"], ureg.meter / ureg.second),
             wind_maximum=Q_(values["wg"], ureg.meter / ureg.second),
