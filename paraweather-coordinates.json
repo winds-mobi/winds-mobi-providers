@@ -1,0 +1,17 @@
+{
+  "01": {"latitude": 46.5788, "longitude": 25.9777},
+  "02": {"latitude": 45.622, "longitude": 25.691},
+  "03": {"latitude": 45.5682, "longitude": 25.5668},
+  "04": {"latitude": 47.7321, "longitude": 23.6731},
+  "05": {"latitude": 45.7994, "longitude": 25.9019},
+  "07": {"latitude": 45.8607, "longitude": 23.0444},
+  "08": {"latitude": 45.5259, "longitude": 25.3204},
+  "09": {"latitude": 45.8228, "longitude": 26.3739},
+  "10": {"latitude": 45.3892, "longitude": 23.4598},
+  "11": {"latitude": 45.5889, "longitude": 25.6649},
+  "12": {"latitude": 45.2924, "longitude": 25.583},
+  "15": {"latitude": 45.7148, "longitude": 25.6527},
+  "20": {"latitude": 45.4662, "longitude": 25.378},
+  "21": {"latitude": 46.2985, "longitude": 26.754},
+  "22": {"latitude": 45.5645, "longitude": 25.3987}
+}
