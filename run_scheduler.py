@@ -52,6 +52,7 @@ def run_scheduler():
         # Alphabetical order
         ("providers.aletsch:aletsch", 5),
         ("providers.borntofly:borntofly", 5),
+        ("providers.burnair:burnair", 5),
         ("providers.ffvl:ffvl", 5),
         ("providers.gxaircom:gxaircom", 5),
         ("providers.holfuy:holfuy", 5),
